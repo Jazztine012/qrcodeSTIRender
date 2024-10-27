@@ -73,7 +73,7 @@ const socket = new WebSocket('ws://localhost:3000');
         const data = JSON.stringify({ location: location });
         socket.send(data);
     }*/
-const eventSource = new EventSource('https://yamamot000.github.io/api/customer-updates');
+const eventSource = new EventSource('/api/customer-updates');
 eventSource.onmessage = function(event) {
     const customerData = JSON.parse(event.data);
 

@@ -16,7 +16,7 @@
 
     <!-- Main Container -->
     <div class="container" id="container">
-        <p>Version: 10272024.scanning-2</p><br>
+        <p>Version: 10272024.transfer</p><br>
         <div class="wait-time">Estimated Waiting Time: <span id="waiting-time">00:00</span></div>     
         <p id="confirmation-text">You have successfully joined the queue.</p>
         
@@ -163,7 +163,7 @@
             };
 
             // Specify the full URL if not on the same origin
-            fetch('https://yamamot000.github.io/api/customer-updates', {
+            fetch('/api/customer-updates', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -183,7 +183,7 @@
             })
             .catch(error => {
                 console.error('Error sending customer data:', error);
-                alert("Error sending customer data!", error);
+                alert("Error sending customer data!", error.toString());
             });
         }
         // window.onload = sendCustomerData;
