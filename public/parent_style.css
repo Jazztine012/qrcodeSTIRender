@@ -1,0 +1,75 @@
+/* Sets variables to be used globally */
+:root {
+    --nav-width: 80px;
+
+    /* COLORS */
+    --white: rgb(250, 250, 250);
+}
+
+/* Parent container for all content. Including the navigation bar */
+.container.parent {
+    flex-grow: 1; /* Fills the remaining vertical space */
+    display: flex;
+    flex-direction: column;
+    height: 100vh; /* Ensure it takes the full viewport height */
+}
+
+/* Puts styles on the navigation placeholder */
+#nav-placeholder {
+    position: fixed; /* If you want the nav to stay in place */
+    top: 0;
+    left: 0;
+    width: var(--nav-width);
+    height: 100%;
+    z-index: 100; /* Ensure the nav stays on top */
+}
+
+/* Goes beside the #nav-placeholder */
+#main-content-placeholder{
+    height: 100%;
+    width: 100%;
+}
+
+.container.horizontal{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 20px;
+    flex-grow: 1;
+    padding: 20px;
+    overflow-x: auto;
+}
+
+.container.vertical{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 20px;
+    flex-grow: 1;
+    padding: 20px;
+    overflow-y: auto;
+    /* max-height: 100%; */
+}
+
+/* PARENT TEXT ALIGNMENT */
+.text-align.left{
+    align-items: start;
+    text-align: start;
+}
+
+.text-align.right{
+    align-items: end;
+    text-align: end;
+}
+
+.text-align.center{
+    align-items: center;
+    text-align: center;
+}
+
+.text-align.justified{
+    align-items: justify;
+    text-align: justify;
+}
