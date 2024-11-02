@@ -1,4 +1,4 @@
-let adminLoginPath = "../html/login.html";
+let adminLoginPath = "http://localhost/queue_management/html/login.html";
 let loginForm = document.getElementById('loginForm');
 let passwordTextInput = document.getElementById('accountPassword');
 
@@ -39,12 +39,13 @@ function togglePasswordVisibility(){
 async function loginUser(event) {
     event.preventDefault();
     
-    const queueDisplayPath = "../queue_display_module/public/index.html"; 
+    const queueDisplayPath = "https://qrcodesti.onrender.com/queue_display.html"; 
     const inputQueueDisplayPassword = passwordTextInput.value;
+    const verifyLoginScript = 'https://qrcodesti.onrender.com/verify_login_queue_display.php';
 
     try {
         // Send login request
-        const response = await fetch('verify_login_queue_display.php', {
+        const response = await fetch(verifyLoginScript, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
