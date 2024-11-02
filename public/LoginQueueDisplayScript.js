@@ -44,7 +44,7 @@ async function loginUser(event) {
 
     try {
         // Send login request
-        const response = await fetch('http://localhost/queue_management/php/verify_login_queue_display.php', {
+        const response = await fetch('verify_login_queue_display.php', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
