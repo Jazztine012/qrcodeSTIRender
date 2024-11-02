@@ -4,30 +4,29 @@ let passwordTextInput = document.getElementById('accountPassword');
 
 document.addEventListener('DOMContentLoaded', function() {
     resetForm();
-    togglePasswordVisibility();
+    setupPasswordToggle();
 });
 
 function resetForm() {
     loginForm.reset(); // Reset form fields
     passwordTextInput.focus(); // Refocus on the password field
-    console.log("Form was reset.")
+    console.log("Form was reset.");
 }
 
-// Switch to Live Queue Display
+// Switch to Admin Login
 function switchToAdminLogin(event) {
     console.log("Go to admin login mode");
     window.location.href = adminLoginPath;
 } 
 
-// Toggle for seeing password
-function togglePasswordVisibility(){
+// Setup toggle for seeing password
+function setupPasswordToggle() {
     const togglePassword = document.getElementById('togglePassword');
-    const passwordField = document.getElementById('accountPassword');
     
     togglePassword.addEventListener('click', function() {
-        // Toggle the type attribute
-        const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
-        passwordField.setAttribute('type', type);
+        // Toggle the type attribute of the password field
+        const type = passwordTextInput.getAttribute('type') === 'password' ? 'text' : 'password';
+        passwordTextInput.setAttribute('type', type);
         
         // Toggle the eye icon
         this.querySelector('i').classList.toggle('fa-eye');
@@ -60,10 +59,9 @@ async function loginUser(event) {
 
         if (data.status === 'success') {
             alert(data.message);
-                
             window.location.href = queueDisplayPath; // Redirect on success
         } else {
-            passwordTextInput.value = ""; // Empties password text input
+            passwordTextInput.value = ""; // Clear password input
             alert(data.message); // Show error message
         }
     } catch (error) {
