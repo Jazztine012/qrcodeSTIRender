@@ -18,6 +18,10 @@ header {
     width: 100%; /* Full width */
 }
 
+#confirmation-text {
+    text-align: center;
+}
+
 .container {
     max-width: 400px;
     width: 100%; /* Full width */
@@ -30,8 +34,9 @@ header {
 
 .wait-time {
     margin-bottom: 20px;
-    font-size: 16px;
+    font-size: 40px;
     font-weight: bold;
+    text-align: center;
 }
 
 .queue-number {
@@ -72,4 +77,5 @@ button:hover {
 
 .hint-text{
     text-align: center;
+    font-size: large;
 }

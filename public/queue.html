@@ -16,23 +16,18 @@
 
     <!-- Main Container -->
     <div class="container" id="container">
-        <p>Version: 10272024.transfer</p><br>
-        <div class="wait-time">Estimated Waiting Time: <span id="waiting-time">00:00</span></div>     
+        <!-- <p>Version: 10272024.transfer</p><br> -->
+        <div class="wait-time"><span id="waiting-time">00:00</span></div>     
         <p id="confirmation-text">You have successfully joined the queue.</p>
         
         <div class= "hint-text" id="window-name"><strong>Location</strong></div>
-        <div class= "hint-text">Your queue number is:</div>
+        <div class= "hint-text">Your number is:</div>
         <div class="queue-number" id="queue-number">Number</div>
-        <p class= "hint-text" id="timestamp-text"><strong>Timestamp</strong></p>
-
-        <!-- Mobile Number Form -->
-        <form id="mobile-form">
-            <input type="tel" id="mobile-number" placeholder="Mobile Number" pattern="[0-9]*" maxlength="10" required>
-            <button type="submit">Send Code</button>
-        </form>
+        <!-- Time is got through Web API -->
+        <p class= "hint-text" id="timestamp-text">Timestamp</p>
 
         <!-- Transaction Type Form -->
-        <form id="transaction-form">
+        <!-- <form id="transaction-form">
             <select required>
                 <option value="" disabled selected>Select Transaction Type</option>
                 <option value="Type1">Type 1</option>
@@ -40,9 +35,18 @@
                 <option value="Type3">Type 3</option>
             </select>
             <button type="submit">Submit</button>
-        </form>
+        </form> -->
 
         <!-- <div id="state-text">State:</div> -->
+    </div>
+
+    <div class="container" id="container">
+        <!-- Mobile Number Form -->
+        <form id="mobile-form">
+            <label for="mobile-form">Mobile Number</label>
+            <input type="tel" id="mobile-number" placeholder="Optional" pattern="[0-9]*" maxlength="10" required>
+            <button type="submit">Submit Number</button>
+        </form>
     </div>
 
     <script>

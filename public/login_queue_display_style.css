@@ -1,54 +1,37 @@
-
-/* Custom Dropdown Styling */
-.custom-dropdown {
-    position: relative;
-    width: 100%;
-}
-
-.custom-dropdown select {
-    appearance: none;
-    width: 100%;
-    padding: 10px;
-    font-size: 1rem;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    background-color: white;
-    cursor: pointer;
-}
-
-.custom-dropdown::after {
-    content: '\25BC';
-    position: absolute;
-    top: 50%;
-    right: 10px;
-    transform: translateY(-50%);
-    pointer-events: none;
-    font-size: 1rem;
-    color: #333;
-}
-
-/* Background Image for the login page */
+/* Background styling */
 #login-body::before {
     content: "";
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
-    width: 100%;
-    height: 100%;
-    background: url('background_2.jpg') no-repeat center center;
+    width: 100vw;
+    height: 100vh;
+    background: url('../images/background_2.jpg') no-repeat center center;
     background-size: cover;
     filter: grayscale(25%);
     opacity: 0.3;
     z-index: -1;
 }
 
+/* Box container styling */
+.box-container {
+    background: #ffffff;
+    box-shadow: 0px 5px 10px 2px rgba(0, 0, 0, 0.2);
+    border-radius: 12px;
+    max-width: 400px;
+    width: 100%;
+    text-align: center;
+    padding: 20px;
+}
+
+/* Password container styling */
 .password-container {
     position: relative;
 }
 
 #togglePassword {
     position: absolute;
-    right: 10px; /* Adjust this to position the button properly */
+    right: 10px;
     top: 50%;
     transform: translateY(-50%);
     background-color: transparent;
@@ -58,32 +41,30 @@
 
 #togglePassword i {
     font-size: 1.1rem;
-    color: #6c757d; /* Gray color for the icon */
+    color: #6c757d;
 }
 
-.box-container{
-    transform: translate(50%, 50%);
-    background: var(--white);
-    box-shadow: 0px 5px 10px 2px #00000070;
-    border-radius: 20px;
-    width: 50%;
-    height: 50%;
-    align-items: center;
-    align-content: space-evenly;
-}
-
-/* Overriding CSS Style */
-#main-content-placeholder{
-    display:flex;
-    flex-grow: 1;
-    flex-direction: column;
-    align-items: center;
-}
-
-.container.parent {
-    flex-grow: 1; /* Fills the remaining vertical space */
+/* Fullscreen container */
+.container-fluid.vh-100 {
     display: flex;
-    flex-direction: column;
-    height: 100vh; /* Ensure it takes the full viewport height */
-    overflow-y: auto;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+    margin: 0;
+}
+
+/* Logo and header styling */
+.logo-img {
+    width: 25%;
+    margin-bottom: 20px;
+}
+
+h1 {
+    font-size: 1.8rem;
+    color: #333;
+}
+
+p {
+    font-size: 1rem;
+    color: #555;
 }
