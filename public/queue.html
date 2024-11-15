@@ -40,7 +40,7 @@
         <!-- <div id="state-text">State:</div> -->
     </div>
 
-    <div class="container" id="container">
+    <div class="container" id="form-container">
         <!-- Mobile Number Form -->
         <form id="mobile-form">
             <label for="mobile-form">Mobile Number</label>
@@ -91,6 +91,7 @@
                 }
             } catch (error) {
                 $("#container").load(`invalid_queue.html`);
+                $("#form-container").hide();
                 console.log('Invalid page loaded');
                 alert('This is an invalid queue card.');
             }

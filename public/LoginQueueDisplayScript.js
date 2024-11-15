@@ -1,33 +1,32 @@
-let adminLoginPath = "../html/login.html";
+let adminLoginPath = "http://localhost/queue_management/html/login.html";
 let loginForm = document.getElementById('loginForm');
 let passwordTextInput = document.getElementById('accountPassword');
 
 document.addEventListener('DOMContentLoaded', function() {
     resetForm();
-    togglePasswordVisibility();
+    setupPasswordToggle();
 });
 
 function resetForm() {
     loginForm.reset(); // Reset form fields
     passwordTextInput.focus(); // Refocus on the password field
-    console.log("Form was reset.")
+    console.log("Form was reset.");
 }
 
-// Switch to Live Queue Display
+// Switch to Admin Login
 function switchToAdminLogin(event) {
     console.log("Go to admin login mode");
     window.location.href = adminLoginPath;
 } 
 
-// Toggle for seeing password
-function togglePasswordVisibility(){
+// Setup toggle for seeing password
+function setupPasswordToggle() {
     const togglePassword = document.getElementById('togglePassword');
-    const passwordField = document.getElementById('accountPassword');
     
     togglePassword.addEventListener('click', function() {
-        // Toggle the type attribute
-        const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
-        passwordField.setAttribute('type', type);
+        // Toggle the type attribute of the password field
+        const type = passwordTextInput.getAttribute('type') === 'password' ? 'text' : 'password';
+        passwordTextInput.setAttribute('type', type);
         
         // Toggle the eye icon
         this.querySelector('i').classList.toggle('fa-eye');
@@ -39,12 +38,13 @@ function togglePasswordVisibility(){
 async function loginUser(event) {
     event.preventDefault();
     
-    const queueDisplayPath = "../queue_display_module/public/index.html"; 
+    const queueDisplayPath = "https://qrcodesti.onrender.com/queue_display.html"; 
     const inputQueueDisplayPassword = passwordTextInput.value;
+    const verifyLoginScript = 'https://qrcodesti.onrender.com/verify_login_queue_display.php';
 
     try {
         // Send login request
-        const response = await fetch('http://localhost/queue_management/php/verify_login_queue_display.php', {
+        const response = await fetch(verifyLoginScript, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -59,10 +59,9 @@ async function loginUser(event) {
 
         if (data.status === 'success') {
             alert(data.message);
-                
             window.location.href = queueDisplayPath; // Redirect on success
         } else {
-            passwordTextInput.value = ""; // Empties password text input
+            passwordTextInput.value = ""; // Clear password input
             alert(data.message); // Show error message
         }
     } catch (error) {

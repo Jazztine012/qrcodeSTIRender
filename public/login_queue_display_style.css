@@ -6,7 +6,7 @@
     left: 0;
     width: 100vw;
     height: 100vh;
-    background: url('../images/background_2.jpg') no-repeat center center;
+    background: url('background_2.jpg') no-repeat center center;
     background-size: cover;
     filter: grayscale(25%);
     opacity: 0.3;
