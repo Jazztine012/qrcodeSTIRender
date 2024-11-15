@@ -57,13 +57,24 @@
         const waitingTimeEl = document.getElementById('waiting-time');
         const token = new URLSearchParams(window.location.search).get('token');
         const params = new URLSearchParams(window.location.search);
-        const queueLocation = params.get('location');
+        const queueLocation = params.get('location').toUpperCase();
         const queueNumber = params.get('queue');
         const timestamp = new Date(params.get('timestamp')).toLocaleString();
-    
+        const queueWaitingTime = params.get('time');
+        
         // Countdown timer for estimated waiting time
-        let totalSeconds = 300; // 5 minutes
+        let totalSeconds = parseInt(queueWaitingTime);
+
         function startCountdown() {
+            // Checks if localStorage has a value
+            if (!localStorage.getItem('remainingTime')){
+                totalSeconds = parseInt(queueWaitingTime);
+            }
+            else {
+                totalSeconds = localStorage.getItem('remainingTime');
+            }
+
+            // Updates timer countdown
             const interval = setInterval(() => {
                 if (totalSeconds > 0) {
                     totalSeconds--;
@@ -73,8 +84,11 @@
                 } else {
                     clearInterval(interval);
                     waitingTimeEl.textContent = '00:00';
+                    localStorage.removeItem('remainingTime');
+                    console.log("Removed waiting time item.");
                 }
             }, 1000);
+            localStorage.setItem('remainingTime', totalSeconds);
         }
     
         // Display queue information
