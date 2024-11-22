@@ -3,50 +3,58 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Code Generator</title>
 
-    <!-- Content Security Policy -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self' file: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; script-src 'self' file: 'unsafe-inline'; style-src 'self' file: 'unsafe-inline' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net;">
-
-    <title>Login | Queue Display</title>
-
-    <!-- Stylesheets -->
     <link rel="stylesheet" href="all.min.css">
-    <link rel="stylesheet" href="bootstrap.min.css">
-    <link rel="stylesheet" href="kaiadmin.min.css">
     <link rel="stylesheet" href="parent_style.css">
-    <link rel="stylesheet" href="login_queue_display_style.css">
-
-    <!-- Scripts -->
-    <script src="jquery-3.6.0.min.js"></script>
-    <script src="bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="queue_display_style.css">
 </head>
-
-<body id="login-body">
-    <div class="container-fluid d-flex justify-content-center align-items-center vh-100">
-        <div class="box-container p-4">
-            <img src="system-logo.png" alt="System Logo" class="logo-img mx-auto d-block mb-3" style="width: 20%;">
-            <div class="text-center">
-                <h1>Welcome to Queue!</h1>
-                <p class="mb-4">This login form is for displaying the overall queue list.</p>
-            </div>
-
-            <!-- Login Form -->
-            <form id="loginForm" onsubmit="loginUser(event)" class="text-center">
-                <div class="password-container mb-3">
-                    <input type="password" id="accountPassword" class="form-control" placeholder="Password" required>
-                    <button type="button" id="togglePassword" class="btn btn-sm btn-outline-secondary">
-                        <i class="fas fa-eye"></i>
-                    </button>
-                </div>
-                <button type="submit" class="btn btn-success w-100 mb-2"><strong>Login</strong></button>
-            </form>
-
-            <!-- <button class="btn btn-secondary w-100" onclick="switchToAdminLogin()">Admin Login Mode</button> -->
-        </div>
+<body>
+    <div class="welcome-container">
+        <h1>Welcome to STI College Tagaytay</h1>
+        <p>To join the queue, please scan the QR code below using your mobile device's camera or a QR code scanning app.
+        <br>Follow the instructions that appear on your screen to complete the process.</p>
     </div>
 
-    <!-- Access to global script -->
-    <script src="GlobalScript.js"></script>
-    <script src="LoginQueueDisplayScript.js"></script>
+    <div id="queueContainer">
+        <!-- Dynamic QR queue cards will be appended here -->
+    </div>
+
+    <!-- <div id="qr-container">
+        <div class="qr-section">
+            <div class="queue-count" id="cashier-count">Cashier Queue</div>
+            <div class="qr-code" id="cashier"></div>
+            <p>Queue Number: <span id="cashier-queue-number"></span></p>
+            <p>Generated at: <span class="timestamp" id="cashier-timestamp"></span></p>
+        </div>
+
+        <div class="qr-section">
+            <div class="queue-count" id="registrar-count">Registrar Queue</div>
+            <div class="qr-code" id="registrar"></div>
+            <p>Queue Number: <span id="registrar-queue-number"></span></p>
+            <p>Generated at: <span class="timestamp" id="registrar-timestamp"></span></p>
+        </div>
+
+        <div class="qr-section">
+            <div class="queue-count" id="front-desk-count">Front Desk Queue</div>
+            <div class="qr-code" id="front-desk"></div>
+            <p>Queue Number: <span id="front-desk-queue-number"></span></p>
+            <p>Generated at: <span class="timestamp" id="front-desk-timestamp"></span></p>
+        </div>
+
+    </div> -->
+
+    <button onclick="logoutQueueDisplay()">Logout</button>
+    
+    <h2>Scanned Customers</h2>
+    <ul id="scanned-customers"></ul>
+
+    <!-- Local library that creates QR codes -->
+    <!-- TODO: Dynamically load online or offline script depending on the situation -->
+    <script src="../../libs/qrcode.min.js"></script>
+    <!-- Native script -->
+    <script src="../../javascript/QueueDisplayScript.js"></script>
+    
 </body>
 </html>

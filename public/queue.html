@@ -8,6 +8,36 @@
     <link rel="stylesheet" href="customer_queue_style.css">
     <link rel="icon" href="favicon.ico" type="image/x-icon">
     <script src="jquery-3.6.0.min.js"></script>
+    <style>
+        /* Styling for pill-shaped buttons */
+        .nav-pills .nav-link {
+            border-radius: 50px;
+            font-weight: bold;
+            padding: 10px 20px;
+            text-align: center;
+        }
+
+        .nav-pills .nav-link.active {
+            background-color: #007bff;
+            color: #fff;
+        }
+
+        .tab-content {
+            margin-top: 20px;
+        }
+        
+        .center-message {
+            text-align: center;
+        }
+
+        #attention-color {
+            color: rgba(141, 78, 27, 0.801);
+        }
+
+        .gray {
+            color: gray;
+        }
+    </style>
 </head>
 <body>
 
@@ -16,182 +46,99 @@
 
     <!-- Main Container -->
     <div class="container" id="container">
-        <!-- <p>Version: 10272024.transfer</p><br> -->
         <div class="wait-time"><span id="waiting-time">00:00</span></div>     
         <p id="confirmation-text">You have successfully joined the queue.</p>
         
-        <div class= "hint-text" id="window-name"><strong>Location</strong></div>
-        <div class= "hint-text">Your number is:</div>
+        <div class="hint-text" id="window-name"><strong>Location</strong></div>
+        <div class="hint-text">Your number is:</div>
         <div class="queue-number" id="queue-number">Number</div>
-        <!-- Time is got through Web API -->
-        <p class= "hint-text" id="timestamp-text">Timestamp</p>
-
-        <!-- Transaction Type Form -->
-        <!-- <form id="transaction-form">
-            <select required>
-                <option value="" disabled selected>Select Transaction Type</option>
-                <option value="Type1">Type 1</option>
-                <option value="Type2">Type 2</option>
-                <option value="Type3">Type 3</option>
-            </select>
-            <button type="submit">Submit</button>
-        </form> -->
-
-        <!-- <div id="state-text">State:</div> -->
+        <p class="hint-text" id="timestamp-text">Timestamp</p>
     </div>
 
     <div class="container" id="form-container">
-        <!-- Mobile Number Form -->
-        <form id="mobile-form">
-            <label for="mobile-form">Mobile Number</label>
-            <input type="tel" id="mobile-number" placeholder="Optional" pattern="[0-9]*" maxlength="10" required>
-            <button type="submit">Submit Number</button>
-        </form>
+        <!-- Warning message -->
+        <i><p class="center-message gray"><span id="attention-color">Attention:</span> Internet connection is required to send data to the system.</p></i>
+        <!-- Pill Navigation for SMS and Email -->
+        <ul class="nav nav-pills justify-content-center" id="promptTabs" role="tablist">
+            <li class="nav-item">
+                <button class="nav-link active" id="sms-tab" data-bs-toggle="tab" data-bs-target="#sms" type="button" role="tab" aria-controls="sms" aria-selected="true">SMS</button>
+            </li>
+            <li class="nav-item">
+                <button class="nav-link" id="email-tab" data-bs-toggle="tab" data-bs-target="#email" type="button" role="tab" aria-controls="email" aria-selected="false">Email</button>
+            </li>
+        </ul>
+
+        <!-- Tab Content -->
+        <div class="tab-content mt-3">
+            <!-- SMS Tab -->
+            <div class="tab-pane fade show active" id="sms" role="tabpanel" aria-labelledby="sms-tab">
+                <form id="sms-form">
+                    <label for="mobile-number">Mobile Number</label>
+                    <input type="tel" id="mobile-number" class="form-control" placeholder="Enter Mobile Number" pattern="[0-9]*" maxlength="10" required>
+                    <button type="submit" class="btn btn-primary mt-3 w-100">Send Mobile Number</button>
+                </form>
+            </div>
+
+            <!-- Email Tab -->
+            <div class="tab-pane fade" id="email" role="tabpanel" aria-labelledby="email-tab">
+                <form id="email-form">
+                    <label for="email-address">Email Address</label>
+                    <input type="email" id="email-address" class="form-control" placeholder="Enter Email Address" required>
+                    <button type="submit" class="btn btn-primary mt-3 w-100">Send Email</button>
+                </form>
+            </div>
+        </div>
     </div>
 
     <script>
-        const windowNameText = document.getElementById('window-name');
-        const queueNumberText = document.getElementById('queue-number');
-        const timestampText = document.getElementById('timestamp-text');
-        const queueMessageText = document.getElementById('confirmation-text');
-        const waitingTimeEl = document.getElementById('waiting-time');
-        const token = new URLSearchParams(window.location.search).get('token');
-        const params = new URLSearchParams(window.location.search);
-        const queueLocation = params.get('location').toUpperCase();
-        const queueNumber = params.get('queue');
-        const timestamp = new Date(params.get('timestamp')).toLocaleString();
-        const queueWaitingTime = params.get('time');
-        
-        // Countdown timer for estimated waiting time
-        let totalSeconds = parseInt(queueWaitingTime);
+        const mobileNumberTextInput = document.getElementById('mobile-number');
+        const emailNumberTextInput = document.getElementById('email-address');
 
-        function startCountdown() {
-            // Checks if localStorage has a value
-            if (!localStorage.getItem('remainingTime')){
-                totalSeconds = parseInt(queueWaitingTime);
-            }
-            else {
-                totalSeconds = localStorage.getItem('remainingTime');
-            }
+        // JavaScript to manage tab switching and forms
+        document.addEventListener('DOMContentLoaded', () => {
+            // Add event listeners for form submission
+            const smsForm = document.getElementById('sms-form');
+            const emailForm = document.getElementById('email-form');
 
-            // Updates timer countdown
-            const interval = setInterval(() => {
-                if (totalSeconds > 0) {
-                    totalSeconds--;
-                    const minutes = Math.floor(totalSeconds / 60).toString().padStart(2, '0');
-                    const seconds = (totalSeconds % 60).toString().padStart(2, '0');
-                    waitingTimeEl.textContent = `${minutes}:${seconds}`;
-                } else {
-                    clearInterval(interval);
-                    waitingTimeEl.textContent = '00:00';
-                    localStorage.removeItem('remainingTime');
-                    console.log("Removed waiting time item.");
-                }
-            }, 1000);
-            localStorage.setItem('remainingTime', totalSeconds);
-        }
-    
-        // Display queue information
-        function setInnerTexts() {
-            try {
-                if (queueLocation && queueNumber && timestamp) {
-                    console.log(queueLocation, ' ', queueNumber, ' ', timestamp);
-                    startCountdown();
-                    windowNameText.innerText = `${queueLocation}`;
-                    queueNumberText.innerText = `${queueNumber}`;
-                    timestampText.innerText = `${timestamp}`;
-                } else {
-                    throw new Error('Queue information is incomplete.');
-                }
-            } catch (error) {
-                $("#container").load(`invalid_queue.html`);
-                $("#form-container").hide();
-                console.log('Invalid page loaded');
-                alert('This is an invalid queue card.');
-            }
-        }
-    
-        // Send data to the server when page loads
-        function sendCustomerData() {
-            if (!queueLocation || !queueNumber || !timestamp) {
-                console.error('Missing data: queueLocation, queueNumber, or timestamp is not defined.');
-                return;
-            }
-    
-            const customerData = {
-                location: queueLocation,
-                queueNumber: queueNumber,
-                timestamp: timestamp
-            };
-    
-            // Send data to the customer updates endpoint
-            fetch('https://qrcodesti.onrender.com/api/customer-updates', { // Use full URL
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(customerData)
-            })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
-            .then(updatedData => {
-                document.getElementById('confirmation-text').innerText = 
-                    `You have joined the queue for ${updatedData.location}. Your queue number is ${updatedData.queueNumber}. The QR code was generated at: ${updatedData.timestamp}.`;
-                alert("Customer data sent successfully!");
-            })
-            .catch(error => {
-                console.error('Error sending customer data:', error);
-                alert("Error sending customer data!", error.toString());
+            smsForm.addEventListener('submit', (event) => {
+                event.preventDefault();
+                const mobileNumber = document.getElementById('mobile-number').value;
+                alert(`SMS sent to ${mobileNumber}`);
+                // Logic to handle SMS submission can go here
             });
-        }
-    
-        // Verify token and establish WebSocket connection
-        const socket = new WebSocket('wss://qrcodesti.onrender.com'); // Use wss:// for WebSocket
-    
-        socket.addEventListener('open', function () {
-            if (token) {
-                fetch('https://qrcodesti.onrender.com/verify_access.php', { // Update to full URL
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ token: token }),
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.status === 'already_accessed') {
-                        alert('This page has already been accessed. You cannot open it again.');
-                    }
-                });
+
+            emailForm.addEventListener('submit', (event) => {
+                event.preventDefault();
+                const emailAddress = document.getElementById('email-address').value;
+                alert(`Email sent to ${emailAddress}`);
+                // Logic to handle Email submission can go here
+            });
+        });
+
+        // EMAIL TEXT INPUT LISTENERS
+
+        // MOBILE TEXT INPUT LISTENERS
+        // Add an event listener to enforce the rules as the user types
+        mobileNumberTextInput.addEventListener('input', function () {
+            // Remove all characters except numbers and the '+' sign
+            this.value = this.value.replace(/[^0-9+]/g, '');
+
+            // Enforce a maximum length of 13 characters
+            if (this.value.length > 13) {
+                this.value = this.value.slice(0, 13);
             }
-    
-            // Send customer data through WebSocket
-            const customerData = {
-                location: queueLocation,
-                queueNumber: queueNumber,
-                timestamp: timestamp
-            };
-            socket.send(JSON.stringify(customerData));
         });
-    
-        socket.addEventListener('error', function (error) {
-            console.error('WebSocket error:', error);
-        });
-    
-        socket.addEventListener('close', function () {
-            console.log('WebSocket connection closed');
-        });
-    
-        // Start countdown and initialize page content
-        document.addEventListener('DOMContentLoaded', function() {
-            sendCustomerData();
-            setInnerTexts();
+
+        // Add validation on form submission to ensure the length is between 11 and 13 characters
+        mobileNumberTextInput.closest('form').addEventListener('submit', function (event) {
+            const inputLength = mobileNumberTextInput.value.length;
+
+            if (inputLength < 11 || inputLength > 13) {
+                event.preventDefault(); // Prevent form submission
+                alert('The mobile number must be between 11 and 13 characters long.');
+            }
         });
     </script>
-    
+    <script src="bootstrap.bundle.min.js"></script>
 </body>
 </html>
