@@ -112,7 +112,8 @@ async function fetchCurrentQueue() {
 // Gets server time based on the World Time API
 async function getServerTime() {
     try {
-        const response = await fetch('https://worldtimeapi.org/api/timezone/etc/UTC');
+        const response = await fetch('https://timeapi.io/api/time/current/zone?timeZone=Asia%2FManila');
+        // const response = await fetch('https://worldtimeapi.org/api/timezone/etc/UTC');
         
         if (!response.ok) {
             throw new Error('Failed to fetch time from the public API.');
