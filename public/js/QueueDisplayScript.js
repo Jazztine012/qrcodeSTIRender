@@ -26,7 +26,7 @@ async function loadQueueCards() {
 // Function to create a queue card for each account
 async function createQueueCard(account) {
     const location = account.account_name;
-    const queueNumber = await fetchCurrentQueue();
+    const queueNumber = await fetchCurrentQueue(account.account_id);
     const timestamp = await getServerTime();
     const waitingTime = await fetchAverageWaitingTime();
 
@@ -96,9 +96,9 @@ async function fetchAverageWaitingTime() {
 }
 
 // Async function to get current queue when page is loaded
-async function fetchCurrentQueue() {
+async function fetchCurrentQueue(accountId) {
     try {
-        const response = await fetch('http://localhost/queue_management/php/fetch_queue_info.php');
+        const response = await fetch(`http://localhost/queue_management/php/fetch_queue_info.php?account_id=${accountId}`);
         if (!response.ok) throw new Error('Network response was not ok');
         const data = await response.json();
         
@@ -120,7 +120,7 @@ async function getServerTime() {
         }
 
         const data = await response.json();
-        const utcTime = new Date(data.datetime);
+        const utcTime = new Date(data.dateTime);
         
         // Convert UTC time to Asia/Manila timezone
         const manilaTimeString = utcTime.toLocaleString("en-US", {
