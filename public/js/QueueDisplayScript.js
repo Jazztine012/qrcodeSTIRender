@@ -98,7 +98,7 @@ async function fetchAverageWaitingTime() {
 // Async function to get current queue when page is loaded
 async function fetchCurrentQueue(accountId) {
     try {
-        const response = await fetch(`http://localhost/queue_management/php/fetch_current_queue.php?account_id=${accountId}`);
+        const response = await fetch(`http://localhost/queue_management/php/fetch_current_unclaimed_queue.php?account_id=${accountId}`);
         if (!response.ok) throw new Error('Network response was not ok');
         const data = await response.json();
         
