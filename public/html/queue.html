@@ -52,7 +52,7 @@
         <div class="hint-text" id="window-name"><strong>Location</strong></div>
         <div class="hint-text">Your number is:</div>
         <div class="queue-number" id="queue-number">Number</div>
-        <!-- <p class="hint-text" id="timestamp-text">Timestamp</p> -->
+        <p class="hint-text" id="timestamp-text">Timestamp</p>
     </div>
 
     <div class="container" id="form-container">
@@ -144,15 +144,15 @@
         // REIMPORT FROM OLD FILES
         const windowNameText = document.getElementById('window-name');
         const queueNumberText = document.getElementById('queue-number');
-        const timestampText = document.getElementById('timestamp-text');
+        const timestampText = document.getElementById('timestamp-text').hide();
         const queueMessageText = document.getElementById('confirmation-text');
         const waitingTimeEl = document.getElementById('waiting-time');
         const token = new URLSearchParams(window.location.search).get('token');
         const params = new URLSearchParams(window.location.search);
         const queueLocation = params.get('location');
         const queueNumber = params.get('queue');
-        // const timestamp = new Date(params.get('timestamp')).toLocaleString();
-        const timestamp = params.get('timestamp');
+        const timestamp = new Date(params.get('timestamp')).toLocaleString();
+        // const timestamp = params.get('timestamp');
     
         // Countdown timer for estimated waiting time
         let totalSeconds = 300; // 5 minutes
@@ -204,28 +204,28 @@
             };
     
             // Send data to the customer updates endpoint
-            // fetch('https://qrcodesti.onrender.com/api/customer-updates', { // Use full URL
-            //     method: 'POST',
-            //     headers: {
-            //         'Content-Type': 'application/json'
-            //     },
-            //     body: JSON.stringify(customerData)
-            // })
-            // .then(response => {
-            //     if (!response.ok) {
-            //         throw new Error('Network response was not ok');
-            //     }
-            //     return response.json();
-            // })
-            // .then(updatedData => {
-            //     document.getElementById('confirmation-text').innerText = 
-            //         `You have joined the queue for ${updatedData.location}. Your queue number is ${updatedData.queueNumber}. The QR code was generated at: ${updatedData.timestamp}.`;
-            //     alert("Customer data sent successfully!");
-            // })
-            // .catch(error => {
-            //     console.error('Error sending customer data:', error);
-            //     alert("Error sending customer data!", error.toString());
-            // });
+            fetch('https://qrcodesti.onrender.com/api/customer-updates', { // Use full URL
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(customerData)
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(updatedData => {
+                document.getElementById('confirmation-text').innerText = 
+                    `You have joined the queue for ${updatedData.location}. Your queue number is ${updatedData.queueNumber}. The QR code was generated at: ${updatedData.timestamp}.`;
+                alert("Customer data sent successfully!");
+            })
+            .catch(error => {
+                console.error('Error sending customer data:', error);
+                alert("Error sending customer data!", error.toString());
+            });
         }
     
         // Verify token and establish WebSocket connection
