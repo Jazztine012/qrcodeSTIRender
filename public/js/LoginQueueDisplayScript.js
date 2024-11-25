@@ -47,7 +47,7 @@ async function loginUser(event) {
 
     try {
         // Send login request
-        const response = await fetch('https://qrcodesti.onrender.com/php/verify_login_queue_display.php', {
+        const response = await fetch('../php/verify_login_queue_display.php', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
