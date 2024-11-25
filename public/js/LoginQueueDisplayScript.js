@@ -46,29 +46,31 @@ async function loginUser(event) {
     const inputQueueDisplayPassword = passwordTextInput.value;
 
     try {
-        // Send login request
-        const response = await fetch('https://qrcodesti.onrender.com/php/verify_login_queue_display.php', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                queue_display_password: inputQueueDisplayPassword
-            }),
-        });
+        // // Send login request
+        // const response = await fetch('https://qrcodesti.onrender.com/php/verify_login_queue_display.php', {
+        //     method: 'POST',
+        //     headers: {
+        //         'Content-Type': 'application/json',
+        //     },
+        //     body: JSON.stringify({
+        //         queue_display_password: inputQueueDisplayPassword
+        //     }),
+        // });
 
-        // Parse response JSON
-        const data = await response.json();
+        // // Parse response JSON
+        // const data = await response.json();
 
-        // Logs in
-        if (data.status === 'success') {
-            alert(data.message);
-            localStorage.setItem('loggedInValue', true);
-            window.location.href = queueDisplayPath; // Redirect on success
-        } else {
-            passwordTextInput.value = ""; // Empties password text input
-            alert(data.message); // Show error message
-        }
+        // // Logs in
+        // if (data.status === 'success') {
+        //     alert(data.message);
+        //     localStorage.setItem('loggedInValue', true);
+        //     window.location.href = queueDisplayPath; // Redirect on success
+        // } else {
+        //     passwordTextInput.value = ""; // Empties password text input
+        //     alert(data.message); // Show error message
+        // }
+
+        window.location.href = queueDisplayPath;
     } catch (error) {
         console.error('Error:', error);
     }
