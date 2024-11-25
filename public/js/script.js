@@ -110,10 +110,13 @@ async function fetchCurrentQueue() {
 // Gets server time based on the World Time API
 async function getServerTime() {
     try {
-        const response = await fetch('https://worldtimeapi.org/api/timezone/etc/UTC');
-        
+        let response = await fetch('https://worldtimeapi.org/api/timezone/etc/UTC');
         if (!response.ok) {
-            throw new Error('Failed to fetch time from the public API.');
+            // Alternative time API
+            response = await fetch('http://worldclockapi.com/api/json/utc/now');
+            if (!response.ok) {
+                throw new Error('Failed to fetch time from the public API.');
+            }
         }
 
         const data = await response.json();
