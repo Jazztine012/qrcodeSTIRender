@@ -42,7 +42,7 @@ function togglePasswordVisibility(){
 async function loginUser(event) {
     event.preventDefault();
     
-    const queueDisplayPath = "../html/index.html"; 
+    const queueDisplayPath = "../html/queue_display.html"; 
     const inputQueueDisplayPassword = passwordTextInput.value;
 
     try {

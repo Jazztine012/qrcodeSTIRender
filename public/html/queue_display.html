@@ -4,13 +4,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>QR Code Generator</title>
+
+    <link rel="stylesheet" href="../css/all.min.css">
+    <link rel="stylesheet" href="../css/parent_style.css">
     <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/queue_display_style.css">
 </head>
 <body>
-    <p>Version: 10272024.transfer</p>
-    <h1>QR Code for Queue System</h1>
+    <div class="welcome-container">
+        <h1>Welcome to STI College Tagaytay</h1>
+        <p>To join the queue, please scan the QR code below using your mobile device's camera or a QR code scanning app.
+        <br>Follow the instructions that appear on your screen to complete the process.</p>
+    </div>
 
-    <div id="qr-container">
+    <div id="queueContainer">
+        <!-- Dynamic QR queue cards will be appended here -->
+    </div>
+
+    <!-- <div id="qr-container">
         <div class="qr-section">
             <div class="queue-count" id="cashier-count">Cashier Queue</div>
             <div class="qr-code" id="cashier"></div>
@@ -31,15 +42,19 @@
             <p>Queue Number: <span id="front-desk-queue-number"></span></p>
             <p>Generated at: <span class="timestamp" id="front-desk-timestamp"></span></p>
         </div>
-    </div>
 
+    </div> -->
+
+    <button onclick="logoutQueueDisplay()">Logout</button>
+    
     <h2>Scanned Customers</h2>
     <ul id="scanned-customers"></ul>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-    <script src="../js/qrcode.min.js" defer></script>
-    
-    <script src="../js/script.js"></script>
+    <!-- Local library that creates QR codes -->
+    <!-- TODO: Dynamically load online or offline script depending on the situation -->
+    <script src="../js/qrcode.min.js"></script>
+    <!-- Native script -->
+    <script src="../js/QueueDisplayScript.js"></script>
     
 </body>
 </html>
