@@ -1,8 +1,10 @@
 const queueContainer = document.getElementById('queueContainer');
-const loginQueueDisplayPath = 'http://localhost/queue_management/html/login_queue_display.html';
-const queuePanelPath = 'qr_card.html'; // Path to the queue card template
+const loginQueueDisplayPath = 'https://qrcodesti.onrender.com/html/login_queue_display.html';
+const queuePanelPath = 'https://qrcodesti.onrender.com/html/qr_card.html'; // Path to the queue card template
 
-document.addEventListener('DOMContentLoaded', loadQueueCards);
+document.addEventListener('DOMContentLoaded', function(){
+    loadQueueCards();
+});
 
 // Fetch active accounts and generate queue cards
 async function loadQueueCards() {
@@ -46,7 +48,7 @@ async function createQueueCard(account) {
     windowName.textContent = account.account_name || 'CASHIER'; // Set window name
     
     // Generate QR code
-    const qrCodeURL = `https://qrcodesti.onrender.com/queue.html?location=${location}&queue=${queueNumber}&timestamp=${timestamp[1]}&time=${fetchAverageWaitingTime()}`;
+    const qrCodeURL = `https://qrcodesti.onrender.com/queue.html?location=${location}&queue=${queueNumber}&timestamp=${timestamp[1]}&time=${20}`;
     new QRCode(qrContainer, {
         text: qrCodeURL,
         width: 150,
