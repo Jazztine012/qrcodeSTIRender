@@ -50,7 +50,7 @@ async function createQueueCard(account) {
     windowName.textContent = account.account_name || 'CASHIER'; // Set window name
     
     // Generate QR code
-    const qrCodeURL = `https://qrcodesti.onrender.com/queue.html?location=${location}&queue=${queueNumber}&timestamp=${timestamp[1]}&time=${waitingTime}`;
+    const qrCodeURL = `https://qrcodesti.onrender.com/html/queue.html?location=${location}&queue=${queueNumber}&timestamp=${timestamp[1]}&time=${waitingTime}`;
     new QRCode(qrContainer, {
         text: qrCodeURL,
         width: 150,
