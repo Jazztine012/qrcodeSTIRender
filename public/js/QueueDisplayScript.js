@@ -1,6 +1,6 @@
 const queueContainer = document.getElementById('queueContainer');
-const loginQueueDisplayPath = 'http://localhost/queue_management/html/login_queue_display.html';
-const queuePanelPath = 'http://localhost/queue_management/queue_display_module/public/qr_card.html'; // Path to the queue card template
+const loginQueueDisplayPath = '../index.html';
+const queuePanelPath = '../html/qr_card.html'; // Path to the queue card template
 
 document.addEventListener('DOMContentLoaded', loadQueueCards);
 
