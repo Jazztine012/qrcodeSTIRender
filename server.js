@@ -2,7 +2,7 @@ const express = require('express');
 const path = require('path');
 const cors = require('cors');
 const app = express();
-const port = process.env.PORT || 3000; // Use Render's PORT or default to 3000 for local development
+const port = process.env.PORT || 4000; // Use Render's PORT or default to 3000 for local development
 
 app.use(cors());
 app.use(express.json());
