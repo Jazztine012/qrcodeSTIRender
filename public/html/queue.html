@@ -218,9 +218,10 @@
                 return response.json();
             })
             .then(updatedData => {
-                document.getElementById('confirmation-text').innerText = 
-                    `You have joined the queue for ${updatedData.location}. Your queue number is ${updatedData.queueNumber}. The QR code was generated at: ${updatedData.timestamp}.`;
-                alert("Customer data sent successfully!");
+                // document.getElementById('confirmation-text').innerText = 
+                //     `You have joined the queue for ${updatedData.location}. Your queue number is ${updatedData.queueNumber}. The QR code was generated at: ${updatedData.timestamp}.`;
+                // alert("Customer data sent successfully!");
+                console.log("Customer data sent successfully!");
             })
             .catch(error => {
                 console.error('Error sending customer data:', error);
