@@ -1,6 +1,6 @@
 const queueContainer = document.getElementById('queueContainer');
-const loginQueueDisplayPath = 'https://qrcodesti.onrender.com/html/login_queue_display.html';
-const queuePanelPath = 'https://qrcodesti.onrender.com/html/qr_card.html'; // Path to the queue card template
+const loginQueueDisplayPath = '../index.html';
+const queuePanelPath = '../html/qr_card.html'; // Path to the queue card template
 
 document.addEventListener('DOMContentLoaded', function(){
     loadQueueCards();

@@ -13,7 +13,7 @@ async function loadQueueCards() {
         queueContainer.innerHTML = ''; // Clear existing content
 
         for (const account of accounts) {
-            console.log(`Account found: ${account.name}`);
+            console.log(`Account found: ${account.account_name}`);
             const queueCard = await createQueueCard(account);
             queueContainer.appendChild(queueCard);
             console.log(`Finished creating ${account.account_name} qr card display.`);
