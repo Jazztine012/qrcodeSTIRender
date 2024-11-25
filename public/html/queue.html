@@ -151,7 +151,8 @@
         const params = new URLSearchParams(window.location.search);
         const queueLocation = params.get('location');
         const queueNumber = params.get('queue');
-        const timestamp = new Date(params.get('timestamp')).toLocaleString();
+        // const timestamp = new Date(params.get('timestamp')).toLocaleString();
+        const timestamp = params.get('timestamp');
     
         // Countdown timer for estimated waiting time
         let totalSeconds = 300; // 5 minutes
