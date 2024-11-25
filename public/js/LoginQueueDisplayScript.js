@@ -1,4 +1,6 @@
 let adminLoginPath = "http://localhost/queue_management/html/login.html" || null;
+const queueDisplayPath = "../html/queue_display.html"; 
+
 let loginForm = document.getElementById('loginForm');
 let passwordTextInput = document.getElementById('accountPassword');
 
@@ -42,7 +44,7 @@ function togglePasswordVisibility(){
 async function loginUser(event) {
     event.preventDefault();
     
-    const queueDisplayPath = "https://qrcodesti.onrender.com/html/queue_display.html"; 
+    
     const inputQueueDisplayPassword = passwordTextInput.value;
 
     try {
