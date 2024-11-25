@@ -42,12 +42,12 @@ function togglePasswordVisibility(){
 async function loginUser(event) {
     event.preventDefault();
     
-    const queueDisplayPath = "../html/queue_display.html"; 
+    const queueDisplayPath = "https://qrcodesti.onrender.com/html/queue_display.html"; 
     const inputQueueDisplayPassword = passwordTextInput.value;
 
     try {
         // Send login request
-        const response = await fetch('../php/verify_login_queue_display.php', {
+        const response = await fetch('https://qrcodesti.onrender.com/php/verify_login_queue_display.php', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
