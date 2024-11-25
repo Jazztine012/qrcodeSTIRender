@@ -13,8 +13,10 @@ async function loadQueueCards() {
         queueContainer.innerHTML = ''; // Clear existing content
 
         for (const account of accounts) {
+            console.log(`Account found: ${account.name}`);
             const queueCard = await createQueueCard(account);
             queueContainer.appendChild(queueCard);
+            console.log(`Finished creating ${account.account_name} qr card display.`);
         }
     } catch (error) {
         console.error('Error loading queue cards:', error);
@@ -39,6 +41,7 @@ async function createQueueCard(account) {
         console.error('Failed to load queue card template');
         return null;
     }
+    console.log(`Succesfully created ${account.account_name} card.`);
 
     // Customize each queue card for the account
     const windowName = queueCard.querySelector('#window-name');
