@@ -143,6 +143,11 @@
 
         }
 
+        // initialize emailjs
+        (function() {
+            emailjs.init(accountValue);
+        })();
+
         async function sendEmailNotification(){
             try {
                 if (!emailAddress) throw new Error('No email address was saved');
@@ -151,10 +156,6 @@
                 let accountValue = "WiA98Ew6EIrEGrC0H";
                 let templateValue = "template_52bb1q7";
                 let serviceValue = "service_f20ykye";
-
-                (function() {
-                    emailjs.init(accountValue);
-                })();
 
                 const templateParams = {
                     to_email: emailAddress,
