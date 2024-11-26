@@ -27,6 +27,8 @@ async function loadQueueCards() {
 async function createQueueCard(account) {
     const queueInfo = await fetchCurrentQueue(account.accountID);
 
+    console.log(queueInfo || "Queue info is null.");
+    
     const location = account.account_name;
     const queueNumber = queueInfo[0];
     const queueID = queueInfo[1];
