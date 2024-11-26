@@ -147,27 +147,27 @@
 
         }
 
-
         async function sendEmailNotification() {
             try {
                 if (!emailAddress) throw new Error('No email address was saved');
 
-                let emailAccountValue;
-                let emailTemplateValue;
-                let emailServiceValue;
+                // Fetch email configuration
+                const response = await fetch('/config');
+                if (!response.ok) throw new Error(`Failed to fetch email configuration: ${response.statusText}`);
+                const config = await response.json();
 
-                (async () => {
-                    const response = await fetch('/config');
-                    const config = await response.json();
+                const emailAccountValue = config.emailAccountValue;
+                const emailTemplateValue = config.emailTemplateValue;
+                const emailServiceValue = config.emailServiceValue;
 
-                    emailAccountValue = config.emailAccountValue;
-                    emailTemplateValue = config.emailTemplateValue;
-                    emailServiceValue = config.emailServiceValue;
-                })();
+                if (!emailAccountValue || !emailTemplateValue || !emailServiceValue) {
+                    throw new Error('Missing email configuration values from /config');
+                }
 
                 // Initialize EmailJS
                 emailjs.init(emailAccountValue);
 
+                // Email template parameters
                 const emailTemplateParams = {
                     to_email: emailAddress, // Recipient's email address
                     queue_number: queueNumber, // Queue number to include in the email
@@ -176,13 +176,13 @@
                 };
 
                 // Send the email notification
-                const response = await emailjs.send(emailServiceValue, emailTemplateValue, emailTemplateParams);
-                console.log("Notification sent successfully:", response);
+                const emailResponse = await emailjs.send(emailServiceValue, emailTemplateValue, emailTemplateParams);
+                console.log("Notification sent successfully:", emailResponse);
 
                 // Optional: Remove saved email address
                 // localStorage.removeItem('emailAddress');
             } catch (error) {
-                console.error(`Error sending email notification. ${error}`);
+                console.error(`Error sending email notification: ${error.message}`);
             }
         }
 

@@ -96,8 +96,8 @@ app.post("/sendNotification", async (req, res) => {
     }
   });
   
-//   returns API keys for email notification
-  app.get('/config', (req, res) => {
+// Returns API keys for email notification
+app.get('/config', (req, res) => {
     res.json({
         emailAccountValue: process.env.EMAIL_ACCOUNT_VALUE,
         emailTemplateValue: process.env.EMAIL_TEMPLATE_VALUE,
