@@ -154,9 +154,9 @@
 
                 // Update accordingly depending on variables
                 // TODO : HIDE THESE
-                const emailAccountValue = process.env.EMAIL_ACCOUNT_VALUE.toString();
-                const emailTemplateValue = process.env.EMAIL_ACCOUNT_VALUE.toString(); // Your email template ID
-                const emailServiceValue = process.env.EMAIL_SERVICE_VALUE.toString(); // Your email service ID
+                const emailAccountValue = process.env.EMAIL_ACCOUNT_VALUE;
+                const emailTemplateValue = process.env.EMAIL_ACCOUNT_VALUE; // Your email template ID
+                const emailServiceValue = process.env.EMAIL_SERVICE_VALUE; // Your email service ID
 
                 // Initialize EmailJS
                 emailjs.init(emailAccountValue);

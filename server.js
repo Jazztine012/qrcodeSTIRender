@@ -73,7 +73,7 @@ app.listen(port, () => {
 
 
 // Code snippet for SMS notifications. Server-side
-const client = twilio(process.env.TWILIO_SID.toString(), process.env.TWILIO_AUTH_TOKEN.toString());
+const client = twilio(process.env.TWILIO_SID, process.env.TWILIO_AUTH_TOKEN);
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
