@@ -71,7 +71,7 @@ app.listen(port, () => {
     console.log(`Server running on port ${port}`);
 });
 
-
+// server side SMS notification
 app.post("/sendNotification", async (req, res) => {
     try {
       const { mobileNumber } = req.body;
@@ -96,3 +96,11 @@ app.post("/sendNotification", async (req, res) => {
     }
   });
   
+//   returns API keys for email notification
+  app.get('/config', (req, res) => {
+    res.json({
+        emailAccountValue: process.env.EMAIL_ACCOUNT_VALUE,
+        emailTemplateValue: process.env.EMAIL_TEMPLATE_VALUE,
+        emailServiceValue: process.env.EMAIL_SERVICE_VALUE,
+    });
+});

@@ -152,11 +152,18 @@
             try {
                 if (!emailAddress) throw new Error('No email address was saved');
 
-                // Update accordingly depending on variables
-                // TODO : HIDE THESE
-                const emailAccountValue = process.env.EMAIL_ACCOUNT_VALUE;
-                const emailTemplateValue = process.env.EMAIL_ACCOUNT_VALUE; // Your email template ID
-                const emailServiceValue = process.env.EMAIL_SERVICE_VALUE; // Your email service ID
+                let emailAccountValue;
+                let emailTemplateValue;
+                let emailServiceValue;
+
+                (async () => {
+                    const response = await fetch('/config');
+                    const config = await response.json();
+
+                    emailAccountValue = config.emailAccountValue;
+                    emailTemplateValue = config.emailTemplateValue;
+                    emailServiceValue = config.emailServiceValue;
+                })();
 
                 // Initialize EmailJS
                 emailjs.init(emailAccountValue);
