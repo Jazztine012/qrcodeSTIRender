@@ -92,7 +92,7 @@
 
     <script>
         const mobileNumberTextInput = document.getElementById('mobile-number');
-        const emailNumberTextInput = document.getElementById('email-address');
+        const emailTextInput = document.getElementById('email-address');
 
         // JavaScript to manage tab switching and forms
         document.addEventListener('DOMContentLoaded', () => {
@@ -102,8 +102,8 @@
 
             smsForm.addEventListener('submit', (event) => {
                 event.preventDefault();
-                const mobileNumber = document.getElementById('mobile-number').value;
-                updateCustomerContactData(mobileNumber, null);
+                const mobileNumber = mobileNumberTextInput.value;
+                updateCustomerContactData(mobileNumber, null, queueID);
                 // alert(`SMS sent to ${mobileNumber}`);
                 // Update localhost to include the mobile number of the queue.
                 // Logic to handle SMS submission can go here
@@ -111,9 +111,9 @@
 
             emailForm.addEventListener('submit', (event) => {
                 event.preventDefault();
-                const emailAddress = document.getElementById('email-address').value;
+                const emailAddress = emailTextInput.value;
                 // alert(`Email sent to ${emailAddress}`);
-                updateCustomerContactData(null, emailAddress);
+                updateCustomerContactData(null, emailAddress, queueID);
                 // Update localhost to include the email address of the queue.
                 // Logic to handle Email submission can go here
             });
@@ -132,6 +132,34 @@
         }
 
         // EMAIL TEXT INPUT LISTENERS
+
+
+        // Add an input event listener for dynamic validation
+        emailTextInput.addEventListener('input', function () {
+            // Get the current value of the input field
+            let email = emailTextInput.value;
+
+            // Remove whitespace and any invalid characters
+            email = email.replace(/\s+/g, ''); // Remove all whitespace
+            email = email.replace(/[^a-zA-Z0-9@._-]/g, ''); // Remove invalid characters for email
+
+            // Update the value of the text input field
+            emailTextInput.value = email;
+
+            // Check if the email is valid
+            if (validateEmail(email)) {
+                emailTextInput.style.borderColor = 'green'; // Indicate valid input
+            } else {
+                emailTextInput.style.borderColor = 'red'; // Indicate invalid input
+            }
+        });
+
+        // Function to validate email format
+        function validateEmail(email) {
+            // Regex for validating an email address
+            const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+            return emailRegex.test(email);
+        }
 
         // MOBILE TEXT INPUT LISTENERS
         // Add an event listener to enforce the rules as the user types
