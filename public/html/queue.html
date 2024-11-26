@@ -124,7 +124,8 @@
                 if (!mobileNumber) console.error("No mobile number was received");
                 if (!emailAddress) console.error("No email address received.");
 
-                const response = await fetch(`http://localhost/queue_management/php/update_notification_contact.php?contactNumber=${mobileNumber}&email=${emailAddress}&queueID=${queueID}`);
+                // const response = await fetch(`http://localhost/queue_management/php/update_notification_contact.php?contactNumber=${mobileNumber}&email=${emailAddress}&queueID=${queueID}`);
+                const response = await fetch(`../php/update_notification_contact.php?contactNumber=${mobileNumber}&email=${emailAddress}&queueID=${queueID}`);
                 if (!response.ok) throw new Error('Network response was not ok');
             } catch (error) {
                 console.error('Error updating customer contact data', error);
