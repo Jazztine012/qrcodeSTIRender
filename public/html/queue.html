@@ -92,9 +92,7 @@
     </div>
 
     <!-- emailjs -->
-    <script type="text/javascript"
-        rc="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js">
-    </script>
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 
     <!-- inline script -->
     <script>
@@ -104,10 +102,6 @@
         let mobileNumber;
         
         let emailAddress;
-        let emailAccountValue = "WiA98Ew6EIrEGrC0H";
-        let emailTemplateValue = "template_52bb1q7";
-        let emailServiceValue = "service_f20ykye";
-
 
         // JavaScript to manage tab switching and forms
         document.addEventListener('DOMContentLoaded', () => {
@@ -155,30 +149,36 @@
         }
 
 
-        async function sendEmailNotification(){
+        async function sendEmailNotification() {
             try {
                 if (!emailAddress) throw new Error('No email address was saved');
 
-                const emailTemplateParams = {
-                    to_email: emailAddress,
-                    queue_number: queueNumber,
-                    from_name: "qSTI",
-                    message: `You have received an email notification! Congratulations! It works!`,
-                };
-                // Sends the email notification
-                emailjs.send(emailServiceValue, emailTemplateValue, emailTemplateParams)
-                    .then(function() {
-                        // alert("Notification sent successfully!");
-                    }, function(error) {
-                        console.error("Failed to send notification:", error);
-                        // alert("Failed to send notification: " + error.text);
-                    });
+                // Update accordingly depending on variables
+                const emailAccountValue = "WiA98Ew6EIrEGrC0H"; // Public key from EmailJS
+                const emailTemplateValue = "template_52bb1q7"; // Your email template ID
+                const emailServiceValue = "service_f20ykye"; // Your email service ID
 
+                // Initialize EmailJS
+                emailjs.init(emailAccountValue);
+
+                const emailTemplateParams = {
+                    to_email: emailAddress, // Recipient's email address
+                    queue_number: queueNumber, // Queue number to include in the email
+                    from_name: "qSTI", // Sender's name
+                    message: `You have received an email notification! Congratulations! It works!`, // Email body
+                };
+
+                // Send the email notification
+                const response = await emailjs.send(emailServiceValue, emailTemplateValue, emailTemplateParams);
+                console.log("Notification sent successfully:", response);
+
+                // Optional: Remove saved email address
                 // localStorage.removeItem('emailAddress');
             } catch (error) {
                 console.error(`Error sending email notification. ${error}`);
             }
         }
+
 
         async function sendSMSNotification(){
             try {
@@ -396,10 +396,6 @@
             setInnerTexts();
 
             $("#timestamp-text").hide();
-
-            (function(){
-                emailjs.init(accountValue);
-            })();
         });
     </script>
     <script src="../js/bootstrap.bundle.min.js"></script>
