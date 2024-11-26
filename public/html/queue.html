@@ -111,7 +111,7 @@
             smsForm.addEventListener('submit', (event) => {
                 event.preventDefault();
                 const mobileNumber = mobileNumberTextInput.value;
-                updateCustomerContactData(mobileNumber, null, queueID);
+                updateCustomerContactData(mobileNumber, null);
             });
 
             emailForm.addEventListener('submit', (event) => {
@@ -127,6 +127,9 @@
             try {
                 if (!mobileNumberHere) console.error("No mobile number was received"); else localStorage.setItem('mobileNumber', mobileNumberHere); sendSMSNotification(); // DEBUG
                 if (!emailAddressHere) console.error("No email address received."); else localStorage.setItem('emailAddress', emailAddressHere); sendEmailNotification(); // DEBUG
+
+                mobileNumberTextInput.value = "";
+                emailTextInput.value = "";
             } catch (error) {
                 console.error('Error updating customer contact data');
             }
