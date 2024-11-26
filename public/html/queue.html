@@ -84,6 +84,7 @@
                 <form id="email-form">
                     <label for="email-address">Email Address</label>
                     <input type="email" id="email-address" class="form-control" placeholder="Enter Email Address" required>
+                    <p id="validation-message"></p>
                     <button type="submit" class="btn btn-primary mt-3 w-100">Send Email</button>
                 </form>
             </div>
@@ -94,6 +95,9 @@
         const mobileNumberTextInput = document.getElementById('mobile-number');
         const emailTextInput = document.getElementById('email-address');
 
+        let mobileNumber;
+        let emailAddress;
+
         // JavaScript to manage tab switching and forms
         document.addEventListener('DOMContentLoaded', () => {
             // Add event listeners for form submission
@@ -102,39 +106,84 @@
 
             smsForm.addEventListener('submit', (event) => {
                 event.preventDefault();
-                const mobileNumber = mobileNumberTextInput.value;
+                mobileNumber = mobileNumberTextInput.value;
                 updateCustomerContactData(mobileNumber, null, queueID);
-                // alert(`SMS sent to ${mobileNumber}`);
-                // Update localhost to include the mobile number of the queue.
-                // Logic to handle SMS submission can go here
             });
 
             emailForm.addEventListener('submit', (event) => {
                 event.preventDefault();
-                const emailAddress = emailTextInput.value;
-                // alert(`Email sent to ${emailAddress}`);
-                updateCustomerContactData(null, emailAddress, queueID);
-                // Update localhost to include the email address of the queue.
-                // Logic to handle Email submission can go here
+                emailAddress = emailTextInput.value;
+                // updateCustomerContactData(null, emailAddress, queueID);
+                updateCustomerContactData(null, emailAddress);
             });
         });
 
-        async function updateCustomerContactData(mobileNumber, emailAddress, queueID){
+        // Updates customer information for notification
+        async function updateCustomerContactData(mobileNumber, emailAddress){
             try {
-                if (!mobileNumber) console.error("No mobile number was received");
-                if (!emailAddress) console.error("No email address received.");
+                if (!mobileNumber) console.error("No mobile number was received"); else localStorage.setItem('mobileNumber', mobileNumber);
+                if (!emailAddress) console.error("No email address received."); else localStorage.setItem('emailAddress', emailAddress);
 
-                const response = await fetch(`http://localhost/queue_management/php/update_notification_contact.php?contactNumber=${mobileNumber}&email=${emailAddress}&queueID=${queueID}`);
-                // const response = await fetch(`../php/update_notification_contact.php?contactNumber=${mobileNumber}&email=${emailAddress}&queueID=${queueID}`);
-                if (!response.ok) throw new Error('Network response was not ok');
+                console.log(`Mobile number: ${localStorage.getItem('mobileNumber')} ; Email Address: ${localStorage.getItem('emailAddress')}`);
             } catch (error) {
-                console.error('Error updating customer contact data', error);
+                console.error('Error updating customer contact data');
             }
         }
 
+        // Checks time and sends a signal if it's time to send a notification
+        async function checkNotificationTime(){
+            try {
+                // If it's time to send a notification call the following below:
+                // sendEmailNotification();
+                // sendSMSNotification();
+                // sendNativeNotification();
+            } catch (error) {
+                console.error(`Error sending notification to user: ${error}`);
+            }
+
+        }
+
+        async function sendEmailNotification(){
+            try {
+                if (!emailAddress) throw new Error('No email address was saved');
+                // Send email notification here
+                localStorage.removeItem('emailAddress');
+            } catch (error) {
+                console.error(`Error sending email notification. ${error}`);
+            }
+        }
+
+        async function sendSMSNotification(){
+            try {
+                if (!emailAddress) throw new Error('No mobile number address was saved');
+                // Send SMS notification here
+                localStorage.removeItem('mobileNumber');
+            } catch (error) {
+                console.error(`Error sending SMS notification. ${error}`);
+            }
+        }
+
+        // Send an in-browser notification
+        // TODO: must have a single jingle sound
+        async function sendNativeNotification(){
+            // Have animation here that will notify in-browser
+        }
+
+        // DEFUNCT TO MAKE THINGS EASIER FOR THE SERVER
+        // async function updateCustomerContactData(mobileNumber, emailAddress, queueID){
+        //     try {
+        //         if (!mobileNumber) console.error("No mobile number was received");
+        //         if (!emailAddress) console.error("No email address received.");
+
+        //         const response = await fetch(`http://localhost/queue_management/php/update_notification_contact.php?contactNumber=${mobileNumber}&email=${emailAddress}&queueID=${queueID}`);
+        //         // const response = await fetch(`../php/update_notification_contact.php?contactNumber=${mobileNumber}&email=${emailAddress}&queueID=${queueID}`);
+        //         if (!response.ok) throw new Error('Network response was not ok');
+        //     } catch (error) {
+        //         console.error('Error updating customer contact data', error);
+        //     }
+        // }
+
         // EMAIL TEXT INPUT LISTENERS
-
-
         // Add an input event listener for dynamic validation
         emailTextInput.addEventListener('input', function () {
             // Get the current value of the input field
