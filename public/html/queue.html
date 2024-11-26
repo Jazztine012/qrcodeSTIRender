@@ -122,7 +122,7 @@
         async function updateCustomerContactData(mobileNumber, emailAddress){
             try {
                 if (!mobileNumber) console.error("No mobile number was received"); else localStorage.setItem('mobileNumber', mobileNumber);
-                if (!emailAddress) console.error("No email address received."); else localStorage.setItem('emailAddress', emailAddress);
+                if (!emailAddress) console.error("No email address received."); else localStorage.setItem('emailAddress', emailAddress); sendEmailNotification(); // DEBUG
 
                 console.log(`Mobile number: ${localStorage.getItem('mobileNumber')} ; Email Address: ${localStorage.getItem('emailAddress')}`);
             } catch (error) {
@@ -146,8 +146,32 @@
         async function sendEmailNotification(){
             try {
                 if (!emailAddress) throw new Error('No email address was saved');
-                // Send email notification here
-                localStorage.removeItem('emailAddress');
+
+                // Update accordingly depending on variables
+                let accountValue = "WiA98Ew6EIrEGrC0H";
+                let templateValue = "template_52bb1q7";
+                let serviceValue = "service_f20ykye";
+
+                (function() {
+                    emailjs.init(accountValue);
+                })();
+
+                const templateParams = {
+                    to_email: emailAddress,
+                    queue_number: queueNumber,
+                    from_name: "qSTI",
+                    message: `You have received an email notification! Congratulations! It works!`,
+                };
+                // Sends the email notification
+                emailjs.send(serviceValue, templateValue, templateParams)
+                    .then(function() {
+                        // alert("Notification sent successfully!");
+                    }, function(error) {
+                        console.error("Failed to send notification:", error);
+                        // alert("Failed to send notification: " + error.text);
+                    });
+
+                // localStorage.removeItem('emailAddress');
             } catch (error) {
                 console.error(`Error sending email notification. ${error}`);
             }
