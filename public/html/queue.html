@@ -99,8 +99,8 @@
         const mobileNumberTextInput = document.getElementById('mobile-number');
         const emailTextInput = document.getElementById('email-address');
 
-        let mobileNumber;
-        let emailAddress;
+        // let mobileNumber;
+        // let emailAddress;
 
         // JavaScript to manage tab switching and forms
         document.addEventListener('DOMContentLoaded', () => {
@@ -110,25 +110,23 @@
 
             smsForm.addEventListener('submit', (event) => {
                 event.preventDefault();
-                mobileNumber = mobileNumberTextInput.value;
+                const mobileNumber = mobileNumberTextInput.value;
                 updateCustomerContactData(mobileNumber, null, queueID);
             });
 
             emailForm.addEventListener('submit', (event) => {
                 event.preventDefault();
-                emailAddress = emailTextInput.value;
+                const emailAddress = emailTextInput.value;
                 // updateCustomerContactData(null, emailAddress, queueID);
                 updateCustomerContactData(null, emailAddress);
             });
         });
 
         // Updates customer information for notification
-        async function updateCustomerContactData(mobileNumber, emailAddress){
+        async function updateCustomerContactData(mobileNumberHere, emailAddressHere){
             try {
-                if (!mobileNumber) console.error("No mobile number was received"); else localStorage.setItem('mobileNumber', mobileNumber); sendSMSNotification(); // DEBUG
-                if (!emailAddress) console.error("No email address received."); else localStorage.setItem('emailAddress', emailAddress); sendEmailNotification(); // DEBUG
-
-                console.log(`Mobile number: ${localStorage.getItem('mobileNumber')} ; Email Address: ${localStorage.getItem('emailAddress')}`);
+                if (!mobileNumberHere) console.error("No mobile number was received"); else localStorage.setItem('mobileNumber', mobileNumberHere); sendSMSNotification(); // DEBUG
+                if (!emailAddressHere) console.error("No email address received."); else localStorage.setItem('emailAddress', emailAddressHere); sendEmailNotification(); // DEBUG
             } catch (error) {
                 console.error('Error updating customer contact data');
             }
@@ -149,6 +147,7 @@
 
         async function sendEmailNotification() {
             try {
+                let emailAddress = localStorage.getItem('emailAddress');
                 if (!emailAddress) throw new Error('No email address was saved');
 
                 // Fetch email configuration
