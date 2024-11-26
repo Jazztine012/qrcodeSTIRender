@@ -72,16 +72,14 @@ app.listen(port, () => {
 });
 
 
-// Code snippet for SMS notifications. Server-side
-const client = twilio(process.env.TWILIO_SID, process.env.TWILIO_AUTH_TOKEN);
-
 app.post("/sendNotification", (req, res) => {
   const { mobileNumber } = req.body;
+  const client = twilio(process.env.TWILIO_SID, process.env.TWILIO_AUTH_TOKEN);
 
   client.messages
     .create({
       body: `You have successfully received an SMS notification congrats!`,
-      from: "+19789157235",
+      from: "+17752584445",
       to: mobileNumber,
     })
     .then((message) => {
