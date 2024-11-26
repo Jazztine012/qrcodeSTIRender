@@ -25,10 +25,10 @@ async function loadQueueCards() {
 
 // Function to create a queue card for each account
 async function createQueueCard(account) {
-    const queueInfo = await fetchCurrentQueue(account.accountID);
+    const queueInfo = await fetchCurrentQueue(account.account_id);
 
     console.log(queueInfo || "Queue info is null.");
-    
+
     const location = account.account_name;
     const queueNumber = queueInfo[0];
     const queueID = queueInfo[1];
@@ -66,7 +66,7 @@ async function createQueueCard(account) {
 
 
     // Console Logs 
-    console.log(location, queueNumber, timestamp[1].toString());
+    // console.log(location, queueNumber, timestamp[1].toString());
     console.log(`URL generated: ${qrCodeURL}`);
     return queueCard;
 }
