@@ -91,6 +91,12 @@
         </div>
     </div>
 
+    <!-- emailjs -->
+    <script type="text/javascript"
+        rc="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js">
+    </script>
+
+    <!-- inline script -->
     <script>
         const mobileNumberTextInput = document.getElementById('mobile-number');
         const emailTextInput = document.getElementById('email-address');
@@ -143,10 +149,6 @@
 
         }
 
-        // initialize emailjs
-        (function() {
-            emailjs.init(accountValue);
-        })();
 
         async function sendEmailNotification(){
             try {
@@ -156,6 +158,10 @@
                 let accountValue = "WiA98Ew6EIrEGrC0H";
                 let templateValue = "template_52bb1q7";
                 let serviceValue = "service_f20ykye";
+
+                (function() {
+                    emailjs.init(accountValue);
+                })();
 
                 const templateParams = {
                     to_email: emailAddress,
