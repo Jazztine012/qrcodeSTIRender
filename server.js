@@ -78,7 +78,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
 app.post("/sendNotification", (req, res) => {
-  const { mobileNumber, queueNumber } = req.body;
+  const { mobileNumber } = req.body;
 
   client.messages
     .create({
