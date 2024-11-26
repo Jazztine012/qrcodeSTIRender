@@ -72,21 +72,27 @@ app.listen(port, () => {
 });
 
 
-app.post("/sendNotification", (req, res) => {
-  const { mobileNumber } = req.body;
-  const client = twilio(process.env.TWILIO_SID, process.env.TWILIO_AUTH_TOKEN);
-
-  client.messages
-    .create({
-      body: `You have successfully received an SMS notification congrats!`,
-      from: "+17752584445",
-      to: mobileNumber,
-    })
-    .then((message) => {
+app.post("/sendNotification", async (req, res) => {
+    try {
+      const { mobileNumber } = req.body;
+  
+      if (!mobileNumber) {
+        return res.status(400).json({ success: false, message: "Mobile number is required." });
+      }
+  
+      const client = twilio(process.env.TWILIO_SID, process.env.TWILIO_AUTH_TOKEN);
+  
+      const message = await client.messages.create({
+        body: `You have successfully received an SMS notification congrats!`,
+        from: "+17752584445",
+        to: mobileNumber,
+      });
+  
+      console.log("Message SID:", message.sid);
       res.status(200).json({ success: true, message: "Notification sent successfully!" });
-    })
-    .catch((error) => {
+    } catch (error) {
       console.error("Error sending notification:", error);
-      res.status(500).json({ success: false, message: "Failed to send notification." });
-    });
-});
+      res.status(500).json({ success: false, message: `Failed to send notification: ${error.message}` });
+    }
+  });
+  
