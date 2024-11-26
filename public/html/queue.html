@@ -100,7 +100,6 @@
         const emailTextInput = document.getElementById('email-address');
 
         let mobileNumber;
-        
         let emailAddress;
 
         // JavaScript to manage tab switching and forms
@@ -154,9 +153,10 @@
                 if (!emailAddress) throw new Error('No email address was saved');
 
                 // Update accordingly depending on variables
-                const emailAccountValue = "WiA98Ew6EIrEGrC0H"; // Public key from EmailJS
-                const emailTemplateValue = "template_52bb1q7"; // Your email template ID
-                const emailServiceValue = "service_f20ykye"; // Your email service ID
+                // TODO : HIDE THESE
+                const emailAccountValue = process.env.EMAIL_ACCOUNT_VALUE.toString();
+                const emailTemplateValue = process.env.EMAIL_ACCOUNT_VALUE.toString(); // Your email template ID
+                const emailServiceValue = process.env.EMAIL_SERVICE_VALUE.toString(); // Your email service ID
 
                 // Initialize EmailJS
                 emailjs.init(emailAccountValue);
@@ -179,16 +179,34 @@
             }
         }
 
-
-        async function sendSMSNotification(){
+        async function sendSMSNotification(event) {
             try {
-                if (!emailAddress) throw new Error('No mobile number address was saved');
-                // Send SMS notification here
-                localStorage.removeItem('mobileNumber');
+                event.preventDefault(); // Ensure the event object is passed
+
+                const mobileNumber = localStorage.getItem('mobileNumber'); // Retrieve from localStorage
+                if (!mobileNumber) throw new Error('No mobile number was saved');
+
+                const response = await fetch("/sendNotification", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ mobileNumber }), // Send the mobile number as JSON
+                });
+
+                if (!response.ok) throw new Error(`Network response was not ok: ${response.statusText}`);
+
+                const result = await response.json();
+                if (result.success) {
+                    console.log("SMS sent successfully");
+                } else {
+                    throw new Error(result.message || "SMS failed to send");
+                }
+
+                localStorage.removeItem('mobileNumber'); // Clean up after successful operation
             } catch (error) {
-                console.error(`Error sending SMS notification. ${error}`);
+                console.error(`Error sending SMS notification: ${error}`);
             }
         }
+
 
         // Send an in-browser notification
         // TODO: must have a single jingle sound

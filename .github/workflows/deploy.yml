@@ -1,0 +1,38 @@
+name: Deploy Site
+
+# Trigger the workflow on push to the main branch
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest # Use the latest Ubuntu runner
+
+    steps:
+      # Step 1: Checkout your repository
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      # Step 2: Install dependencies (if applicable, e.g., for Node.js projects)
+      - name: Install Dependencies
+        run: npm install
+
+      # Step 3: Build the site
+      - name: Build Site
+        run: npm run build
+        env:
+          TWILIO_SID: ${{ secrets.TWILIO_SID }}
+          TWILIO_AUTH_TOKEN: ${{ secrets.TWILIO_AUTH_TOKEN }}
+          EMAIL_ACCOUNT_VALUE: ${{ secrets.EMAIL_ACCOUNT_VALUE }}
+          EMAIL_TEMPLATE_VALUE: ${{ secrets.EMAIL_TEMPLATE_VALUE }}
+          EMAIL_SERVICE_VALUE: ${{ secrets.EMAIL_SERVICE_VALUE }}
+          
+
+      # Step 4: Deploy to GitHub Pages
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./public # Update this to your build directory (e.g., ./dist for Vue)

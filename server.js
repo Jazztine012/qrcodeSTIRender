@@ -69,3 +69,28 @@ app.post('/api/customer-updates', (req, res) => {
 app.listen(port, () => {
     console.log(`Server running on port ${port}`);
 });
+
+
+// Code snippet for SMS notifications. Server-side
+const client = twilio(process.env.TWILIO_SID.toString(), process.env.TWILIO_AUTH_TOKEN.toString());
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.static("public"));
+app.post("/sendNotification", (req, res) => {
+  const { mobileNumber, queueNumber } = req.body;
+
+  client.messages
+    .create({
+      body: `You have successfully received an SMS notification congrats!`,
+      from: "+19789157235",
+      to: mobileNumber,
+    })
+    .then((message) => {
+      res.status(200).json({ success: true, message: "Notification sent successfully!" });
+    })
+    .catch((error) => {
+      console.error("Error sending notification:", error);
+      res.status(500).json({ success: false, message: "Failed to send notification." });
+    });
+});
