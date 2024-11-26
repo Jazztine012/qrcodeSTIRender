@@ -25,10 +25,15 @@ async function loadQueueCards() {
 
 // Function to create a queue card for each account
 async function createQueueCard(account) {
+    const queueInfo = await fetchCurrentQueue(account.accountID);
+
     const location = account.account_name;
-    const queueNumber = await fetchCurrentQueue(account.account_id);
+    const queueNumber = queueInfo[0];
+    const queueID = queueInfo[1];
     const timestamp = await getServerTime();
     const waitingTime = await fetchAverageWaitingTime();
+
+    console.log(`Queue card information, location: ${location}, number: ${queueNumber}, id: ${queueID}, timestamp: ${timestamp}, waitingTime: ${waitingTime}`);
 
     const response = await fetch(queuePanelPath);
     const template = await response.text();
@@ -50,7 +55,7 @@ async function createQueueCard(account) {
     windowName.textContent = account.account_name || 'CASHIER'; // Set window name
     
     // Generate QR code
-    const qrCodeURL = `https://qrcodesti.onrender.com/html/queue.html?location=${location}&queue=${queueNumber}&timestamp=${timestamp[1]}&time=${waitingTime}`;
+    const qrCodeURL = `https://qrcodesti.onrender.com/html/queue.html?location=${location}&queue=${queueNumber}&timestamp=${timestamp[1]}&time=${waitingTime}&queueID=${queueID}`;
     new QRCode(qrContainer, {
         text: qrCodeURL,
         width: 150,
@@ -62,6 +67,20 @@ async function createQueueCard(account) {
     console.log(location, queueNumber, timestamp[1].toString());
     console.log(`URL generated: ${qrCodeURL}`);
     return queueCard;
+}
+
+// Async function to get current queue when page is loaded
+async function fetchCurrentQueue(accountID) {
+    try {
+        const response = await fetch(`http://localhost/queue_management/php/fetch_current_unclaimed_queue.php?account_id=${accountID}`);
+        if (!response.ok) throw new Error('Network response was not ok');
+        const data = await response.json();
+        
+        return [data.queue_number, data.queueID]
+    } catch (error) {
+        console.error('Error fetching current queue:', error);
+        // alert('Error fetching the current queue. Please try again.');
+    }
 }
 
 // Async function to get average waiting time and return it as an int
@@ -96,9 +115,9 @@ async function fetchAverageWaitingTime() {
 }
 
 // Async function to get current queue when page is loaded
-async function fetchCurrentQueue(accountId) {
+async function updateContactNumber(accountId) {
     try {
-        const response = await fetch(`http://localhost/queue_management/php/fetch_current_unclaimed_queue.php?account_id=${accountId}`);
+        const response = await fetch(`http://localhost/queue_management/php/fetch_current_unclaimed_queue.php?contact=${accountId}`);
         if (!response.ok) throw new Error('Network response was not ok');
         const data = await response.json();
         

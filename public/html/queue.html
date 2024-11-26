@@ -103,7 +103,8 @@
             smsForm.addEventListener('submit', (event) => {
                 event.preventDefault();
                 const mobileNumber = document.getElementById('mobile-number').value;
-                alert(`SMS sent to ${mobileNumber}`);
+                updateCustomerContactData(mobileNumber, null);
+                // alert(`SMS sent to ${mobileNumber}`);
                 // Update localhost to include the mobile number of the queue.
                 // Logic to handle SMS submission can go here
             });
@@ -111,11 +112,24 @@
             emailForm.addEventListener('submit', (event) => {
                 event.preventDefault();
                 const emailAddress = document.getElementById('email-address').value;
-                alert(`Email sent to ${emailAddress}`);
+                // alert(`Email sent to ${emailAddress}`);
+                updateCustomerContactData(null, emailAddress);
                 // Update localhost to include the email address of the queue.
                 // Logic to handle Email submission can go here
             });
         });
+
+        async function updateCustomerContactData(mobileNumber, emailAddress, queueID){
+            try {
+                if (!mobileNumber) console.error("No mobile number was received");
+                if (!emailAddress) console.error("No email address received.");
+
+                const response = await fetch(`http://localhost/queue_management/php/update_notification_contact.php?contactNumber=${mobileNumber}&email=${emailAddress}&queueID=${queueID}`);
+                if (!response.ok) throw new Error('Network response was not ok');
+            } catch (error) {
+                console.error('Error updating customer contact data', error);
+            }
+        }
 
         // EMAIL TEXT INPUT LISTENERS
 
@@ -151,9 +165,12 @@
         const params = new URLSearchParams(window.location.search);
         const queueLocation = params.get('location');
         const queueNumber = params.get('queue');
+        const queueID = params.get('queueID');
         const timestamp = new Date(params.get('timestamp')).toLocaleString();
         // const timestamp = params.get('timestamp');
     
+        console.log(`queueID from the queue is: ${queueID || null}`);
+
         // Countdown timer for estimated waiting time
         let totalSeconds = 300; // 5 minutes
         function startCountdown() {
@@ -192,15 +209,16 @@
     
         // Send data to the server when page loads
         function sendCustomerData() {
-            if (!queueLocation || !queueNumber || !timestamp) {
-                console.error('Missing data: queueLocation, queueNumber, or timestamp is not defined.');
+            if (!queueLocation || !queueNumber || !timestamp || !queueID) {
+                console.error('Missing data: queueLocation, queueNumber, queueID, or timestamp is not defined.');
                 return;
             }
     
             const customerData = {
                 location: queueLocation,
                 queueNumber: queueNumber,
-                timestamp: timestamp
+                timestamp: timestamp,
+                queueID: queueID
             };
     
             // Send data to the customer updates endpoint
@@ -253,7 +271,8 @@
             const customerData = {
                 location: queueLocation,
                 queueNumber: queueNumber,
-                timestamp: timestamp
+                timestamp: timestamp,
+                queueID: queueID
             };
             socket.send(JSON.stringify(customerData));
         });
@@ -271,7 +290,7 @@
             sendCustomerData();
             setInnerTexts();
 
-            timestampText.hide();
+            $("#timestamp-text").hide();
         });
     </script>
     <script src="../js/bootstrap.bundle.min.js"></script>
