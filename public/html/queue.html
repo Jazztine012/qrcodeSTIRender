@@ -111,29 +111,58 @@
             smsForm.addEventListener('submit', (event) => {
                 event.preventDefault();
                 const mobileNumber = mobileNumberTextInput.value;
-                updateCustomerContactData(mobileNumber, null);
+                updateMobileNumber(mobileNumber);
             });
 
             emailForm.addEventListener('submit', (event) => {
                 event.preventDefault();
                 const emailAddress = emailTextInput.value;
-                // updateCustomerContactData(null, emailAddress, queueID);
-                updateCustomerContactData(null, emailAddress);
+                updateEmailAddress(emailAddress);
             });
         });
 
-        // Updates customer information for notification
-        async function updateCustomerContactData(mobileNumberHere, emailAddressHere){
+        // Function to update mobile number and send SMS notification
+        async function updateMobileNumber(mobileNumber) {
             try {
-                if (!mobileNumberHere) console.error("No mobile number was received"); else localStorage.setItem('mobileNumber', mobileNumberHere); sendSMSNotification(); // DEBUG
-                if (!emailAddressHere) console.error("No email address received."); else localStorage.setItem('emailAddress', emailAddressHere); sendEmailNotification(); // DEBUG
+                if (!mobileNumber) {
+                    console.error("No mobile number was received");
+                    return;
+                }
+                
+                // Store mobile number in localStorage (if necessary)
+                localStorage.setItem('mobileNumber', mobileNumber);
 
+                // Call the sendSMSNotification function (ensure it's implemented)
+                sendSMSNotification();
+
+                // Clear the input field after submission
                 mobileNumberTextInput.value = "";
-                emailTextInput.value = "";
             } catch (error) {
-                console.error('Error updating customer contact data');
+                console.error('Error updating mobile number:', error);
             }
         }
+
+        // Function to update email address and send email notification
+        async function updateEmailAddress(emailAddress) {
+            try {
+                if (!emailAddress) {
+                    console.error("No email address was received");
+                    return;
+                }
+                
+                // Store email address in localStorage (if necessary)
+                localStorage.setItem('emailAddress', emailAddress);
+
+                // Call the sendEmailNotification function (ensure it's implemented)
+                sendEmailNotification();
+
+                // Clear the input field after submission
+                emailTextInput.value = "";
+            } catch (error) {
+                console.error('Error updating email address:', error);
+            }
+        }
+
 
         // Checks time and sends a signal if it's time to send a notification
         async function checkNotificationTime(){
