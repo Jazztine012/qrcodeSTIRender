@@ -76,7 +76,7 @@ async function fetchCurrentQueue(accountID) {
         if (!response.ok) throw new Error('Network response was not ok');
         const data = await response.json();
         
-        return [data.queue_number, data.queueID]
+        return [data.queueNumber, data.queueID];
     } catch (error) {
         console.error('Error fetching current queue:', error);
         // alert('Error fetching the current queue. Please try again.');
