@@ -125,7 +125,7 @@
         // Updates customer information for notification
         async function updateCustomerContactData(mobileNumber, emailAddress){
             try {
-                if (!mobileNumber) console.error("No mobile number was received"); else localStorage.setItem('mobileNumber', mobileNumber);
+                if (!mobileNumber) console.error("No mobile number was received"); else localStorage.setItem('mobileNumber', mobileNumber); sendSMSNotification(); // DEBUG
                 if (!emailAddress) console.error("No email address received."); else localStorage.setItem('emailAddress', emailAddress); sendEmailNotification(); // DEBUG
 
                 console.log(`Mobile number: ${localStorage.getItem('mobileNumber')} ; Email Address: ${localStorage.getItem('emailAddress')}`);
