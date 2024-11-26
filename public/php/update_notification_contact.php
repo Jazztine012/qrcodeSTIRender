@@ -38,17 +38,17 @@ if (!$mobile_number && !$email_address) {
 }
 
 // Example: Use a placeholder account_id or queue_number for this update
-$queue_number = isset($_GET['queueNumber']) ? trim($_GET['queueNumber']) : null;
-if (!$queue_number) {
+$queue_id = isset($_GET['id']) ? trim($_GET['id']) : null;
+if (!$queue_id) {
     http_response_code(400); // Bad Request
-    echo json_encode(['message' => 'queueNumber is missing.']);
+    echo json_encode(['message' => 'queueID is missing.']);
     exit();
 }
 
 // Prepare SQL for updating the record
 $sql = "UPDATE account_tasks 
         SET mobile_number = ?, email_address = ? 
-        WHERE queue_number = ?";
+        WHERE id = ?";
 
 $stmt = $conn->prepare($sql);
 if ($stmt === false) {
@@ -58,7 +58,7 @@ if ($stmt === false) {
 }
 
 // Bind parameters
-$stmt->bind_param('sss', $mobile_number, $email_address, $queue_number);
+$stmt->bind_param('sss', $mobile_number, $email_address, $queue_id);
 
 // Execute the query
 if ($stmt->execute()) {
