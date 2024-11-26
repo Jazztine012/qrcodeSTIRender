@@ -179,10 +179,8 @@
             }
         }
 
-        async function sendSMSNotification(event) {
+        async function sendSMSNotification() {
             try {
-                event.preventDefault(); // Ensure the event object is passed
-
                 const mobileNumber = localStorage.getItem('mobileNumber'); // Retrieve from localStorage
                 if (!mobileNumber) throw new Error('No mobile number was saved');
 
