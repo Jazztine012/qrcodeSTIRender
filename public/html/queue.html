@@ -202,14 +202,22 @@
 
                 // Send the email notification
                 const emailResponse = await emailjs.send(emailServiceValue, emailTemplateValue, emailTemplateParams);
-                if (!emailResponse.success) throw new Error("Oops."); return; 
-                // Clear the input field after submission
-                emailTextInput.value = "";
                 console.log("Notification sent successfully:", emailResponse);
+
+                // Check if the response is successful
+                if (emailResponse.status === 200) {
+                    console.log("Email successfully sent!");
+                    
+                    // Clear the input field after submission
+                    emailTextInput.value = "";
+                } else {
+                    console.warn("Email sent, but with issues:", emailResponse);
+                }
             } catch (error) {
                 console.error(`Error sending email notification: ${error.message}`);
             }
         }
+
 
         async function sendSMSNotification() {
             try {
