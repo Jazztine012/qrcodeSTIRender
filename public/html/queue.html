@@ -102,7 +102,12 @@
         const emailTextInput = document.getElementById('email-address');
 
         let mobileNumber;
+        
         let emailAddress;
+        let emailAccountValue = "WiA98Ew6EIrEGrC0H";
+        let emailTemplateValue = "template_52bb1q7";
+        let emailServiceValue = "service_f20ykye";
+
 
         // JavaScript to manage tab switching and forms
         document.addEventListener('DOMContentLoaded', () => {
@@ -154,23 +159,14 @@
             try {
                 if (!emailAddress) throw new Error('No email address was saved');
 
-                // Update accordingly depending on variables
-                let accountValue = "WiA98Ew6EIrEGrC0H";
-                let templateValue = "template_52bb1q7";
-                let serviceValue = "service_f20ykye";
-
-                (function() {
-                    emailjs.init(accountValue);
-                })();
-
-                const templateParams = {
+                const emailTemplateParams = {
                     to_email: emailAddress,
                     queue_number: queueNumber,
                     from_name: "qSTI",
                     message: `You have received an email notification! Congratulations! It works!`,
                 };
                 // Sends the email notification
-                emailjs.send(serviceValue, templateValue, templateParams)
+                emailjs.send(emailServiceValue, emailTemplateValue, emailTemplateParams)
                     .then(function() {
                         // alert("Notification sent successfully!");
                     }, function(error) {
@@ -400,6 +396,10 @@
             setInnerTexts();
 
             $("#timestamp-text").hide();
+
+            (function(){
+                emailjs.init(accountValue);
+            })();
         });
     </script>
     <script src="../js/bootstrap.bundle.min.js"></script>
