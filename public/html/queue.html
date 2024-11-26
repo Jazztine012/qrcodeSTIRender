@@ -134,9 +134,6 @@
 
                 // Call the sendSMSNotification function (ensure it's implemented)
                 sendSMSNotification();
-
-                // Clear the input field after submission
-                mobileNumberTextInput.value = "";
             } catch (error) {
                 console.error('Error updating mobile number:', error);
             }
@@ -155,9 +152,6 @@
 
                 // Call the sendEmailNotification function (ensure it's implemented)
                 sendEmailNotification();
-
-                // Clear the input field after submission
-                emailTextInput.value = "";
             } catch (error) {
                 console.error('Error updating email address:', error);
             }
@@ -208,10 +202,10 @@
 
                 // Send the email notification
                 const emailResponse = await emailjs.send(emailServiceValue, emailTemplateValue, emailTemplateParams);
+                if (!emailResponse.success) throw new Error("Oops."); return; 
+                // Clear the input field after submission
+                emailTextInput.value = "";
                 console.log("Notification sent successfully:", emailResponse);
-
-                // Optional: Remove saved email address
-                // localStorage.removeItem('emailAddress');
             } catch (error) {
                 console.error(`Error sending email notification: ${error.message}`);
             }
@@ -233,6 +227,8 @@
                 const result = await response.json();
                 if (result.success) {
                     console.log("SMS sent successfully");
+                    // Clear the input field after submission
+                    mobileNumberTextInput.value = "";
                 } else {
                     throw new Error(result.message || "SMS failed to send");
                 }
