@@ -75,7 +75,6 @@ app.listen(port, () => {
 // Code snippet for SMS notifications. Server-side
 const client = twilio(process.env.TWILIO_SID, process.env.TWILIO_AUTH_TOKEN);
 
-app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
 app.post("/sendNotification", (req, res) => {
