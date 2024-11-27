@@ -322,6 +322,7 @@
 
         // Countdown timer for estimated waiting time
         let totalSeconds = 300; // 5 minutes
+        
         function startCountdown() {
             const interval = setInterval(() => {
                 if (totalSeconds > 0) {
@@ -356,104 +357,83 @@
             }
         }
     
-        // Send data to the server when page loads
-        function sendCustomerData() {
-            if (!queueLocation || !queueNumber || !timestamp || !queueID) {
-                console.error('Missing data: queueLocation, queueNumber, queueID, or timestamp is not defined.');
-                return;
-            }
+        // // Send data to the server when page loads
+        // function sendCustomerData() {
+        //     if (!queueLocation || !queueNumber || !timestamp || !queueID) {
+        //         console.error('Missing data: queueLocation, queueNumber, queueID, or timestamp is not defined.');
+        //         return;
+        //     }
     
-            const customerData = {
-                location: queueLocation,
-                queueNumber: queueNumber,
-                timestamp: timestamp,
-                queueID: queueID
-            };
+        //     const customerData = {
+        //         location: queueLocation,
+        //         queueNumber: queueNumber,
+        //         timestamp: timestamp,
+        //         queueID: queueID
+        //     };
     
-            // Send data to the customer updates endpoint
-            fetch('https://qrcodesti.onrender.com/api/customer-updates', { // Use full URL
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(customerData)
-            })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
-            .then(updatedData => {
-                // document.getElementById('confirmation-text').innerText = 
-                //     `You have joined the queue for ${updatedData.location}. Your queue number is ${updatedData.queueNumber}. The QR code was generated at: ${updatedData.timestamp}.`;
-                // alert("Customer data sent successfully!");
-                console.log("Customer data sent successfully!");
-            })
-            .catch(error => {
-                console.error('Error sending customer data:', error);
-                alert("Error sending customer data!", error.toString());
-            });
-        }
+        //     // Send data to the customer updates endpoint
+        //     fetch('https://qrcodesti.onrender.com/api/customer-updates', { // Use full URL
+        //         method: 'POST',
+        //         headers: {
+        //             'Content-Type': 'application/json'
+        //         },
+        //         body: JSON.stringify(customerData)
+        //     })
+        //     .then(response => {
+        //         if (!response.ok) {
+        //             throw new Error('Network response was not ok');
+        //         }
+        //         return response.json();
+        //     })
+        //     .then(updatedData => {
+        //         // document.getElementById('confirmation-text').innerText = 
+        //         //     `You have joined the queue for ${updatedData.location}. Your queue number is ${updatedData.queueNumber}. The QR code was generated at: ${updatedData.timestamp}.`;
+        //         // alert("Customer data sent successfully!");
+        //         console.log("Customer data sent successfully!");
+        //     })
+        //     .catch(error => {
+        //         console.error('Error sending customer data:', error);
+        //         alert("Error sending customer data!", error.toString());
+        //     });
+        // }
     
-        // Verify token and establish WebSocket connection
-        const socket = new WebSocket('wss://qrcodesti.onrender.com'); // Use wss:// for WebSocket
+        // // Verify token and establish WebSocket connection
+        // const socket = new WebSocket('wss://qrcodesti.onrender.com'); // Use wss:// for WebSocket
     
-        socket.addEventListener('open', function () {
-            if (token) {
-                fetch('https://qrcodesti.onrender.com/verify_access.php', { // Update to full URL
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ token: token }),
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.status === 'already_accessed') {
-                        alert('This page has already been accessed. You cannot open it again.');
-                    }
-                });
-            }
+        // socket.addEventListener('open', function () {
+        //     if (token) {
+        //         fetch('https://qrcodesti.onrender.com/verify_access.php', { // Update to full URL
+        //             method: 'POST',
+        //             headers: {
+        //                 'Content-Type': 'application/json',
+        //             },
+        //             body: JSON.stringify({ token: token }),
+        //         })
+        //         .then(response => response.json())
+        //         .then(data => {
+        //             if (data.status === 'already_accessed') {
+        //                 alert('This page has already been accessed. You cannot open it again.');
+        //             }
+        //         });
+        //     }
     
-            // Send customer data through WebSocket
-            const customerData = {
-                location: queueLocation,
-                queueNumber: queueNumber,
-                timestamp: timestamp,
-                queueID: queueID
-            };
-            socket.send(JSON.stringify(customerData));
-        });
+        //     // Send customer data through WebSocket
+        //     const customerData = {
+        //         location: queueLocation,
+        //         queueNumber: queueNumber,
+        //         timestamp: timestamp,
+        //         queueID: queueID
+        //     };
+        //     socket.send(JSON.stringify(customerData));
+        // });
     
-        socket.addEventListener('error', function (error) {
-            console.error('WebSocket error:', error);
-        });
+        // socket.addEventListener('error', function (error) {
+        //     console.error('WebSocket error:', error);
+        // });
     
-        socket.addEventListener('close', function () {
-            console.log('WebSocket connection closed');
-        });
-    
-        const apiEndpoint = "https://f8ca-124-217-52-18.ngrok-free.app/api/update-accessed.php";
-
-        async function markQueueAsAccessed() {
-            try {
-                const response = await fetch(apiEndpoint, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ queueID }),
-                });
-
-                const result = await response.json();
-                if (result.success) {
-                    console.log("Queue marked as accessed successfully!");
-                } else {
-                    console.error("Failed to update queue:", result.message);
-                }
-            } catch (error) {
-                console.error("Error updating queue:", error);
-            }
-        }
+        // socket.addEventListener('close', function () {
+        //     console.log('WebSocket connection closed');
+        // });
 
         async function appendQueueIDToFile() {
             try {
@@ -461,7 +441,7 @@
                     throw new Error('No queue ID provided.');
                 }
 
-                const response = await fetch('https://your-server-url/append_to_accessed_queues.php', {
+                const response = await fetch('https://qrcodesti.onrender.com/php/append_to_accessed_queues.php', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ queueID }),
