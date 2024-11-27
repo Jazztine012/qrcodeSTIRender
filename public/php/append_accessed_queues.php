@@ -1,7 +1,7 @@
 <?php
 // Allow cross-origin requests
 header('Access-Control-Allow-Origin: *');
-header('Access-Control-Allow-Methods: POST, OPTIONS');
+header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
 header('Access-Control-Allow-Headers: Content-Type');
 header('Content-Type: application/json');
 
@@ -37,7 +37,7 @@ try {
     $result = file_put_contents($filePath, $queueID . PHP_EOL, FILE_APPEND);
 
     if ($result === false) {
-        throw new Exception('Failed to write to file');
+        exit(0);
     }
 
     echo json_encode(['success' => true, 'message' => 'Queue ID added successfully']);
