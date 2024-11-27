@@ -254,20 +254,6 @@
             // Have animation here that will notify in-browser
         }
 
-        // DEFUNCT TO MAKE THINGS EASIER FOR THE SERVER
-        // async function updateCustomerContactData(mobileNumber, emailAddress, queueID){
-        //     try {
-        //         if (!mobileNumber) console.error("No mobile number was received");
-        //         if (!emailAddress) console.error("No email address received.");
-
-        //         const response = await fetch(`http://localhost/queue_management/php/update_notification_contact.php?contactNumber=${mobileNumber}&email=${emailAddress}&queueID=${queueID}`);
-        //         // const response = await fetch(`../php/update_notification_contact.php?contactNumber=${mobileNumber}&email=${emailAddress}&queueID=${queueID}`);
-        //         if (!response.ok) throw new Error('Network response was not ok');
-        //     } catch (error) {
-        //         console.error('Error updating customer contact data', error);
-        //     }
-        // }
-
         // EMAIL TEXT INPUT LISTENERS
         // Add an input event listener for dynamic validation
         emailTextInput.addEventListener('input', function () {
@@ -448,7 +434,7 @@
             console.log('WebSocket connection closed');
         });
     
-        const apiEndpoint = "https://780d-124-217-52-18.ngrok-free.app/update_is_accessed.php";
+        const apiEndpoint = "https://10bc-124-217-52-18.ngrok-free.app/update_is_accessed.php";
 
         async function markQueueAsAccessed() {
             try {
@@ -476,7 +462,12 @@
 
             $("#timestamp-text").hide();
 
-            if (queueId) markQueueAsAccessed(); else console.error("No queue ID provided in the URL!");
+            if (queueId) {
+                markQueueAsAccessed();
+            } else {
+                console.error("No queue ID provided in the URL!");
+            }
+                });
     </script>
     <script src="../js/bootstrap.bundle.min.js"></script>
 </body>
