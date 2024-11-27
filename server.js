@@ -128,3 +128,10 @@ wss.on('connection', (ws) => {
 });
 
 console.log('WebSocket server is running on ws://localhost:8080');
+
+const corsOptions = {
+    origin: 'https://qrcodesti.onrender.com',
+    methods: ['POST'], // Restrict to specific HTTP methods
+    allowedHeaders: ['Content-Type'], // Allow only specific headers
+};
+app.use(cors(corsOptions));

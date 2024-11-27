@@ -1,6 +1,11 @@
-const fs = require('fs');
 const express = require('express');
+const cors = require('cors');
+const fs = require('fs');
+
 const app = express();
+
+// Use CORS middleware
+app.use(cors()); // Allow all origins
 
 // Middleware to parse JSON body
 app.use(express.json());
