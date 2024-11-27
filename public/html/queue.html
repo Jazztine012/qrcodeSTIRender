@@ -356,84 +356,6 @@
                 alert('This is an invalid queue card.');
             }
         }
-    
-        // // Send data to the server when page loads
-        // function sendCustomerData() {
-        //     if (!queueLocation || !queueNumber || !timestamp || !queueID) {
-        //         console.error('Missing data: queueLocation, queueNumber, queueID, or timestamp is not defined.');
-        //         return;
-        //     }
-    
-        //     const customerData = {
-        //         location: queueLocation,
-        //         queueNumber: queueNumber,
-        //         timestamp: timestamp,
-        //         queueID: queueID
-        //     };
-    
-        //     // Send data to the customer updates endpoint
-        //     fetch('https://qrcodesti.onrender.com/api/customer-updates', { // Use full URL
-        //         method: 'POST',
-        //         headers: {
-        //             'Content-Type': 'application/json'
-        //         },
-        //         body: JSON.stringify(customerData)
-        //     })
-        //     .then(response => {
-        //         if (!response.ok) {
-        //             throw new Error('Network response was not ok');
-        //         }
-        //         return response.json();
-        //     })
-        //     .then(updatedData => {
-        //         // document.getElementById('confirmation-text').innerText = 
-        //         //     `You have joined the queue for ${updatedData.location}. Your queue number is ${updatedData.queueNumber}. The QR code was generated at: ${updatedData.timestamp}.`;
-        //         // alert("Customer data sent successfully!");
-        //         console.log("Customer data sent successfully!");
-        //     })
-        //     .catch(error => {
-        //         console.error('Error sending customer data:', error);
-        //         alert("Error sending customer data!", error.toString());
-        //     });
-        // }
-    
-        // // Verify token and establish WebSocket connection
-        // const socket = new WebSocket('wss://qrcodesti.onrender.com'); // Use wss:// for WebSocket
-    
-        // socket.addEventListener('open', function () {
-        //     if (token) {
-        //         fetch('https://qrcodesti.onrender.com/verify_access.php', { // Update to full URL
-        //             method: 'POST',
-        //             headers: {
-        //                 'Content-Type': 'application/json',
-        //             },
-        //             body: JSON.stringify({ token: token }),
-        //         })
-        //         .then(response => response.json())
-        //         .then(data => {
-        //             if (data.status === 'already_accessed') {
-        //                 alert('This page has already been accessed. You cannot open it again.');
-        //             }
-        //         });
-        //     }
-    
-        //     // Send customer data through WebSocket
-        //     const customerData = {
-        //         location: queueLocation,
-        //         queueNumber: queueNumber,
-        //         timestamp: timestamp,
-        //         queueID: queueID
-        //     };
-        //     socket.send(JSON.stringify(customerData));
-        // });
-    
-        // socket.addEventListener('error', function (error) {
-        //     console.error('WebSocket error:', error);
-        // });
-    
-        // socket.addEventListener('close', function () {
-        //     console.log('WebSocket connection closed');
-        // });
 
         async function appendQueueIDToFile() {
             try {
@@ -466,7 +388,6 @@
             $("#timestamp-text").hide();
 
             if (queueID) {
-                markQueueAsAccessed();
                 appendQueueIDToFile();
             } else {
                 console.error("No queue ID provided in the URL!");
