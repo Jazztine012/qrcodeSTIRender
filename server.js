@@ -59,6 +59,8 @@ app.post('/api/customer-updates', (req, res) => {
         timestamp: new Date().toLocaleString()
     };
 
+    appendToAccessedQueue(updatedQueueNumber);
+
     // Broadcast the update to SSE clients
     broadcastCustomerUpdate(responseData);
 
@@ -140,12 +142,13 @@ app.use(cors(corsOptions));
 // writeFile function is defined.
 const fs = require('fs')
 
-// Data which will write in a file.
-let data = "Hello world."
-
-// Write data in 'Hello.txt' .
-fs.writeFile('public/accessed_queues.txt', data, (err) => {
-
-    // In case of a error throw err.
-    if (err) throw err;
-})
+function appendToAccessedQueue(queueID) {
+    const filePath = path.join(__dirname, 'public', 'accessed_queues.txt');
+    fs.appendFile(filePath, `${queueID}\n`, (err) => {
+        if (err) {
+            console.error('Error appending to file:', err);
+        } else {
+            console.log(`Queue ID ${queueID} appended to accessed_queues.txt`);
+        }
+    });
+}
