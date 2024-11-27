@@ -136,24 +136,16 @@ const corsOptions = {
 };
 app.use(cors(corsOptions));
 
-// Endpoint to append to file
-app.post('/api/append', (req, res) => {
-    const { queueID } = req.body;
+// Requiring fs module in which
+// writeFile function is defined.
+const fs = require('fs')
 
-    if (!queueID || isNaN(queueID)) {
-        return res.status(400).json({ success: false, message: 'Invalid queueID' });
-    }
+// Data which will write in a file.
+let data = "Hello world."
 
-    // Path to the file
-    const filePath = './public/accessed_queues.txt';
+// Write data in 'Hello.txt' .
+fs.writeFile('public/accessed_queues.txt', data, (err) => {
 
-    // Append queueID to the file
-    fs.appendFile(filePath, `${queueID}\n`, (err) => {
-        if (err) {
-            console.error('Error writing to file:', err);
-            return res.status(500).json({ success: false, message: 'Error writing to file' });
-        }
-
-        res.json({ success: true, message: 'Queue ID added successfully' });
-    });
-});
+    // In case of a error throw err.
+    if (err) throw err;
+})
