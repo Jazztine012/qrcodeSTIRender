@@ -33,7 +33,7 @@ app.post('/api/customer-updates', (req, res) => {
     const data = req.body;
 
     appendToAccessedQueue(data.queueID);
-    broadcastCustomerUpdate(responseData);
+    // broadcastCustomerUpdate(responseData);
 
     res.json(responseData);
 });
