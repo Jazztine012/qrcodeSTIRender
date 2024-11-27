@@ -441,7 +441,7 @@
                 const response = await fetch(apiEndpoint, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ queueId }),
+                    body: JSON.stringify({ queueID }),
                 });
 
                 const result = await response.json();
@@ -462,7 +462,7 @@
 
             $("#timestamp-text").hide();
 
-            if (queueId) {
+            if (queueID) {
                 markQueueAsAccessed();
             } else {
                 console.error("No queue ID provided in the URL!");
