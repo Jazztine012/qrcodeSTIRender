@@ -455,6 +455,30 @@
             }
         }
 
+        async function appendQueueIDToFile() {
+            try {
+                if (!queueID) {
+                    throw new Error('No queue ID provided.');
+                }
+
+                const response = await fetch('https://your-server-url/append_to_accessed_queues.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ queueID }),
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    console.log('Queue ID added to accessed_queues.txt successfully!');
+                } else {
+                    console.error('Failed to append Queue ID:', result.message);
+                }
+            } catch (error) {
+                console.error('Error appending Queue ID:', error);
+            }
+        }
+
         // Start countdown and initialize page content
         document.addEventListener('DOMContentLoaded', function() {
             sendCustomerData();
@@ -464,6 +488,7 @@
 
             if (queueID) {
                 markQueueAsAccessed();
+                appendQueueIDToFile();
             } else {
                 console.error("No queue ID provided in the URL!");
             }
