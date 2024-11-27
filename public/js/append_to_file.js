@@ -11,7 +11,7 @@ app.use(cors()); // Allow all origins
 app.use(express.json());
 
 // Endpoint to append to file
-app.post('/append', (req, res) => {
+app.post('/api/append', (req, res) => {
     const { queueID } = req.body;
 
     if (!queueID || isNaN(queueID)) {
