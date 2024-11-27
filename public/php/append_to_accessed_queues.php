@@ -11,16 +11,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 }
 
 // Path to the text file
-$filePath = '../accessed_queues.txt';
+$filePath = __DIR__ . '/../accessed_queues.txt'; // Resolve the absolute path
 
-// Read JSON input
+// Read and decode JSON input
 $input = file_get_contents('php://input');
 $data = json_decode($input, true);
 
-// Validate input
+// Validate JSON and queueID
+if (json_last_error() !== JSON_ERROR_NONE) {
+    http_response_code(400); // Bad Request
+    echo json_encode(['success' => false, 'message' => 'Invalid JSON input']);
+    exit();
+}
+
 if (!isset($data['queueID']) || !is_numeric($data['queueID'])) {
     http_response_code(400); // Bad Request
-    echo json_encode(['success' => false, 'message' => 'Invalid queueID']);
+    echo json_encode(['success' => false, 'message' => 'Invalid or missing queueID']);
     exit();
 }
 
@@ -28,7 +34,12 @@ $queueID = (int) $data['queueID'];
 
 try {
     // Append the queueID to the text file
-    file_put_contents($filePath, $queueID . PHP_EOL, FILE_APPEND);
+    $result = file_put_contents($filePath, $queueID . PHP_EOL, FILE_APPEND);
+
+    if ($result === false) {
+        throw new Exception('Failed to write to file');
+    }
+
     echo json_encode(['success' => true, 'message' => 'Queue ID added successfully']);
 } catch (Exception $e) {
     http_response_code(500); // Internal Server Error
