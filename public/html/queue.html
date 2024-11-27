@@ -448,32 +448,25 @@
             console.log('WebSocket connection closed');
         });
     
-        async function processQueueValidity() {
-            if (!queueId) {
-                console.error("No queue ID found in the URL!");
-                return;
-            }
+        const apiEndpoint = "https://780d-124-217-52-18.ngrok-free.app/update_is_accessed.php";
 
-            // API endpoint for updating is_accessed
-            const apiEndpoint = "https://b230-124-217-52-18.ngrok-free.app/update-accessed"; // Replace with your ngrok URL
-
-            // Send the update request
-            fetch(apiEndpoint, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ queueId }),
-            })
-                .then((response) => response.json())
-                .then((data) => {
-                    if (data.success) {
-                        console.log("Queue access updated successfully!");
-                    } else {
-                        console.error("Failed to update queue access:", data.message);
-                    }
-                })
-                .catch((error) => {
-                    console.error("Error updating queue access:", error);
+        async function markQueueAsAccessed() {
+            try {
+                const response = await fetch(apiEndpoint, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ queueId }),
                 });
+
+                const result = await response.json();
+                if (result.success) {
+                    console.log("Queue marked as accessed successfully!");
+                } else {
+                    console.error("Failed to update queue:", result.message);
+                }
+            } catch (error) {
+                console.error("Error updating queue:", error);
+            }
         }
 
         // Start countdown and initialize page content
@@ -482,7 +475,8 @@
             setInnerTexts();
 
             $("#timestamp-text").hide();
-        });
+
+            if (queueId) markQueueAsAccessed(); else console.error("No queue ID provided in the URL!");
     </script>
     <script src="../js/bootstrap.bundle.min.js"></script>
 </body>
