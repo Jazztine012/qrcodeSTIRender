@@ -363,7 +363,7 @@
                     throw new Error('No queue ID provided.');
                 }
 
-                const response = await fetch('https://qrcodesti.onrender.com/php/append_to_accessed_queues.php', {
+                const response = await fetch('https://qrcodesti.onrender.com/php/append_accessed_queues.php', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ queueID }),
