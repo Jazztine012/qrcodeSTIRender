@@ -3,15 +3,16 @@ const path = require('path');
 const cors = require('cors');
 const twilio = require("twilio");
 const app = express();
+const mysql = require('mysql');
 const port = process.env.PORT || 4000; // Use Render's PORT or default to 3000 for local development
 
 app.use(cors());
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
-let cashierQueue = 1;
-let registrarQueue = 1;
-let frontDeskQueue = 1;
+// let cashierQueue = 1;
+// let registrarQueue = 1;
+// let frontDeskQueue = 1;
 let sseClients = [];
 
 // Serve the main page for joining the queue
@@ -30,6 +31,46 @@ app.get('/api/customer-updates', (req, res) => {
     // Remove client on disconnect
     req.on('close', () => {
         sseClients = sseClients.filter(client => client !== res);
+    });
+});
+
+// MySQL connection setup
+const db = mysql.createConnection({
+    host: 'localhost',
+    user: 'root',
+    password: '', // Your MySQL password
+    database: 'queue_management'
+});
+
+// Connect to the database
+db.connect((err) => {
+    if (err) {
+        console.error('Database connection failed:', err.stack);
+        return;
+    }
+    console.log('Connected to MySQL database.');
+});
+
+// Endpoint to update is_accessed for a specific queue ID
+app.post('/updateAccessed', (req, res) => {
+    const { queueId } = req.body;
+
+    if (!queueId) {
+        return res.status(400).json({ success: false, message: 'Queue ID is required.' });
+    }
+
+    const sql = 'UPDATE queue SET is_accessed = TRUE WHERE id = ?';
+    db.query(sql, [queueId], (err, result) => {
+        if (err) {
+            console.error('Error updating database:', err);
+            return res.status(500).json({ success: false, message: 'Failed to update queue.' });
+        }
+
+        if (result.affectedRows > 0) {
+            res.status(200).json({ success: true, message: 'Queue updated successfully.' });
+        } else {
+            res.status(404).json({ success: false, message: 'Queue ID not found.' });
+        }
     });
 });
 
@@ -66,10 +107,6 @@ app.post('/api/customer-updates', (req, res) => {
     res.json(responseData);
 });
 
-// Start the server and log the port
-app.listen(port, () => {
-    console.log(`Server running on port ${port}`);
-});
 
 // server side SMS notification
 app.post("/sendNotification", async (req, res) => {
@@ -103,4 +140,9 @@ app.get('/config', (req, res) => {
         emailTemplateValue: process.env.EMAIL_TEMPLATE_VALUE,
         emailServiceValue: process.env.EMAIL_SERVICE_VALUE,
     });
+});
+
+// Start the server and log the port
+app.listen(port, () => {
+    console.log(`Server running on port ${port}`);
 });

@@ -448,6 +448,34 @@
             console.log('WebSocket connection closed');
         });
     
+        async function processQueueValidity() {
+            if (!queueId) {
+                console.error("No queue ID found in the URL!");
+                return;
+            }
+
+            // API endpoint for updating is_accessed
+            const apiEndpoint = "https://b230-124-217-52-18.ngrok-free.app/update-accessed"; // Replace with your ngrok URL
+
+            // Send the update request
+            fetch(apiEndpoint, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ queueId }),
+            })
+                .then((response) => response.json())
+                .then((data) => {
+                    if (data.success) {
+                        console.log("Queue access updated successfully!");
+                    } else {
+                        console.error("Failed to update queue access:", data.message);
+                    }
+                })
+                .catch((error) => {
+                    console.error("Error updating queue access:", error);
+                });
+        }
+
         // Start countdown and initialize page content
         document.addEventListener('DOMContentLoaded', function() {
             sendCustomerData();

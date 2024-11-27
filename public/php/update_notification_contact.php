@@ -46,7 +46,7 @@ if (!$queue_id) {
 }
 
 // Prepare SQL for updating the record
-$sql = "UPDATE account_tasks 
+$sql = "UPDATE account_tasks
         SET mobile_number = ?, email_address = ? 
         WHERE id = ?";
 
