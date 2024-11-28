@@ -227,7 +227,7 @@
                 const mobileNumber = localStorage.getItem('mobileNumber'); // Retrieve from localStorage
                 if (!mobileNumber) throw new Error('No mobile number was saved');
 
-                const response = await fetch("/sendNotification", {
+                const response = await fetch("https://qrcodesti.onrender.//sendNotification", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ mobileNumber }), // Send the mobile number as JSON
@@ -413,7 +413,7 @@
                 })
                 .catch(error => {
                     console.error('Error sending customer data:', error);
-                    alert(`Failed to send customer data. Please try again later. Error: ${error.message}`);
+                    // alert(`Failed to send customer data. Please try again later. Error: ${error.message}`);
                 });
         }
 

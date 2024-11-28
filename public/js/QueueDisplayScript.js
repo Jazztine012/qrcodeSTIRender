@@ -211,3 +211,5 @@ const timestamp = getServerTime().then(timeData => {
         console.log("Manila Unix Timestamp:", timeData.manilaUnixTimestamp);
     }
 });
+
+setInterval(loadQueueCards(), 5000)
