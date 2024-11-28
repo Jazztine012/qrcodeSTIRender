@@ -2,7 +2,16 @@ const queueContainer = document.getElementById('queueContainer');
 const loginQueueDisplayPath = '../index.html';
 const queuePanelPath = '../html/qr_card.html'; // Path to the queue card template
 
-document.addEventListener('DOMContentLoaded', loadQueueCards);
+document.addEventListener('DOMContentLoaded', startQueueCardRefresh);
+
+// Function to load and refresh queue cards every 5 seconds
+function startQueueCardRefresh() {
+    setInterval(async () => {
+        console.log('Refreshing queue cards...');
+        await loadQueueCards(); // Call the function to load queue cards
+        console.log('Queue cards refreshed.');
+    }, 5000); // Refresh every 5000 milliseconds (5 seconds)
+}
 
 // Fetch active accounts and generate queue cards
 async function loadQueueCards() {
@@ -211,5 +220,3 @@ const timestamp = getServerTime().then(timeData => {
         console.log("Manila Unix Timestamp:", timeData.manilaUnixTimestamp);
     }
 });
-
-setInterval(loadQueueCards(), 5000)
