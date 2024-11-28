@@ -35,7 +35,7 @@ app.post('/api/customer-updates', (req, res) => {
     appendToAccessedQueue(data.queueID);
     // broadcastCustomerUpdate(responseData);
 
-    res.json(responseData);
+    // res.json(responseData);
 });
 
 // SMS Notification
