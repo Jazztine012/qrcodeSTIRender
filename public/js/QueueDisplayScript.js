@@ -2,7 +2,7 @@ const queueContainer = document.getElementById('queueContainer');
 const loginQueueDisplayPath = '../index.html';
 const queuePanelPath = '../html/qr_card.html'; // Path to the queue card template
 
-document.addEventListener('DOMContentLoaded', startQueueCardRefresh);
+document.addEventListener('DOMContentLoaded', loadQueueCards);
 
 // Function to load and refresh queue cards every 5 seconds
 function startQueueCardRefresh() {
@@ -65,14 +65,19 @@ async function createQueueCard(account) {
 
     windowName.textContent = account.account_name || 'CASHIER'; // Set window name
     
-    // Generate QR code
-    const qrCodeURL = `https://qrcodesti.onrender.com/html/queue.html?location=${location}&queue=${queueNumber}&timestamp=${timestamp[1]}&time=${waitingTime}&queueID=${queueID}`;
-    new QRCode(qrContainer, {
-        text: qrCodeURL,
-        width: 150,
-        height: 150
-    });
+    setInterval(async () => {
+        console.log('Refreshing queue cards...');
 
+        // Generate QR code
+        const qrCodeURL = await `https://qrcodesti.onrender.com/html/queue.html?location=${location}&queue=${queueNumber}&timestamp=${timestamp[1]}&time=${waitingTime}&queueID=${queueID}`;
+        new QRCode(qrContainer, {
+            text: qrCodeURL,
+            width: 150,
+            height: 150
+        });
+
+        console.log('Queue cards refreshed.');
+    }, 10000); // Refresh every 5000 milliseconds (5 seconds)
 
     // Console Logs 
     // console.log(location, queueNumber, timestamp[1].toString());
