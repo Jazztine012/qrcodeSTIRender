@@ -26,12 +26,12 @@ let queueID;
 document.addEventListener('DOMContentLoaded', async function() {
     // Fetches and processes data
     await getData(data);
-    // Sets inner texts based on decrypted data
-    setInnerTexts();
     // Hides unnecessary elements 
     $("#timestamp-text").hide();
     // Sends customer data and updates is_accessed state in localhost database
     sendCustomerData(queueID);
+    // Sets inner texts based on decrypted data
+    setInnerTexts();
     });
 
 // Parent function in processing encrypted data
@@ -285,24 +285,10 @@ function setInnerTexts() {
     } catch (error) {
         $("#container").load(`invalid_queue.html`);
         $("#form-container").hide();
-        console.log('Invalid page loaded');
+        console.log('Invalid page loaded ', error);
         alert('This is an invalid queue card.');
     }
 }
-
-// async function appendQueueID() {
-//     try {
-//         const response = await fetch('https://qrcodesti.onrender.com/api/append', {
-//             method: 'POST',
-//             headers: { 'Content-Type': 'application/json' },
-//             body: JSON.stringify({ queueID }),
-//         });
-//         const result = await response.json();
-//         console.log(result.message);
-//     } catch (error) {
-//         console.error('Error appending Queue ID:', error);
-//     }
-// }
 
 // Function to send customer data to the server when the page loads
 function sendCustomerData(queueID) {
