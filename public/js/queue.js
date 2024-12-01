@@ -357,13 +357,13 @@ function sendCustomerData() {
 //     }
 // }
 
-const key = fetchConfig()[0];
-const iv = fetchConfig()[1];
+const key = CryptoJS.enc.Utf8.parse(fetchConfig()[0]);
+const iv = CryptoJS.enc.Utf8.parse(fetchConfig()[1]);
 
 async function decryptData(encryptedData) {
     // Decrypt
-    const decrypted = CryptoJS.AES.decrypt(encryptedData, key, {
-        iv: iv,
+    const decrypted = CryptoJS.AES.decrypt(encryptedData, this.key, {
+        iv: this.iv,
         mode: CryptoJS.mode.CTR,
         padding: CryptoJS.pad.Pkcs7,
     });
