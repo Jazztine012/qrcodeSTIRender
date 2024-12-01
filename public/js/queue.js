@@ -16,6 +16,15 @@ const data = params.get('queue_data');
 let queueData = {}; // Object to hold queue details
 let key, iv; // Encryption key and IV
 
+// Check if `queue_data` is base64-encoded
+function isBase64(str) {
+    try {
+        return btoa(atob(str)) === str;
+    } catch (err) {
+        return false;
+    }
+}
+
 // Fetch encryption configuration
 async function fetchConfig() {
     try {
@@ -38,12 +47,22 @@ async function fetchConfig() {
 // Decrypt data function
 async function decryptData(encryptedData, key, iv) {
     try {
+        if (!encryptedData) {
+            throw new Error('Encrypted data is missing.');
+        }
+
         const decrypted = CryptoJS.AES.decrypt(encryptedData, key, {
             iv: iv,
             mode: CryptoJS.mode.CTR,
             padding: CryptoJS.pad.Pkcs7,
         });
-        return decrypted.toString(CryptoJS.enc.Utf8);
+
+        const plaintext = decrypted.toString(CryptoJS.enc.Utf8);
+        if (!plaintext) {
+            throw new Error('Decryption resulted in empty data.');
+        }
+
+        return plaintext;
     } catch (error) {
         console.error('Error decrypting data:', error);
         throw error;
@@ -52,10 +71,16 @@ async function decryptData(encryptedData, key, iv) {
 
 // Parse decrypted data
 function parseDecryptedData(inputString) {
+    console.log('Parsing decrypted data:', inputString);
+
     const parts = inputString.split('/');
     if (parts.length < 5) {
-        throw new Error('Decrypted data is incomplete or malformed.');
+        console.warn('Decrypted data is incomplete. Filling missing parts with defaults.');
+        while (parts.length < 5) {
+            parts.push(''); // Default empty values for missing parts
+        }
     }
+
     return parts;
 }
 
@@ -66,7 +91,12 @@ async function getData() {
             throw new Error('queue_data parameter is missing in the URL.');
         }
 
-        const decryptedData = await decryptData(data, key, iv);
+        if (!isBase64(data)) {
+            throw new Error('queue_data parameter is not a valid base64 string.');
+        }
+
+        const base64ParsedData = CryptoJS.enc.Base64.parse(data); // Parse base64 string
+        const decryptedData = await decryptData(base64ParsedData, key, iv);
         console.log('Decrypted data:', decryptedData);
 
         const parsedData = parseDecryptedData(decryptedData);
