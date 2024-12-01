@@ -378,8 +378,8 @@ async function fetchConfig() {
         const config = await response.json();
 
         // Assign keys from the config
-        const key = CryptoJS.enc.Utf8.parse(config.encryptionKey);
-        const iv = CryptoJS.enc.Utf8.parse(config.iv);
+        const key = config.encryptionKey;
+        const iv = config.iv;
 
         console.log('Encryption key and IV retrieved successfully.');
         return { key, iv };
