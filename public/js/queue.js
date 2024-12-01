@@ -360,8 +360,8 @@ function sendCustomerData() {
 //     }
 // }
 
-const key = await fetchConfig()[0];
-const iv = await fetchConfig()[1];
+const key = fetchConfig()[0];
+const iv = fetchConfig()[1];
 
 async function decryptData(encryptedData) {
     // Decrypt
