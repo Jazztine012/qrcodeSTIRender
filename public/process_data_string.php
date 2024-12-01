@@ -1,6 +1,6 @@
 <?php
 // Allow requests from any origin
-header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Origin: https://qrcodesti.onrender.com');
 // Allow specific HTTP methods (GET, POST, etc.)
 header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
 // Allow specific headers

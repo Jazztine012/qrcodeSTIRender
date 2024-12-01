@@ -66,11 +66,11 @@ app.get('/config', (req, res) => {
 });
 
 // WebSocket Server
-const wss = new WebSocket.Server({ port: 8080 });
-wss.on('connection', (ws) => {
-    console.log('Client connected');
-    ws.on('message', (message) => ws.send(`Server received: ${message}`));
-    ws.on('close', () => console.log('Client disconnected'));
-});
+// const wss = new WebSocket.Server({ port: 8080 });
+// wss.on('connection', (ws) => {
+//     console.log('Client connected');
+//     ws.on('message', (message) => ws.send(`Server received: ${message}`));
+//     ws.on('close', () => console.log('Client disconnected'));
+// });
 
 app.listen(port, () => console.log(`Server running on port ${port}`));
