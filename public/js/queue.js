@@ -11,7 +11,7 @@ const waitingTimeEl = document.getElementById('waiting-time');
 
 // Retrieved from URL
 const params = new URLSearchParams(window.location.search);
-const data = decodeURIComponent(params.get('queue_data'));
+const data = params.get('queue_data');
 
 let queueData = {}; // Object to hold queue details
 let key, iv; // Encryption key and IV
@@ -38,7 +38,7 @@ async function fetchConfig() {
 // Decrypt data function
 async function decryptData(encryptedData, key, iv) {
     try {
-        const decrypted = CryptoJS.AES.decrypt(JSON.stringify(encryptedData), key, {
+        const decrypted = CryptoJS.AES.decrypt(encryptedData, key, {
             iv: iv,
             mode: CryptoJS.mode.CTR,
             padding: CryptoJS.pad.Pkcs7,
