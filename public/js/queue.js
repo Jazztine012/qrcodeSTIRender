@@ -1,6 +1,3 @@
-// IMPORTS
-const CryptoJS = require('crypto-js');
-
 // SMS AND EMAIL FORM OBJECTS
 const smsForm = document.getElementById('sms-form');
 const emailForm = document.getElementById('email-form');
