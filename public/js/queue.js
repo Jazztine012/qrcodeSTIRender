@@ -333,36 +333,9 @@ function sendCustomerData(queueID) {
         });
 }
 
-// async function processString(string, action) {
-//     try {
-//         const response = await fetch('/process_data_string.php', {
-//             method: 'POST',
-//             headers: {
-//                 'Content-Type': 'application/json',
-//             },
-//             body: JSON.stringify({
-//                 string: string,
-//                 action: action, // 'encrypt' or 'decrypt'
-//             }),
-//         });
-
-//         const data = await response.json();
-
-//         if (data.status === 'success') {
-//             console.log(`Action: ${data.action}`);
-//             console.log(`Result: ${data.result}`);
-//             return data.result; // Use this result as needed
-//         } else {
-//             console.error(`Error: ${data.message}`);
-//         }
-//     } catch (error) {
-//         console.error('Error processing the string:', error);
-//     }
-// }
-
 async function decryptData(encryptedData, key, iv) {
     // Decrypt
-    const decrypted = CryptoJS.AES.decrypt(CryptoJS.enc.Base64.parse(encryptedData), key, {
+    const decrypted = CryptoJS.AES.decrypt(encryptedData, key, {
         iv: iv,
         mode: CryptoJS.mode.CTR,
         padding: CryptoJS.pad.Pkcs7,
