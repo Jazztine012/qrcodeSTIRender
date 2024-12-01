@@ -362,7 +362,7 @@ function sendCustomerData(queueID) {
 
 async function decryptData(encryptedData, key, iv) {
     // Decrypt
-    const decrypted = CryptoJS.AES.decrypt(encryptedData, key, {
+    const decrypted = CryptoJS.AES.decrypt(CryptoJS.enc.Base64.parse(encryptedData), key, {
         iv: iv,
         mode: CryptoJS.mode.CTR,
         padding: CryptoJS.pad.Pkcs7,
