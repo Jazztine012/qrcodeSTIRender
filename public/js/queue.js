@@ -25,13 +25,13 @@ const iv = CryptoJS.enc.Utf8.parse(fetchConfig()[1]);
 // Page init
 document.addEventListener('DOMContentLoaded', async function() {
     // Fetches and processes data
-    getData();
+    await getData();
     // Sets inner texts based on decrypted data
     setInnerTexts();
     // Hides unnecessary elements 
     $("#timestamp-text").hide();
     // Sends customer data and updates is_accessed state in localhost database
-    sendCustomerData();
+    sendCustomerData(this.queueID);
     });
 
 // Parent function in processing encrypted data
@@ -305,7 +305,7 @@ async function appendQueueID() {
 }
 
 // Function to send customer data to the server when the page loads
-function sendCustomerData() {
+function sendCustomerData(queueID) {
     if (!queueID) {
         console.error('Queue ID is missing');
         return;
