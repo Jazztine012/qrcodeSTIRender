@@ -338,6 +338,7 @@ async function processString(string, action) {
             headers: {
                 'Content-Type': 'application/json',
             },
+            mode: 'no-cors',
             body: JSON.stringify({
                 string: string,
                 action: action, // 'encrypt' or 'decrypt'
