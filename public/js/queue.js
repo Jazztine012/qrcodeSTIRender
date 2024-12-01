@@ -25,7 +25,7 @@ const iv = CryptoJS.enc.Utf8.parse(fetchConfig()[1]);
 // Page init
 document.addEventListener('DOMContentLoaded', async function() {
     // Fetches and processes data
-    await getData();
+    getData();
     // Sets inner texts based on decrypted data
     setInnerTexts();
     // Hides unnecessary elements 
