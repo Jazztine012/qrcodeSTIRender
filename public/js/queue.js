@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', async function() {
     // Hides unnecessary elements 
     $("#timestamp-text").hide();
     // Sends customer data and updates is_accessed state in localhost database
-    sendCustomerData(this.queueID);
+    sendCustomerData(queueID);
     });
 
 // Parent function in processing encrypted data
