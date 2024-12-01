@@ -36,6 +36,7 @@ document.addEventListener('DOMContentLoaded', async function() {
 
 // Parent function in processing encrypted data
 async function getData() {
+    console.log(data);
     const queueData = await decryptData(this.data);
     console.log(queueData);
     const parsedData = await parseDecryptedData(queueData);
