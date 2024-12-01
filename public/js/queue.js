@@ -19,8 +19,8 @@ let timestamp;
 let waitingTime;
 let queueID;
 
-const key = CryptoJS.enc.Utf8.parse(fetchConfig()[0]);
-const iv = CryptoJS.enc.Utf8.parse(fetchConfig()[1]);
+const key = fetchConfig()[0];
+const iv = fetchConfig()[1];
 
 // Page init
 document.addEventListener('DOMContentLoaded', async function() {
@@ -37,7 +37,7 @@ document.addEventListener('DOMContentLoaded', async function() {
 // Parent function in processing encrypted data
 async function getData(dataToEncrypt) {
     console.log(dataToEncrypt);
-    const queueData = await decryptData(dataToEncrypt, key, iv);
+    const queueData = await decryptData(dataToEncrypt, this.key, this.iv);
     console.log(queueData);
     const parsedData = await parseDecryptedData(queueData);
     console.log(parsedData);
