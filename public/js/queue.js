@@ -40,12 +40,12 @@ async function getData() {
     const queueData = await decryptData(this.data, key, iv);
     console.log(queueData);
     const parsedData = await parseDecryptedData(queueData);
-
+    console.log(parsedData);
     this.queueLocation = parsedData[0].toString();
     this.queueNumber = parsedData[1].toString();
     this.timestamp = parseInt(parsedData[2]);
     this.waitingTime = parseInt(parsedData[3]);
-    this.queueID = parseInt(parsedData[4]);
+    this.queueID = parsedData[4];
 
     console.log(`${queueLocation} ${queueNumber} ${timestamp} ${waitingTime} ${queueID} `);
 }
