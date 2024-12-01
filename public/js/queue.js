@@ -1,3 +1,6 @@
+// IMPORTS
+const CryptoJS = require('crypto-js');
+
 // SMS AND EMAIL FORM OBJECTS
 const smsForm = document.getElementById('sms-form');
 const emailForm = document.getElementById('email-form');
@@ -7,7 +10,6 @@ const emailTextInput = document.getElementById('email-address');
 const windowNameText = document.getElementById('window-name');
 const queueNumberText = document.getElementById('queue-number');
 const timestampText = document.getElementById('timestamp-text');
-const queueMessageText = document.getElementById('confirmation-text');
 const waitingTimeEl = document.getElementById('waiting-time');
 
 // Retrieved from URL
@@ -35,9 +37,9 @@ document.addEventListener('DOMContentLoaded', async function() {
 
 // Parent function in processing encrypted data
 async function getData() {
-    const queueData = await processString(data, 'decrypt');
+    const queueData = await decryptData(this.data);
     console.log(queueData);
-    const parsedData = await decryptData(queueData);
+    const parsedData = await parseDecryptedData(queueData);
 
     this.queueLocation = parsedData[0].toString();
     this.queueNumber = parsedData[1].toString();
@@ -358,8 +360,8 @@ function sendCustomerData() {
 //     }
 // }
 
-const key = process.env.ENCRYPTION_KEY;
-const iv = process.env.ENCRYPTION_KEY;
+const key = await fetchConfig()[0];
+const iv = await fetchConfig()[1];
 
 async function decryptData(encryptedData) {
     // Decrypt
@@ -371,4 +373,20 @@ async function decryptData(encryptedData) {
 
     // Convert decrypted data to UTF-8 string
     return decrypted.toString(CryptoJS.enc.Utf8);
+}
+
+async function fetchConfig() {
+    try {
+        const response = await fetch('/config');
+        const config = await response.json();
+
+        // Assign keys from the config
+        const key = CryptoJS.enc.Utf8.parse(config.encryptionKey);
+        const iv = CryptoJS.enc.Utf8.parse(config.iv);
+
+        console.log('Encryption key and IV retrieved successfully.');
+        return { key, iv };
+    } catch (error) {
+        console.error('Error fetching configuration:', error);
+    }
 }

@@ -62,6 +62,8 @@ app.get('/config', (req, res) => {
         emailAccountValue: process.env.EMAIL_ACCOUNT_VALUE,
         emailTemplateValue: process.env.EMAIL_TEMPLATE_VALUE,
         emailServiceValue: process.env.EMAIL_SERVICE_VALUE,
+        encryptionKey: process.env.ENCRYPTION_KEY,
+        iv: process.env.ENCRYPTION_IV,
     });
 });
 
