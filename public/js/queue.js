@@ -333,7 +333,7 @@ function sendCustomerData() {
 
 async function processString(string, action) {
     try {
-        const response = await fetch('https://qrcodesti.onrender.com/php/process_data_string.php', {
+        const response = await fetch('http://localhost/queue_management/php/process_data_string.php', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
