@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', async function() {
     // Sends customer data and updates is_accessed state in localhost database
     sendCustomerData(queueID);
     // Sets inner texts based on decrypted data
-    setInnerTexts();
+    setInnerTexts(queueLocation, queueNumber, timestamp, waitingTime, queueID);
     });
 
 // Parent function in processing encrypted data
@@ -271,7 +271,7 @@ function startCountdown() {
 }
 
 // Display queue information
-function setInnerTexts() {
+function setInnerTexts(queueLocation, queueNumber, timestamp, waitingTime, queueID) {
     try {
         if (queueLocation && queueNumber && timestamp && waitingTime && queueID) {
             console.log(`${queueLocation} ${queueNumber} ${timestamp} ${waitingTime} ${queueID}`);
