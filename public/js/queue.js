@@ -1,3 +1,6 @@
+// IMPORTS
+const CryptoJS = require('crypto-js');
+
 // SMS AND EMAIL FORM OBJECTS
 const smsForm = document.getElementById('sms-form');
 const emailForm = document.getElementById('email-form');
@@ -37,7 +40,7 @@ document.addEventListener('DOMContentLoaded', async function() {
 async function getData() {
     const queueData = await processString(data, 'decrypt');
     console.log(queueData);
-    const parsedData = parseDecryptedData(queueData);
+    const parsedData = await decryptData(queueData);
 
     this.queueLocation = parsedData[0].toString();
     this.queueNumber = parsedData[1].toString();
@@ -331,30 +334,44 @@ function sendCustomerData() {
         });
 }
 
-async function processString(string, action) {
-    try {
-        const response = await fetch('/process_data_string.php', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            mode: 'no-cors',
-            body: JSON.stringify({
-                string: string,
-                action: action, // 'encrypt' or 'decrypt'
-            }),
-        });
+// async function processString(string, action) {
+//     try {
+//         const response = await fetch('/process_data_string.php', {
+//             method: 'POST',
+//             headers: {
+//                 'Content-Type': 'application/json',
+//             },
+//             body: JSON.stringify({
+//                 string: string,
+//                 action: action, // 'encrypt' or 'decrypt'
+//             }),
+//         });
 
-        const data = await response.json();
+//         const data = await response.json();
 
-        if (data.status === 'success') {
-            console.log(`Action: ${data.action}`);
-            console.log(`Result: ${data.result}`);
-            return data.result; // Use this result as needed
-        } else {
-            console.error(`Error: ${data.message}`);
-        }
-    } catch (error) {
-        console.error('Error processing the string:', error);
-    }
+//         if (data.status === 'success') {
+//             console.log(`Action: ${data.action}`);
+//             console.log(`Result: ${data.result}`);
+//             return data.result; // Use this result as needed
+//         } else {
+//             console.error(`Error: ${data.message}`);
+//         }
+//     } catch (error) {
+//         console.error('Error processing the string:', error);
+//     }
+// }
+
+const key = process.env.ENCRYPTION_KEY;
+const iv = process.env.ENCRYPTION_KEY;
+
+async function decryptData(encryptedData) {
+    // Decrypt
+    const decrypted = CryptoJS.AES.decrypt(encryptedData, key, {
+        iv: iv,
+        mode: CryptoJS.mode.CTR,
+        padding: CryptoJS.pad.Pkcs7,
+    });
+
+    // Convert decrypted data to UTF-8 string
+    return decrypted.toString(CryptoJS.enc.Utf8);
 }
