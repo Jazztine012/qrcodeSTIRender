@@ -1,23 +1,71 @@
+// SMS AND EMAIL FORM OBJECTS
+const smsForm = document.getElementById('sms-form');
+const emailForm = document.getElementById('email-form');
 const mobileNumberTextInput = document.getElementById('mobile-number');
 const emailTextInput = document.getElementById('email-address');
+// QUEUE ELEMENT OBJECTS
+const windowNameText = document.getElementById('window-name');
+const queueNumberText = document.getElementById('queue-number');
+const timestampText = document.getElementById('timestamp-text');
+const queueMessageText = document.getElementById('confirmation-text');
+const waitingTimeEl = document.getElementById('waiting-time');
 
-// JavaScript to manage tab switching and forms
-document.addEventListener('DOMContentLoaded', () => {
-    // Add event listeners for form submission
-    const smsForm = document.getElementById('sms-form');
-    const emailForm = document.getElementById('email-form');
+// Retrieved from URL
+const params = new URLSearchParams(window.location.search);
+const data = params.get('data');
+// Decrypted data
+let queueData;
 
-    smsForm.addEventListener('submit', (event) => {
-        event.preventDefault();
-        const mobileNumber = mobileNumberTextInput.value;
-        updateMobileNumber(mobileNumber);
+let queueLocation;
+let queueNumber;
+let timestamp;
+let waitingTime;
+let queueID;
+
+
+// Page init
+document.addEventListener('DOMContentLoaded', async function() {
+    queueData = await processString(data, 'decrypt');
+    const parsedData = parseDecryptedData(queueData);
+    queueLocation = parsedData[0].toString();
+    queueNumber = parsedData[1].toString();
+    timestamp = parseInt(parsedData[2]);
+    waitingTime = parseInt(parsedData[3]);
+    queueID = parseInt(parsedData[4]);
+
+    setInnerTexts();
+
+    $("#timestamp-text").hide();
+
+    if (queueID) {
+        sendCustomerData();
+    } else {
+        console.error("No queue ID provided in the URL!");
+    }
     });
 
-    emailForm.addEventListener('submit', (event) => {
-        event.preventDefault();
-        const emailAddress = emailTextInput.value;
-        updateEmailAddress(emailAddress);
+function parseDecryptedData(inputString) {
+    // Split the string using "/" as the separator
+    const parts = inputString.split('/');
+
+    parts.forEach((part, index) => {
+        console.log(`Part ${index + 1}: ${part}`);
     });
+
+    return parts;
+}
+
+// Event listeners
+smsForm.addEventListener('submit', (event) => {
+    event.preventDefault();
+    const mobileNumber = mobileNumberTextInput.value;
+    updateMobileNumber(mobileNumber);
+});
+
+emailForm.addEventListener('submit', (event) => {
+    event.preventDefault();
+    const emailAddress = emailTextInput.value;
+    updateEmailAddress(emailAddress);
 });
 
 // Function to update mobile number and send SMS notification
@@ -56,7 +104,6 @@ async function updateEmailAddress(emailAddress) {
     }
 }
 
-
 // Checks time and sends a signal if it's time to send a notification
 async function checkNotificationTime(){
     try {
@@ -70,6 +117,7 @@ async function checkNotificationTime(){
 
 }
 
+// Sends email notification in due time
 async function sendEmailNotification() {
     try {
         let emailAddress = localStorage.getItem('emailAddress');
@@ -117,7 +165,7 @@ async function sendEmailNotification() {
     }
 }
 
-
+// Sends SMS notification in due time
 async function sendSMSNotification() {
     try {
         const mobileNumber = localStorage.getItem('mobileNumber'); // Retrieve from localStorage
@@ -145,7 +193,6 @@ async function sendSMSNotification() {
         console.error(`Error sending SMS notification: ${error}`);
     }
 }
-
 
 // Send an in-browser notification
 // TODO: must have a single jingle sound
@@ -203,31 +250,12 @@ mobileNumberTextInput.closest('form').addEventListener('submit', function (event
     }
 });
 
-// REIMPORT FROM OLD FILES
-const windowNameText = document.getElementById('window-name');
-const queueNumberText = document.getElementById('queue-number');
-const timestampText = document.getElementById('timestamp-text');
-const queueMessageText = document.getElementById('confirmation-text');
-const waitingTimeEl = document.getElementById('waiting-time');
-const token = new URLSearchParams(window.location.search).get('token');
-const params = new URLSearchParams(window.location.search);
-const queueLocation = params.get('location');
-const queueNumber = params.get('queue');
-const queueID = params.get('queueID');
-const timestamp = new Date(params.get('timestamp')).toLocaleString();
-// const timestamp = params.get('timestamp');
-
-console.log(`queueID from the queue is: ${queueID || null}`);
-
-// Countdown timer for estimated waiting time
-let totalSeconds = 300; // 5 minutes
-
 function startCountdown() {
     const interval = setInterval(() => {
-        if (totalSeconds > 0) {
-            totalSeconds--;
-            const minutes = Math.floor(totalSeconds / 60).toString().padStart(2, '0');
-            const seconds = (totalSeconds % 60).toString().padStart(2, '0');
+        if (waitingTime > 0) {
+            waitingTime--;
+            const minutes = Math.floor(waitingTime / 60).toString().padStart(2, '0');
+            const seconds = (waitingTime % 60).toString().padStart(2, '0');
             waitingTimeEl.textContent = `${minutes}:${seconds}`;
         } else {
             clearInterval(interval);
@@ -239,8 +267,8 @@ function startCountdown() {
 // Display queue information
 function setInnerTexts() {
     try {
-        if (queueLocation && queueNumber && timestamp) {
-            console.log(queueLocation, ' ', queueNumber, ' ', timestamp);
+        if (queueLocation && queueNumber && timestamp && waitingTime && queueID) {
+            console.log(`${queueLocation} ${queueNumber} ${timestamp} ${waitingTime} ${queueID}`);
             startCountdown();
             windowNameText.innerText = `${queueLocation}`;
             queueNumberText.innerText = `${queueNumber}`;
@@ -272,20 +300,10 @@ async function appendQueueID() {
 
 // Function to send customer data to the server when the page loads
 function sendCustomerData() {
-    // Check if all required data is available
-    if (!queueLocation || !queueNumber || !timestamp || !queueID) {
-        console.error('Missing data: queueLocation, queueNumber, queueID, or timestamp is not defined.');
+    if (!queueID) {
+        console.error('Queue ID is missing');
         return;
     }
-
-    const customerData = {
-        location: queueLocation,
-        queueNumber: queueNumber,
-        timestamp: timestamp,
-        queueID: queueID,
-    };
-
-    console.log('Sending customer data:', customerData);
 
     // Send data to the customer updates endpoint
     fetch('https://qrcodesti.onrender.com/api/customer-updates', {
@@ -293,7 +311,7 @@ function sendCustomerData() {
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify(customerData),
+        body: JSON.stringify(queueID),
     })
         .then(response => {
             if (!response.ok) {
@@ -303,27 +321,35 @@ function sendCustomerData() {
         })
         .then(updatedData => {
             console.log('Customer data successfully sent:', updatedData);
-            // Optionally, update UI with the response data
-            // Example:
-            // document.getElementById('confirmation-text').innerText = `Queue Number: ${updatedData.queueNumber}`;
         })
         .catch(error => {
             console.error('Error sending customer data:', error);
-            // alert(`Failed to send customer data. Please try again later. Error: ${error.message}`);
         });
 }
 
+async function processString(string, action) {
+    try {
+        const response = await fetch('http://localhost/queue_management/queue_display_module/php/process_data_string.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                string: string,
+                action: action, // 'encrypt' or 'decrypt'
+            }),
+        });
 
-// Start countdown and initialize page content
-document.addEventListener('DOMContentLoaded', function() {
-    setInnerTexts();
+        const data = await response.json();
 
-    $("#timestamp-text").hide();
-
-    if (queueID) {
-        sendCustomerData();
-        // appendQueueID();
-    } else {
-        console.error("No queue ID provided in the URL!");
+        if (data.status === 'success') {
+            console.log(`Action: ${data.action}`);
+            console.log(`Result: ${data.result}`);
+            return data.result; // Use this result as needed
+        } else {
+            console.error(`Error: ${data.message}`);
+        }
+    } catch (error) {
+        console.error('Error processing the string:', error);
     }
-    });
+}
