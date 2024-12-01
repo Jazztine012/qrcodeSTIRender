@@ -26,12 +26,15 @@ let queueID;
 // Page init
 document.addEventListener('DOMContentLoaded', async function() {
     queueData = await processString(data, 'decrypt');
+    console.log(queueData);
     const parsedData = parseDecryptedData(queueData);
     queueLocation = parsedData[0].toString();
     queueNumber = parsedData[1].toString();
     timestamp = parseInt(parsedData[2]);
     waitingTime = parseInt(parsedData[3]);
     queueID = parseInt(parsedData[4]);
+
+    console.log(`${queueLocation} ${queueNumber} ${timestamp} ${waitingTime} ${queueID} `);
 
     setInnerTexts();
 
