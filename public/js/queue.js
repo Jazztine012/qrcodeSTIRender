@@ -333,7 +333,7 @@ function sendCustomerData() {
 
 async function processString(string, action) {
     try {
-        const response = await fetch('../php/process_data_string.php', {
+        const response = await fetch('/public/php/process_data_string.php', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
