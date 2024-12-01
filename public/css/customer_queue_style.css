@@ -79,3 +79,32 @@ button:hover {
     text-align: center;
     font-size: large;
 }
+
+/* Styling for pill-shaped buttons */
+.nav-pills .nav-link {
+    border-radius: 50px;
+    font-weight: bold;
+    padding: 10px 20px;
+    text-align: center;
+}
+
+.nav-pills .nav-link.active {
+    background-color: #007bff;
+    color: #fff;
+}
+
+.tab-content {
+    margin-top: 20px;
+}
+
+.center-message {
+    text-align: center;
+}
+
+#attention-color {
+    color: rgba(141, 78, 27, 0.801);
+}
+
+.gray {
+    color: gray;
+}
