@@ -25,7 +25,7 @@ const iv = CryptoJS.enc.Utf8.parse(fetchConfig()[1]);
 // Page init
 document.addEventListener('DOMContentLoaded', async function() {
     // Fetches and processes data
-    await getData();
+    await getData(data);
     // Sets inner texts based on decrypted data
     setInnerTexts();
     // Hides unnecessary elements 
@@ -35,9 +35,9 @@ document.addEventListener('DOMContentLoaded', async function() {
     });
 
 // Parent function in processing encrypted data
-async function getData() {
-    console.log(data);
-    const queueData = await decryptData(this.data, key, iv);
+async function getData(dataToEncrypt) {
+    console.log(dataToEncrypt);
+    const queueData = await decryptData(dataToEncrypt, key, iv);
     console.log(queueData);
     const parsedData = await parseDecryptedData(queueData);
     console.log(parsedData);
