@@ -12,9 +12,7 @@ const waitingTimeEl = document.getElementById('waiting-time');
 
 // Retrieved from URL
 const params = new URLSearchParams(window.location.search);
-const data = params.get('data');
-// Decrypted data
-let queueData;
+const data = params.get('queue_data');
 
 let queueLocation;
 let queueNumber;
@@ -25,27 +23,30 @@ let queueID;
 
 // Page init
 document.addEventListener('DOMContentLoaded', async function() {
-    queueData = await processString(data, 'decrypt');
+    // Fetches and processes data
+    await getData();
+    // Sets inner texts based on decrypted data
+    setInnerTexts();
+    // Hides unnecessary elements 
+    $("#timestamp-text").hide();
+    // Sends customer data and updates is_accessed state in localhost database
+    sendCustomerData();
+    });
+
+// Parent function in processing encrypted data
+async function getData() {
+    const queueData = await processString(data, 'decrypt');
     console.log(queueData);
     const parsedData = parseDecryptedData(queueData);
-    queueLocation = parsedData[0].toString();
-    queueNumber = parsedData[1].toString();
-    timestamp = parseInt(parsedData[2]);
-    waitingTime = parseInt(parsedData[3]);
-    queueID = parseInt(parsedData[4]);
+
+    this.queueLocation = parsedData[0].toString();
+    this.queueNumber = parsedData[1].toString();
+    this.timestamp = parseInt(parsedData[2]);
+    this.waitingTime = parseInt(parsedData[3]);
+    this.queueID = parseInt(parsedData[4]);
 
     console.log(`${queueLocation} ${queueNumber} ${timestamp} ${waitingTime} ${queueID} `);
-
-    setInnerTexts();
-
-    $("#timestamp-text").hide();
-
-    if (queueID) {
-        sendCustomerData();
-    } else {
-        console.error("No queue ID provided in the URL!");
-    }
-    });
+}
 
 function parseDecryptedData(inputString) {
     // Split the string using "/" as the separator
