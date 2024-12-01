@@ -41,11 +41,11 @@ async function getData(dataToEncrypt) {
     // console.log(queueData);
     const parsedData = await parseDecryptedData(dataToEncrypt);
     console.log(parsedData);
-    this.queueLocation = parsedData[0].toString();
-    this.queueNumber = parsedData[1].toString();
-    this.timestamp = parseInt(parsedData[2]);
-    this.waitingTime = parseInt(parsedData[3]);
-    this.queueID = parsedData[4];
+    queueLocation = parsedData[0].toString();
+    queueNumber = parsedData[1].toString();
+    timestamp = parseInt(parsedData[2]);
+    waitingTime = parseInt(parsedData[3]);
+    queueID = parseInt(parsedData[4]);
 
     console.log(`${queueLocation} ${queueNumber} ${timestamp} ${waitingTime} ${queueID} `);
 }
