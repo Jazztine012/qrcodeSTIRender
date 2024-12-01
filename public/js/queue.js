@@ -38,7 +38,7 @@ async function fetchConfig() {
 // Decrypt data function
 async function decryptData(encryptedData, key, iv) {
     try {
-        const decrypted = CryptoJS.AES.decrypt(CryptoJS.enc.Utf8.parse(encryptedData), key, {
+        const decrypted = CryptoJS.AES.decrypt(JSON.stringify(encryptedData), key, {
             iv: iv,
             mode: CryptoJS.mode.CTR,
             padding: CryptoJS.pad.Pkcs7,
