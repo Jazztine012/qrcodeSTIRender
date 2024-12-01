@@ -290,19 +290,19 @@ function setInnerTexts() {
     }
 }
 
-async function appendQueueID() {
-    try {
-        const response = await fetch('https://qrcodesti.onrender.com/api/append', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ queueID }),
-        });
-        const result = await response.json();
-        console.log(result.message);
-    } catch (error) {
-        console.error('Error appending Queue ID:', error);
-    }
-}
+// async function appendQueueID() {
+//     try {
+//         const response = await fetch('https://qrcodesti.onrender.com/api/append', {
+//             method: 'POST',
+//             headers: { 'Content-Type': 'application/json' },
+//             body: JSON.stringify({ queueID }),
+//         });
+//         const result = await response.json();
+//         console.log(result.message);
+//     } catch (error) {
+//         console.error('Error appending Queue ID:', error);
+//     }
+// }
 
 // Function to send customer data to the server when the page loads
 function sendCustomerData(queueID) {
@@ -317,7 +317,7 @@ function sendCustomerData(queueID) {
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify(queueID),
+        body: JSON.stringify({queueID}),
     })
         .then(response => {
             if (!response.ok) {
