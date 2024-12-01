@@ -19,6 +19,8 @@ let timestamp;
 let waitingTime;
 let queueID;
 
+const key = CryptoJS.enc.Utf8.parse(fetchConfig()[0]);
+const iv = CryptoJS.enc.Utf8.parse(fetchConfig()[1]);
 
 // Page init
 document.addEventListener('DOMContentLoaded', async function() {
@@ -356,9 +358,6 @@ function sendCustomerData() {
 //         console.error('Error processing the string:', error);
 //     }
 // }
-
-const key = CryptoJS.enc.Utf8.parse(fetchConfig()[0]);
-const iv = CryptoJS.enc.Utf8.parse(fetchConfig()[1]);
 
 async function decryptData(encryptedData) {
     // Decrypt
