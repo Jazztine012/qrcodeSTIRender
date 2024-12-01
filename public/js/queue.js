@@ -333,7 +333,7 @@ function sendCustomerData() {
 
 async function processString(string, action) {
     try {
-        const response = await fetch('http://localhost/queue_management/queue_display_module/php/process_data_string.php', {
+        const response = await fetch('../php/process_data_string.php', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
