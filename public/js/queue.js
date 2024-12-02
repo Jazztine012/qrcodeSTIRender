@@ -289,7 +289,8 @@ function setInnerTexts(queueLocation, queueNumber, timestamp, waitingTime, queue
 
         console.log(`${queueLocation} ${queueNumber} ${timestamp} ${waitingTime} ${queueID}`);
         startCountdown();
-        windowNameText.innerText = `${queueLocation}`;
+        const newQueueLocation = queueLocation.replaceAll("_", " ");
+        windowNameText.innerText = `${newQueueLocation}`;
         queueNumberText.innerText = `${queueNumber}`;
         timestampText.innerText = `${timestamp}`;
     } catch (error) {
