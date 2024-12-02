@@ -26,7 +26,7 @@ let queueID;
 document.addEventListener('DOMContentLoaded', async function() {
     // Fetches and processes data
     await getData(data);
-    if (!checkTimeValidity(timestamp)){
+    if (checkTimeValidity(timestamp) == false){
         alert("Invalid queue card. This card has been in timeout.");
         loadInvalidCard();
     }
