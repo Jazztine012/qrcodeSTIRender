@@ -32,6 +32,12 @@ document.addEventListener('DOMContentLoaded', async function() {
     sendCustomerData(queueID);
     // Sets inner texts based on decrypted data
     setInnerTexts(queueLocation, queueNumber, timestamp, waitingTime, queueID);
+    setInterval( function () {
+        if (!checkTimeValidity()){
+            loadInvalidCard();
+        }
+        // ELSE: continue as usual
+    }, 60000);
     });
 
 // Parent function in processing encrypted data
@@ -276,20 +282,26 @@ function setInnerTexts(queueLocation, queueNumber, timestamp, waitingTime, queue
         if (queueLocation == "" && queueNumber == "" && timestamp == null && queueID == null && waitingTime == null) {
             throw new Error('Queue information is incomplete.');
         }
-        if (timestamp - 60 < getServerTime()){
-            throw new Error('Queue card timeout.');
-        }
+
         console.log(`${queueLocation} ${queueNumber} ${timestamp} ${waitingTime} ${queueID}`);
         startCountdown();
         windowNameText.innerText = `${queueLocation}`;
         queueNumberText.innerText = `${queueNumber}`;
         timestampText.innerText = `${timestamp}`;
     } catch (error) {
-        $("#container").load(`invalid_queue.html`);
-        $("#form-container").hide();
-        console.log('Invalid page loaded ', error);
-        alert('This is an invalid queue card.');
+        loadInvalidCard();
     }
+}
+
+function loadInvalidCard() {
+    $("#container").load(`invalid_queue.html`);
+    $("#form-container").hide();
+    console.log('Invalid page loaded ', error);
+    alert('This is an invalid queue card.');
+}
+
+function checkTimeValidity() {
+    return timestamp - 60 >= getServerTime();
 }
 
 // Function to send customer data to the server when the page loads
