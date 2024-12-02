@@ -310,7 +310,7 @@ function checkTimeValidity(timestamp) {
     const timestampLimit = timestamp + 60;
     console.log(`Time now: ${timeNow}, Time in queue: ${timestampLimit}, Original Timestamp: ${timestamp}`);
     return true;
-    // return getServerTime() <= timestamp + 60;
+    // return getServerTime() <= timestampLimit;
 }
 
 // Function to send customer data to the server when the page loads
@@ -381,13 +381,15 @@ async function getServerTime() {
         }
 
         const data = await response.json();
-        const utcTime = new Date(data.dateTime);
 
-        // Get Unix timestamp in seconds for Manila time
-        const unixTimeStamp = Math.floor(new Date(utcTime.toLocaleString("en-US", { timeZone: "Asia/Manila" })).getTime() / 1000);
+        // Convert the API's datetime string directly to a UNIX timestamp in seconds
+        const unixTimeStamp = Math.floor(new Date(data.dateTime).getTime() / 1000);
 
         return unixTimeStamp;
     } catch (error) {
         console.error("Error fetching server time:", error);
+
+        // Fallback to local time (less reliable)
+        return Math.floor(Date.now() / 1000);
     }
 }
