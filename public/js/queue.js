@@ -41,8 +41,8 @@ async function getData(dataToEncrypt) {
     console.log(queueData);
     const parsedData = await parseDecryptedData(queueData);
     console.log(parsedData);
-    queueLocation = parsedData[0].toString();
-    queueNumber = parsedData[1].toString();
+    queueLocation = parsedData[0];
+    queueNumber = parsedData[1];
     timestamp = parseInt(parsedData[2]);
     waitingTime = parseInt(parsedData[3]);
     queueID = parseInt(parsedData[4]);
