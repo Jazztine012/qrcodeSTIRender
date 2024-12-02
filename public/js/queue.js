@@ -37,9 +37,9 @@ document.addEventListener('DOMContentLoaded', async function() {
 // Parent function in processing encrypted data
 async function getData(dataToEncrypt) {
     console.log(dataToEncrypt);
-    // const queueData = await decryptData(dataToEncrypt, fetchConfig()[0], fetchConfig()[1]);
-    // console.log(queueData);
-    const parsedData = await parseDecryptedData(dataToEncrypt);
+    const queueData = await decryptData(dataToEncrypt, fetchConfig()[0], fetchConfig()[1]);
+    console.log(queueData);
+    const parsedData = await parseDecryptedData(queueData);
     console.log(parsedData);
     queueLocation = parsedData[0].toString();
     queueNumber = parsedData[1].toString();
@@ -273,8 +273,8 @@ function startCountdown() {
 // Display queue information
 function setInnerTexts(queueLocation, queueNumber, timestamp, waitingTime, queueID) {
     try {
-        if (queueLocation && queueNumber && timestamp && queueID) {
-            console.log(`${queueLocation} ${queueNumber} ${timestamp} ${queueID}`);
+        if (queueLocation != "" && queueNumber != "" && timestamp != null && queueID != null && waitingTime != 0) {
+            console.log(`${queueLocation} ${queueNumber} ${timestamp} ${waitingTime} ${queueID}`);
             startCountdown();
             windowNameText.innerText = `${queueLocation}`;
             queueNumberText.innerText = `${queueNumber}`;
@@ -337,8 +337,8 @@ async function fetchConfig() {
         const config = await response.json();
 
         // Assign keys from the config
-        const key = config.encryptionKey;
-        const iv = config.iv;
+        const key = CryptoJS.enc.Utf8.parse(config.encryptionKey);
+        const iv = CryptoJS.enc.Utf8.parse(config.iv);
 
         console.log('Encryption key and IV retrieved successfully.');
         return { key, iv };
