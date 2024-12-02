@@ -305,7 +305,7 @@ function loadInvalidCard() {
 }
 
 function checkTimeValidity() {
-    return timestamp - 60 >= getServerTime();
+    return timestamp <= getServerTime() + 60;
 }
 
 // Function to send customer data to the server when the page loads
