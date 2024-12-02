@@ -37,7 +37,7 @@ document.addEventListener('DOMContentLoaded', async function() {
             loadInvalidCard();
         }
         // ELSE: continue as usual
-    }, 60000);
+    }, 5000);
     });
 
 // Parent function in processing encrypted data
