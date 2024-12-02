@@ -24,12 +24,12 @@ let queueID;
 
 // Page init
 document.addEventListener('DOMContentLoaded', async function() {
-    if (!checkTimeValidity()){
+    // Fetches and processes data
+    await getData(data);
+    if (!checkTimeValidity(timestamp)){
         alert("Invalid queue card. This card has been in timeout.");
         loadInvalidCard();
     }
-    // Fetches and processes data
-    await getData(data);
     // Hides unnecessary elements 
     $("#timestamp-text").hide();
     // Sends customer data and updates is_accessed state in localhost database
@@ -305,8 +305,12 @@ function loadInvalidCard() {
 }
 
 // TODO CHANGE SCHEMA
-function checkTimeValidity() {
-    return getServerTime() <= timestamp + 60;
+function checkTimeValidity(timestamp) {
+    const timeNow = getServerTime();
+    const timestampLimit = timestamp + 60;
+    console.log(`Time now: ${timeNow}, Time in queue: ${timestampLimit}, Original Timestamp: ${timestamp}`);
+    return true;
+    // return getServerTime() <= timestamp + 60;
 }
 
 // Function to send customer data to the server when the page loads
