@@ -304,14 +304,23 @@ function loadInvalidCard() {
     alert('This is an invalid queue card.');
 }
 
-// TODO CHANGE SCHEMA
-function checkTimeValidity(timestamp) {
-    const timeNow = getServerTime();
-    const timestampLimit = timestamp + 60;
-    console.log(`Time now: ${timeNow}, Time in queue: ${timestampLimit}, Original Timestamp: ${timestamp}`);
-    return true;
-    // return getServerTime() <= timestampLimit;
+async function checkTimeValidity(timestamp) {
+    try {
+        const timeNow = await getServerTime(); // Assuming getServerTime is an async function
+        if (!timeNow || isNaN(timeNow)) {
+            console.error("Error retrieving server time.");
+            return false;
+        }
+
+        const timestampLimit = timestamp + 60; // 60-second validity
+        console.log(`Time now: ${timeNow}, Time in queue: ${timestampLimit}, Original Timestamp: ${timestamp}`);
+        return timeNow <= timestampLimit;
+    } catch (error) {
+        console.error("Error checking time validity:", error);
+        return false;
+    }
 }
+
 
 // Function to send customer data to the server when the page loads
 function sendCustomerData(queueID) {
