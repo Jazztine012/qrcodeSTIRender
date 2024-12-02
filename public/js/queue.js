@@ -37,7 +37,7 @@ document.addEventListener('DOMContentLoaded', async function() {
 // Parent function in processing encrypted data
 async function getData(dataToEncrypt) {
     console.log(dataToEncrypt);
-    const queueData = await decryptData(dataToEncrypt, fetchConfig()[0], fetchConfig()[1]);
+    const queueData = await decryptData(dataToEncrypt, CryptoJS.enc.Utf8.parse(fetchConfig()[0]), CryptoJS.enc.Utf8.parse(fetchConfig()[1]));
     console.log(queueData);
     const parsedData = await parseDecryptedData(queueData);
     console.log(parsedData);
@@ -338,8 +338,8 @@ async function fetchConfig() {
         const config = await response.json();
 
         // Assign keys from the config
-        const key = CryptoJS.enc.Utf8.parse(config.encryptionKey);
-        const iv = CryptoJS.enc.Utf8.parse(config.iv);
+        const key = config.encryptionKey;
+        const iv = config.iv;
 
         console.log('Encryption key and IV retrieved successfully.');
         return { key, iv };
