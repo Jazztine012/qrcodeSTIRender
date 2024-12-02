@@ -24,6 +24,10 @@ let queueID;
 
 // Page init
 document.addEventListener('DOMContentLoaded', async function() {
+    if (!checkTimeValidity()){
+        alert("Invalid queue card. This card has been in timeout.");
+        loadInvalidCard();
+    }
     // Fetches and processes data
     await getData(data);
     // Hides unnecessary elements 
@@ -32,12 +36,12 @@ document.addEventListener('DOMContentLoaded', async function() {
     sendCustomerData(queueID);
     // Sets inner texts based on decrypted data
     setInnerTexts(queueLocation, queueNumber, timestamp, waitingTime, queueID);
-    setInterval( function () {
-        if (!checkTimeValidity()){
-            loadInvalidCard();
-        }
-        // ELSE: continue as usual
-    }, 5000);
+    // setInterval( function () {
+    //     if (!checkTimeValidity()){
+    //         loadInvalidCard();
+    //     }
+    //     // ELSE: continue as usual
+    // }, 5000);
     });
 
 // Parent function in processing encrypted data
