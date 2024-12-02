@@ -273,7 +273,7 @@ function startCountdown() {
 // Display queue information
 function setInnerTexts(queueLocation, queueNumber, timestamp, waitingTime, queueID) {
     try {
-        if (queueLocation != "" && queueNumber != "" && timestamp != null && queueID != null && waitingTime != 0) {
+        if (queueLocation != "" && queueNumber != "" && timestamp != null && queueID != null && waitingTime != null) {
             console.log(`${queueLocation} ${queueNumber} ${timestamp} ${waitingTime} ${queueID}`);
             startCountdown();
             windowNameText.innerText = `${queueLocation}`;
