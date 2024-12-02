@@ -273,15 +273,17 @@ function startCountdown() {
 // Display queue information
 function setInnerTexts(queueLocation, queueNumber, timestamp, waitingTime, queueID) {
     try {
-        if (queueLocation != "" && queueNumber != "" && timestamp != null && queueID != null && waitingTime != null) {
-            console.log(`${queueLocation} ${queueNumber} ${timestamp} ${waitingTime} ${queueID}`);
-            startCountdown();
-            windowNameText.innerText = `${queueLocation}`;
-            queueNumberText.innerText = `${queueNumber}`;
-            timestampText.innerText = `${timestamp}`;
-        } else {
+        if (queueLocation == "" && queueNumber == "" && timestamp == null && queueID == null && waitingTime == null) {
             throw new Error('Queue information is incomplete.');
         }
+        if (timestamp - 60 < getServerTime()){
+            throw new Error('Queue card timeout.');
+        }
+        console.log(`${queueLocation} ${queueNumber} ${timestamp} ${waitingTime} ${queueID}`);
+        startCountdown();
+        windowNameText.innerText = `${queueLocation}`;
+        queueNumberText.innerText = `${queueNumber}`;
+        timestampText.innerText = `${timestamp}`;
     } catch (error) {
         $("#container").load(`invalid_queue.html`);
         $("#form-container").hide();
@@ -345,5 +347,26 @@ async function fetchConfig() {
         return { key, iv };
     } catch (error) {
         console.error('Error fetching configuration:', error);
+    }
+}
+
+// Gets server time based on the World Time API
+async function getServerTime() {
+    try {
+        const response = await fetch('https://timeapi.io/api/time/current/zone?timeZone=Asia%2FManila');
+        
+        if (!response.ok) {
+            throw new Error('Failed to fetch time from the public API.');
+        }
+
+        const data = await response.json();
+        const utcTime = new Date(data.dateTime);
+
+        // Get Unix timestamp in seconds for Manila time
+        const unixTimeStamp = Math.floor(new Date(utcTime.toLocaleString("en-US", { timeZone: "Asia/Manila" })).getTime() / 1000);
+
+        return unixTimeStamp;
+    } catch (error) {
+        console.error("Error fetching server time:", error);
     }
 }
