@@ -304,8 +304,9 @@ function loadInvalidCard() {
     alert('This is an invalid queue card.');
 }
 
+// TODO CHANGE SCHEMA
 function checkTimeValidity() {
-    return timestamp <= getServerTime() + 60;
+    return getServerTime() <= timestamp + 60;
 }
 
 // Function to send customer data to the server when the page loads
