@@ -29,6 +29,7 @@ document.addEventListener('DOMContentLoaded', async function() {
     sendCustomerData(queueID);
     // Sets inner texts based on decrypted data
     setInnerTexts(queueLocation, queueNumber, timestamp, waitingTime, queueID);
+    sendNativeNotification();
     });
 
 // Parent function in processing encrypted data
@@ -184,9 +185,10 @@ async function sendSMSNotification() {
 }
 
 // Send an in-browser notification
-// TODO: must have a single jingle sound
 async function sendNativeNotification(){
-    // Have animation here that will notify in-browser
+    let modalNotification = new bootstrap.Modal(document.getElementById('modal-notification'));
+    document.getElementById('queue-location').innerText = location;
+    modalNotification.show();
 }
 
 // EMAIL TEXT INPUT LISTENERS
@@ -343,9 +345,11 @@ async function decryptData() {
             return decryptedData;
         } catch (error) {
             console.error("Decryption failed:", error);
+            loadInvalidCard()
         }
     } else {
         console.warn("No data found in URL parameters.");
+        loadInvalidCard()
     }
 }
 

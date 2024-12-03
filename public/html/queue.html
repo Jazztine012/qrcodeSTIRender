@@ -64,6 +64,27 @@
         </div>
     </div>
 
+    <!-- In-browser notification -->
+    <div class="modal fade" id="modal-notification" tabindex="-1" aria-labelledby="modal-notification" aria-hidden="true">
+        <div class="modal-dialog modal-danger modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="py-3 text-center">
+                        <i class="fas fa-bell" style="font-size: 24px"></i>
+                        <h4 class="text-info mt-4" id="queue-state">NOTICE</h4>
+                        <p>
+                            Time estimates show you're number will almost be called.
+                            Please return to the admission office and look out for the <span id="queue-location"></span> service desk.
+                        </p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">OK</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Email JS -->
     <script src="../js/email.min.js"></script>
     <!-- Bootstrap JS -->
