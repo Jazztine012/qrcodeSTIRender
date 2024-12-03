@@ -345,7 +345,7 @@ function sendCustomerData(queueID) {
 async function decryptData() {
     // Extract the 'queue_data' parameter from the URL
     const urlParams = new URLSearchParams(window.location.search);
-    const encryptedData = urlParams.get("queue_data");
+    const encryptedData = urlParams.get("d");
 
     const decryptionKey = await fetchConfig()[0];
 
