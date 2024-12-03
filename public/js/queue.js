@@ -22,6 +22,7 @@ let queueID;
 document.addEventListener('DOMContentLoaded', async function() {
     // Fetches and processes data
     await getData();
+    
     if (await checkTimeValidity(timestamp) == false){
         alert("Invalid queue card. This card has been in timeout.");
         loadInvalidCard();
@@ -291,7 +292,7 @@ function setInnerTexts(queueLocation, queueNumber, timestamp, waitingTime, queue
 function loadInvalidCard() {
     $("#container").load(`invalid_queue.html`);
     $("#form-container").hide();
-    console.log('Invalid page loaded ', error);
+    console.log('Invalid page loaded');
     alert('This is an invalid queue card.');
 }
 
@@ -343,6 +344,7 @@ function sendCustomerData(queueID) {
 }
 
 async function decryptData() {
+    debugger;
     // Extract the 'queue_data' parameter from the URL
     const urlParams = new URLSearchParams(window.location.search);
     const encryptedData = urlParams.get("d");
