@@ -36,11 +36,11 @@ document.addEventListener('DOMContentLoaded', async function() {
 async function getData() {
     const queueData = await decryptData();
 
-    queueLocation = queueData[0];
-    queueNumber = queueData[1];
-    timestamp = parseInt(queueData[2]);
-    waitingTime = parseInt(queueData[3]);
-    queueID = parseInt(queueData[4]);
+    queueLocation = queueData.data[0];
+    queueNumber = queueData.data[1];
+    timestamp = parseInt(queueData.data[2]);
+    waitingTime = parseInt(queueData.data[3]);
+    queueID = parseInt(queueData.data[4]);
 
     console.log(`${queueLocation} ${queueNumber} ${timestamp} ${waitingTime} ${queueID} `);
 }
