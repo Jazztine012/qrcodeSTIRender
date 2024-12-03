@@ -21,7 +21,6 @@ document.addEventListener('DOMContentLoaded', async function() {
     await getData();
     
     if (await checkTimeValidity(timestamp) == false){
-        alert("Invalid queue card. This card has been in timeout.");
         loadInvalidCard();
     }
     // Hides unnecessary elements 
