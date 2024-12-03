@@ -34,7 +34,14 @@ header {
 
 .wait-time {
     margin-bottom: 20px;
-    font-size: 40px;
+    font-size: 20px;
+    font-weight: bold;
+    text-align: center;
+}
+
+#window-name {
+    margin-bottom: 20px;
+    font-size: 28px;
     font-weight: bold;
     text-align: center;
 }

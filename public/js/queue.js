@@ -68,6 +68,9 @@ async function updateMobileNumber(mobileNumber) {
         
         // Store mobile number in localStorage (if necessary)
         localStorage.setItem('mobileNumber', mobileNumber);
+        alert("Mobile number saved.");
+        // Clear the input field after submission
+        mobileNumberTextInput.value = "";
 
         // Call the sendSMSNotification function (ensure it's implemented)
         // sendSMSNotification();
@@ -86,6 +89,9 @@ async function updateEmailAddress(emailAddress) {
         
         // Store email address in localStorage (if necessary)
         localStorage.setItem('emailAddress', emailAddress);
+        alert("Email saved.");
+        // Clear the input field after submission
+        emailTextInput.value = "";
 
         // Call the sendEmailNotification function (ensure it's implemented)
         // sendEmailNotification();
@@ -170,9 +176,6 @@ async function sendEmailNotification() {
         // Check if the response is successful
         if (emailResponse.status === 200) {
             console.log("Email successfully sent!");
-            
-            // Clear the input field after submission
-            emailTextInput.value = "";
         } else {
             console.warn("Email sent, but with issues:", emailResponse);
         }
