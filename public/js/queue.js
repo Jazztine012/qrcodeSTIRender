@@ -349,7 +349,7 @@ async function decryptData() {
     const urlParams = new URLSearchParams(window.location.search);
     const encryptedData = urlParams.get("d");
 
-    const decryptionKey = await fetchConfig()[0];
+    const decryptionKey = await fetchConfig();
 
     if (encryptedData) {
         try {
@@ -374,10 +374,9 @@ async function fetchConfig() {
 
         // Assign keys from the config
         const key = config.encryptionKey;
-        const iv = config.iv;
-
-        console.log('Encryption key and IV retrieved successfully.');
-        return { key, iv };
+        
+        if (key) return key;
+        throw new Error("Encryption key not fetched.");
     } catch (error) {
         console.error('Error fetching configuration:', error);
     }
