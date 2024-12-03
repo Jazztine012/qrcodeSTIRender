@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', async function() {
     sendCustomerData(queueID);
     // Sets inner texts based on decrypted data
     setInnerTexts(queueLocation, queueNumber, timestamp, waitingTime, queueID);
-    sendNativeNotification();
+    // sendNativeNotification();
     });
 
 // Parent function in processing encrypted data
@@ -70,7 +70,7 @@ async function updateMobileNumber(mobileNumber) {
         localStorage.setItem('mobileNumber', mobileNumber);
 
         // Call the sendSMSNotification function (ensure it's implemented)
-        sendSMSNotification();
+        // sendSMSNotification();
     } catch (error) {
         console.error('Error updating mobile number:', error);
     }
@@ -88,23 +88,49 @@ async function updateEmailAddress(emailAddress) {
         localStorage.setItem('emailAddress', emailAddress);
 
         // Call the sendEmailNotification function (ensure it's implemented)
-        sendEmailNotification();
+        // sendEmailNotification();
     } catch (error) {
         console.error('Error updating email address:', error);
     }
 }
 
-// Checks time and sends a signal if it's time to send a notification
-async function checkNotificationTime(){
+async function startCountdown() {
     try {
-        // If it's time to send a notification call the following below:
-        // sendEmailNotification();
-        // sendSMSNotification();
-        // sendNativeNotification();
-    } catch (error) {
-        console.error(`Error sending notification to user: ${error}`);
-    }
+        let remainingTime = waitingTime; // Remaining time in seconds
+        const halfTime = Math.floor(remainingTime / 2); // Half-time trigger
 
+        const interval = setInterval(() => {
+            if (remainingTime > 0) {
+                remainingTime--;
+                const minutesLeft = Math.ceil(remainingTime / 60);
+
+                // Display countdown as "Estimated time left: X minutes left"
+                waitingTimeEl.textContent = `Estimated time left: ${minutesLeft} minute${minutesLeft > 1 ? 's' : ''} left`;
+
+                // Trigger notifications
+                if (remainingTime === 180 || (remainingTime === halfTime && waitingTime < 180)) {
+                    triggerNotifications();
+                }
+            } else {
+                clearInterval(interval);
+                waitingTimeEl.textContent = "Estimated time left: 0 minutes left";
+            }
+        }, 1000); // Update every second
+    } catch (error) {
+        console.error("Error starting countdown:", error);
+    }
+}
+
+// Function to trigger notifications
+function triggerNotifications() {
+    try {
+        sendEmailNotification();
+        sendSMSNotification();
+        sendNativeNotification();
+        console.log("Notifications triggered.");
+    } catch (error) {
+        console.error("Error triggering notifications:", error);
+    }
 }
 
 // Sends email notification in due time
@@ -187,7 +213,7 @@ async function sendSMSNotification() {
 // Send an in-browser notification
 async function sendNativeNotification(){
     let modalNotification = new bootstrap.Modal(document.getElementById('modal-notification'));
-    document.getElementById('queue-location').innerText = queueLocation;
+    document.getElementById('queue-location').innerText = queueLocation.replaceAll('_', ' ');
     modalNotification.show();
 }
 
@@ -240,20 +266,6 @@ mobileNumberTextInput.closest('form').addEventListener('submit', function (event
         alert('The mobile number must be between 11 and 13 characters long.');
     }
 });
-
-function startCountdown() {
-    const interval = setInterval(() => {
-        if (waitingTime > 0) {
-            waitingTime--;
-            const minutes = Math.floor(waitingTime / 60).toString().padStart(2, '0');
-            const seconds = (waitingTime % 60).toString().padStart(2, '0');
-            waitingTimeEl.textContent = `${minutes}:${seconds}`;
-        } else {
-            clearInterval(interval);
-            waitingTimeEl.textContent = '00:00';
-        }
-    }, 1000);
-}
 
 // Display queue information
 function setInnerTexts(queueLocation, queueNumber, timestamp, waitingTime, queueID) {
