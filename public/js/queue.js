@@ -9,10 +9,6 @@ const queueNumberText = document.getElementById('queue-number');
 const timestampText = document.getElementById('timestamp-text');
 const waitingTimeEl = document.getElementById('waiting-time');
 
-// Retrieved from URL
-const params = new URLSearchParams(window.location.search);
-const data = params.get('queue_data');
-
 let queueLocation;
 let queueNumber;
 let timestamp;
@@ -25,7 +21,7 @@ let queueID;
 // Page init
 document.addEventListener('DOMContentLoaded', async function() {
     // Fetches and processes data
-    await getData(data);
+    await getData();
     if (await checkTimeValidity(timestamp) == false){
         alert("Invalid queue card. This card has been in timeout.");
         loadInvalidCard();
@@ -39,15 +35,12 @@ document.addEventListener('DOMContentLoaded', async function() {
     });
 
 // Parent function in processing encrypted data
-async function getData(dataToDecrypt) {
-    console.log(dataToDecrypt);
-    const queueData = await decryptData(dataToDecrypt);
-    console.log(queueData);
-
+async function getData() {
+    const queueData = await decryptData();
+    return;
     const parsedData = await parseDecryptedData(queueData);
     console.log(parsedData);
 
-    return;
     queueLocation = parsedData[0];
     queueNumber = parsedData[1];
     timestamp = parseInt(parsedData[2]);
@@ -349,14 +342,17 @@ function sendCustomerData(queueID) {
         });
 }
 
-async function decryptData(decryptedData) {
+async function decryptData() {
+    // Extract the 'queue_data' parameter from the URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const encryptedData = urlParams.get("queue_data");
+
     const decryptionKey = await fetchConfig()[0];
-    const undecodedData = decryptedData;
 
     if (encryptedData) {
         try {
             // Decrypt the data
-            const bytes = CryptoJS.AES.decrypt(decodeURIComponent(undecodedData), decryptionKey);
+            const bytes = CryptoJS.AES.decrypt(decodeURIComponent(encryptedData), decryptionKey);
             const decryptedData = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
 
             console.log("Decrypted Data:", decryptedData);
