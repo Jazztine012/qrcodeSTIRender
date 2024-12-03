@@ -36,21 +36,18 @@ document.addEventListener('DOMContentLoaded', async function() {
     sendCustomerData(queueID);
     // Sets inner texts based on decrypted data
     setInnerTexts(queueLocation, queueNumber, timestamp, waitingTime, queueID);
-    // setInterval( function () {
-    //     if (!checkTimeValidity()){
-    //         loadInvalidCard();
-    //     }
-    //     // ELSE: continue as usual
-    // }, 5000);
     });
 
 // Parent function in processing encrypted data
-async function getData(dataToEncrypt) {
-    console.log(dataToEncrypt);
-    // const queueData = await decryptData(dataToEncrypt, CryptoJS.enc.Utf8.parse(fetchConfig()[0]), CryptoJS.enc.Utf8.parse(fetchConfig()[1]));
-    // console.log(queueData);
-    const parsedData = await parseDecryptedData(dataToEncrypt);
+async function getData(dataToDecrypt) {
+    console.log(dataToDecrypt);
+    const queueData = await decryptData(dataToDecrypt);
+    console.log(queueData);
+
+    const parsedData = await parseDecryptedData(queueData);
     console.log(parsedData);
+
+    return;
     queueLocation = parsedData[0];
     queueNumber = parsedData[1];
     timestamp = parseInt(parsedData[2]);
@@ -352,17 +349,24 @@ function sendCustomerData(queueID) {
         });
 }
 
-async function decryptData(encryptedData, key, iv) {
-    // Decrypt
-    const decrypted = CryptoJS.AES.decrypt(
-        CryptoJS.enc.Base64.parse(encryptedData), key, {
-        iv: iv,
-        mode: CryptoJS.mode.CTR,
-        padding: CryptoJS.pad.NoPadding,
-    });
+async function decryptData(decryptedData) {
+    const decryptionKey = await fetchConfig()[0];
+    const undecodedData = decryptedData;
 
-    // Convert decrypted data to UTF-8 string
-    return decrypted.toString(CryptoJS.enc.Utf8);
+    if (encryptedData) {
+        try {
+            // Decrypt the data
+            const bytes = CryptoJS.AES.decrypt(decodeURIComponent(undecodedData), decryptionKey);
+            const decryptedData = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
+
+            console.log("Decrypted Data:", decryptedData);
+            return decryptedData
+        } catch (error) {
+            console.error("Decryption failed:", error);
+        }
+    } else {
+        console.warn("No data found in URL parameters.");
+    }
 }
 
 async function fetchConfig() {
