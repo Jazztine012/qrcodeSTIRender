@@ -187,7 +187,7 @@ async function sendSMSNotification() {
 // Send an in-browser notification
 async function sendNativeNotification(){
     let modalNotification = new bootstrap.Modal(document.getElementById('modal-notification'));
-    document.getElementById('queue-location').innerText = location;
+    document.getElementById('queue-location').innerText = queueLocation;
     modalNotification.show();
 }
 
