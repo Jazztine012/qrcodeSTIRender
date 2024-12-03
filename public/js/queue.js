@@ -15,9 +15,6 @@ let timestamp;
 let waitingTime;
 let queueID;
 
-// const key = fetchConfig()[0];
-// const iv = fetchConfig()[1];
-
 // Page init
 document.addEventListener('DOMContentLoaded', async function() {
     // Fetches and processes data
@@ -38,28 +35,14 @@ document.addEventListener('DOMContentLoaded', async function() {
 // Parent function in processing encrypted data
 async function getData() {
     const queueData = await decryptData();
-    return;
-    const parsedData = await parseDecryptedData(queueData);
-    console.log(parsedData);
 
-    queueLocation = parsedData[0];
-    queueNumber = parsedData[1];
-    timestamp = parseInt(parsedData[2]);
-    waitingTime = parseInt(parsedData[3]);
-    queueID = parseInt(parsedData[4]);
+    queueLocation = queueData[0];
+    queueNumber = queueData[1];
+    timestamp = parseInt(queueData[2]);
+    waitingTime = parseInt(queueData[3]);
+    queueID = parseInt(queueData[4]);
 
     console.log(`${queueLocation} ${queueNumber} ${timestamp} ${waitingTime} ${queueID} `);
-}
-
-function parseDecryptedData(inputString) {
-    // Split the string using "/" as the separator
-    const parts = inputString.split('/');
-
-    parts.forEach((part, index) => {
-        console.log(`Part ${index + 1}: ${part}`);
-    });
-
-    return parts;
 }
 
 // Event listeners
@@ -344,7 +327,6 @@ function sendCustomerData(queueID) {
 }
 
 async function decryptData() {
-    debugger;
     // Extract the 'queue_data' parameter from the URL
     const urlParams = new URLSearchParams(window.location.search);
     const encryptedData = urlParams.get("d");
@@ -358,7 +340,8 @@ async function decryptData() {
             const decryptedData = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
 
             console.log("Decrypted Data:", decryptedData);
-            return decryptedData
+            
+            return decryptedData;
         } catch (error) {
             console.error("Decryption failed:", error);
         }
