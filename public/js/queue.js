@@ -70,7 +70,7 @@ async function updateMobileNumber(mobileNumber) {
         
         // Store mobile number in localStorage (if necessary)
         localStorage.setItem('mobileNumber', mobileNumber);
-        alert("Mobile number saved.");
+        alert("Mobile number saved. You will receive a notification in due time.");
         // Clear the input field after submission
         mobileNumberTextInput.value = "";
 
@@ -91,7 +91,7 @@ async function updateEmailAddress(emailAddress) {
         
         // Store email address in localStorage (if necessary)
         localStorage.setItem('emailAddress', emailAddress);
-        alert("Email saved.");
+        alert("Email saved. You will receive a notification in due time.");
         // Clear the input field after submission
         emailTextInput.value = "";
 
