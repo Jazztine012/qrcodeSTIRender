@@ -17,6 +17,8 @@ let queueID;
 
 // Page init
 document.addEventListener('DOMContentLoaded', async function() {
+    localStorage.clear();
+
     // Fetches and processes data
     await getData();
     
