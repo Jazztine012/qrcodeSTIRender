@@ -168,7 +168,7 @@ async function sendEmailNotification() {
             to_email: emailAddress, // Recipient's email address
             queue_number: queueNumber, // Queue number to include in the email
             from_name: "STI College Tagaytay QMS (Queue Management System)", // Sender's name
-            message: `Good day! We would like to inform you about your queue ${queueNumber} at the ${queueLocation} service desk!
+            message: `Good day! We would like to inform you about your queue ${queueNumber} at the ${queueLocation.replaceAll('_', ' ')} service desk!
                     \nKindly return to the designated service desk as soon as possible if you haven't already, thank you!`, // Email body
         };
 
@@ -196,7 +196,11 @@ async function sendSMSNotification() {
         const response = await fetch("https://qrcodesti.onrender.com/sendNotification", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ mobileNumber }), // Send the mobile number as JSON
+            body: JSON.stringify({
+                mobile_number: mobileNumber,
+                queue_number: queueNumber,
+                queue_location: queueLocation.replaceAll('_', ' '),
+            }), // Send queue info and mobile number as JSON
         });
 
         if (!response.ok) throw new Error(`Network response was not ok: ${response.statusText}`);

@@ -38,17 +38,17 @@ app.post('/api/customer-updates', (req, res) => {
 // SMS Notification
 app.post("/sendNotification", async (req, res) => {
     try {
-        const { mobileNumber } = req.body;
-        if (!mobileNumber) {
-            return res.status(400).json({ success: false, message: "Mobile number is required." });
+        const { mobile_number, queue_number, queue_location } = req.body;
+        if (!mobileNumber || !queue_number || !queue_location) {
+            return res.status(400).json({ success: false, message: "Mobile number, queue number, and queue location are required." });
         }
 
         const client = twilio(process.env.TWILIO_SID, process.env.TWILIO_AUTH_TOKEN);
         const message = await client.messages.create({
-            body: `Good day! We would like to inform you about your queue at the school's admission office!
+            body: `Good day! We would like to inform you about your queue ${queue_number} at the ${queue_location} service desk!
             \nKindly return to the designated service desk as soon as possible if you haven't already, thank you!`,
             from: "+17752584445",
-            to: mobileNumber,
+            to: mobile_number,
         });
 
         res.status(200).json({ success: true, message: "Notification sent successfully!" });
