@@ -45,7 +45,8 @@ app.post("/sendNotification", async (req, res) => {
 
         const client = twilio(process.env.TWILIO_SID, process.env.TWILIO_AUTH_TOKEN);
         const message = await client.messages.create({
-            body: `You have successfully received an SMS notification congrats!`,
+            body: `Good day! We would like to inform you about your queue at the school's admission office!
+            \nKindly return to the designated service desk as soon as possible if you haven't already, thank you!`,
             from: "+17752584445",
             to: mobileNumber,
         });

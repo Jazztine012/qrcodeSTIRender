@@ -167,8 +167,9 @@ async function sendEmailNotification() {
         const emailTemplateParams = {
             to_email: emailAddress, // Recipient's email address
             queue_number: queueNumber, // Queue number to include in the email
-            from_name: "qSTI", // Sender's name
-            message: `You have received an email notification! Congratulations! It works!`, // Email body
+            from_name: "STI College Tagaytay QMS (Queue Management System)", // Sender's name
+            message: `Good day! We would like to inform you about your queue ${queueNumber} at the ${queueLocation} service desk!
+                    \nKindly return to the designated service desk as soon as possible if you haven't already, thank you!`, // Email body
         };
 
         // Send the email notification
