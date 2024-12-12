@@ -116,7 +116,7 @@ async function startCountdown() {
                 waitingTimeEl.textContent = `Estimated time left: ${minutesLeft} minute${minutesLeft > 1 ? 's' : ''} left`;
 
                 // Trigger notifications
-                if (remainingTime === 180 || (remainingTime === halfTime && waitingTime < 180)) {
+                if (remainingTime === 180 || remainingTime === halfTime) {
                     triggerNotifications();
                 }
             } else {
