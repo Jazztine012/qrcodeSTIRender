@@ -8,16 +8,17 @@ const WebSocket = require('ws');
 const app = express();
 const port = process.env.PORT || 4000;
 
-const allowedOrigins = ['http://localhost', 'https://qrcodesti.onrender.com'];
+// const allowedOrigins = ['http://localhost', 'https://qrcodesti.onrender.com'];
 
 app.use(cors({
-    origin: function (origin, callback) {
-        if (!origin || allowedOrigins.includes(origin)) {
-            callback(null, true); // Allow the request
-        } else {
-            callback(new Error('Not allowed by CORS')); // Block the request
-        }
-    },
+    origin: 'https://qrcodesti.onrender.com',
+    // origin: function (origin, callback) {
+    //     if (!origin || allowedOrigins.includes(origin)) {
+    //         callback(null, true); // Allow the request
+    //     } else {
+    //         callback(new Error('Not allowed by CORS')); // Block the request
+    //     }
+    // },
     methods: ['GET', 'POST'],
     allowedHeaders: ['Content-Type'],
 }));
