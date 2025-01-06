@@ -24,6 +24,7 @@ document.addEventListener('DOMContentLoaded', async function() {
     
     if (await checkTimeValidity(timestamp) == false){
         loadInvalidCard();
+        return;
     }
     // Hides unnecessary elements 
     $("#timestamp-text").hide();
