@@ -31,7 +31,6 @@ document.addEventListener('DOMContentLoaded', async function() {
     sendCustomerData(queueID);
     // Sets inner texts based on decrypted data
     setInnerTexts(queueLocation, queueNumber, timestamp, waitingTime, queueID);
-    // sendNativeNotification();
     });
 
 // Parent function in processing encrypted data
