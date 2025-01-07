@@ -146,8 +146,6 @@ async function startCountdown() {
 // Function to trigger notifications
 function triggerNotifications() {
     try {
-        const notificationSound = new Audio('../audio/simple_notification.wav');
-        notificationSound.play();
         if (emailAddress) sendEmailNotification();
         if (mobileNumber) sendSMSNotification();
         sendNativeNotification();
@@ -240,6 +238,8 @@ async function sendSMSNotification() {
 async function sendNativeNotification(){
     let modalNotification = new bootstrap.Modal(document.getElementById('modal-notification'));
     document.getElementById('queue-location').innerText = queueLocation.replaceAll('_', ' ');
+    const notificationSound = new Audio('../audio/simple_notification.wav');
+    notificationSound.play();
     modalNotification.show();
 }
 
