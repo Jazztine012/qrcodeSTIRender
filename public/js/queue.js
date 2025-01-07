@@ -146,8 +146,8 @@ async function startCountdown() {
 // Function to trigger notifications
 function triggerNotifications() {
     try {
-        if (emailAddress) sendEmailNotification();
-        if (mobileNumber) sendSMSNotification();
+        sendEmailNotification();
+        sendSMSNotification();
         sendNativeNotification();
         console.log("Notifications triggered.");
     } catch (error) {
@@ -183,7 +183,8 @@ async function sendEmailNotification() {
             queue_number: queueNumber, // Queue number to include in the email
             from_name: "STI College Tagaytay QMS (Queue Management System)", // Sender's name
             message: `Good day! We would like to inform you about your queue ${queueNumber} at the ${queueLocation.replaceAll('_', ' ')} service desk!
-                    \nKindly return to the designated service desk as soon as possible if you haven't already, thank you!`, // Email body
+            \nKindly return to the designated service desk as soon as
+            possible if you haven't already, thank you!`, // Email body
         };
 
         // Send the email notification
