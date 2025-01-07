@@ -148,8 +148,8 @@ function triggerNotifications() {
     try {
         const notificationSound = new Audio('../audio/simple_notification.wav');
         notificationSound.play();
-        sendEmailNotification();
-        sendSMSNotification();
+        if (emailAddress) sendEmailNotification();
+        if (mobileNumber) sendSMSNotification();
         sendNativeNotification();
         console.log("Notifications triggered.");
     } catch (error) {
