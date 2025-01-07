@@ -85,9 +85,6 @@ async function updateMobileNumber(mobileNumber) {
         alert("Mobile number saved. You will receive a notification in due time.");
         // Clear the input field after submission
         mobileNumberTextInput.value = "";
-
-        // Call the sendSMSNotification function (ensure it's implemented)
-        // sendSMSNotification();
     } catch (error) {
         console.error('Error updating mobile number:', error);
     }
