@@ -55,7 +55,7 @@ app.post("/sendNotification", async (req, res) => {
         const message = await client.messages.create({
             body: `Good day! We would like to inform you about your queue ${queue_number} at the ${queue_location} service desk!
             \nKindly return to the designated service desk as soon as possible if you haven't already, thank you!`,
-            from: "+17752584445",
+            from: "+12293606401",
             to: mobile_number,
         });
 

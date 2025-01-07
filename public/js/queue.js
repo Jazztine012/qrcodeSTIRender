@@ -67,7 +67,19 @@ async function updateMobileNumber(mobileNumber) {
             console.error("No mobile number was received");
             return;
         }
-        
+
+        const inputLength = mobileNumber.value.length;
+
+        if (inputLength < 11 || inputLength > 13) {
+            alert('Mobile number must be between 11 and 13 characters long. Please try again');
+            return;
+        }
+
+        if (mobileNumber[0] === '0') {
+            // Replace the first character '0' with '+63'
+            mobileNumber = '+63' + mobileNumber.slice(1);
+        }
+
         // Store mobile number in localStorage (if necessary)
         localStorage.setItem('mobileNumber', mobileNumber);
         alert("Mobile number saved. You will receive a notification in due time.");
@@ -83,9 +95,17 @@ async function updateMobileNumber(mobileNumber) {
 
 // Function to update email address and send email notification
 async function updateEmailAddress(emailAddress) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     try {
         if (!emailAddress) {
             console.error("No email address was received");
+            return;
+        }
+
+        const isEmailValid = emailRegex.test(emailAddress);
+
+        if(!isEmailValid){
+            alert("Invalid email address. Please try again.");
             return;
         }
         
@@ -264,16 +284,6 @@ mobileNumberTextInput.addEventListener('input', function () {
     // Enforce a maximum length of 13 characters
     if (this.value.length > 13) {
         this.value = this.value.slice(0, 13);
-    }
-});
-
-// Add validation on form submission to ensure the length is between 11 and 13 characters
-mobileNumberTextInput.closest('form').addEventListener('submit', function (event) {
-    const inputLength = mobileNumberTextInput.value.length;
-
-    if (inputLength < 11 || inputLength > 13) {
-        event.preventDefault(); // Prevent form submission
-        alert('The mobile number must be between 11 and 13 characters long.');
     }
 });
 
