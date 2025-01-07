@@ -111,9 +111,6 @@ async function updateEmailAddress(emailAddress) {
         alert("Email saved. You will receive a notification in due time.");
         // Clear the input field after submission
         emailTextInput.value = "";
-
-        // Call the sendEmailNotification function (ensure it's implemented)
-        // sendEmailNotification();
     } catch (error) {
         console.error('Error updating email address:', error);
     }
@@ -149,6 +146,8 @@ async function startCountdown() {
 // Function to trigger notifications
 function triggerNotifications() {
     try {
+        const notificationSound = new Audio('../audio/simple_notification.wav');
+        notificationSound.play();
         sendEmailNotification();
         sendSMSNotification();
         sendNativeNotification();
