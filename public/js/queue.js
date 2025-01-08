@@ -68,7 +68,7 @@ async function updateMobileNumber(mobileNumber) {
             return;
         }
 
-        const inputLength = mobileNumber.value.length;
+        const inputLength = mobileNumber.length;
 
         if (inputLength < 11 || inputLength > 13) {
             alert('Mobile number must be between 11 and 13 characters long. Please try again');
