@@ -12,7 +12,7 @@ const allowedOrigins = ['http://localhost', 'https://qrcodesti.onrender.com'];
 
 app.use(cors({
     origin: function (origin, callback) {
-        if (!origin || allowedOrigins.includes(origin)) {
+        if (!origin || allowedOrigins.some((allowedOrigin) => origin.startsWith(allowedOrigin))) {
             callback(null, true); // Allow the request
         } else {
             callback(new Error('Not allowed by CORS')); // Block the request
@@ -21,6 +21,7 @@ app.use(cors({
     methods: ['GET', 'POST'],
     allowedHeaders: ['Content-Type'],
 }));
+
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
