@@ -54,7 +54,7 @@ app.post("/sendNotification", async (req, res) => {
 
         const client = twilio(process.env.TWILIO_SID, process.env.TWILIO_AUTH_TOKEN);
         const message = await client.messages.create({
-            body: `Good day! We would like to inform you about your queue ${queue_number} at the ${queue_location} service desk! Kindly return to the designated service desk as soon as possible if you haven't already, thank you!`,
+            body: `This message reminder is for your queue ${queue_number} at the ${queue_location} service desk. Thank you!`,
             from: "+12293606401",
             to: mobile_number,
         });
