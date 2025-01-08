@@ -83,6 +83,7 @@ async function updateMobileNumber(mobileNumber) {
         // Store mobile number in localStorage (if necessary)
         localStorage.setItem('mobileNumber', mobileNumber);
         alert("Mobile number saved. You will receive a notification in due time.");
+        console.log(`Fetched number from local storage: ${localStorage.getItem('mobileNumber')}`);
         // Clear the input field after submission
         mobileNumberTextInput.value = "";
     } catch (error) {
@@ -235,11 +236,12 @@ async function sendSMSNotification() {
     }
 }
 
+const notificationSound = new Audio('../audio/simple_notification.wav');
+
 // Send an in-browser notification
 async function sendNativeNotification(){
     let modalNotification = new bootstrap.Modal(document.getElementById('modal-notification'));
     document.getElementById('queue-location').innerText = queueLocation.replaceAll('_', ' ');
-    const notificationSound = new Audio('../audio/simple_notification.wav');
     notificationSound.play();
     modalNotification.show();
 }

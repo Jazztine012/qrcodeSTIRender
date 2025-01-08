@@ -47,7 +47,7 @@ app.post('/api/customer-updates', (req, res) => {
 app.post("/sendNotification", async (req, res) => {
     try {
         const { mobile_number, queue_number, queue_location } = req.body;
-        if (!mobileNumber || !queue_number || !queue_location) {
+        if (!mobile_number || !queue_number || !queue_location) {
             return res.status(400).json({ success: false, message: "Mobile number, queue number, and queue location are required." });
         }
 
