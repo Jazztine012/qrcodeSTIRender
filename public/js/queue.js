@@ -81,9 +81,9 @@ async function updateMobileNumber(mobileNumber) {
         }
 
         // Store mobile number in localStorage (if necessary)
-        localStorage.setItem('mobileNumber', mobileNumber);
+        sessionStorage.setItem('mobileNumber', mobileNumber);
         alert("Mobile number saved. You will receive a notification in due time.");
-        console.log(`Fetched number from local storage: ${localStorage.getItem('mobileNumber')}`);
+        console.log(`Fetched number from local storage: ${sessionStorage.getItem('mobileNumber')}`);
         // Clear the input field after submission
         mobileNumberTextInput.value = "";
     } catch (error) {
@@ -108,7 +108,7 @@ async function updateEmailAddress(emailAddress) {
         }
         
         // Store email address in localStorage (if necessary)
-        localStorage.setItem('emailAddress', emailAddress);
+        sessionStorage.setItem('emailAddress', emailAddress);
         alert("Email saved. You will receive a notification in due time.");
         // Clear the input field after submission
         emailTextInput.value = "";
@@ -159,7 +159,7 @@ function triggerNotifications() {
 // Sends email notification in due time
 async function sendEmailNotification() {
     try {
-        let emailAddress = localStorage.getItem('emailAddress');
+        let emailAddress = sessionStorage.getItem('emailAddress');
         if (!emailAddress) throw new Error('No email address was saved');
 
         // Fetch email configuration
@@ -206,7 +206,7 @@ async function sendEmailNotification() {
 // Sends SMS notification in due time
 async function sendSMSNotification() {
     try {
-        const mobileNumber = localStorage.getItem('mobileNumber'); // Retrieve from localStorage
+        const mobileNumber = sessionStorage.getItem('mobileNumber'); // Retrieve from localStorage
         if (!mobileNumber) throw new Error('No mobile number was saved');
 
         const response = await fetch("https://qrcodesti.onrender.com/sendNotification", {
@@ -230,7 +230,7 @@ async function sendSMSNotification() {
             throw new Error(result.message || "SMS failed to send");
         }
 
-        localStorage.removeItem('mobileNumber'); // Clean up after successful operation
+        sessionStorage.removeItem('mobileNumber'); // Clean up after successful operation
     } catch (error) {
         console.error(`Error sending SMS notification: ${error}`);
     }
