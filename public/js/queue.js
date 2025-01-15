@@ -17,6 +17,8 @@ let timestamp;
 let waitingTime;
 let queueID;
 
+let hasSessionData;
+
 // Page init
 document.addEventListener('DOMContentLoaded', async function() {
     const urlParams = new URLSearchParams(window.location.search);
@@ -27,7 +29,7 @@ document.addEventListener('DOMContentLoaded', async function() {
     // Sets inner texts based on decrypted data
     setInnerTexts(queueLocation, queueNumber, timestamp, waitingTime, queueID);
     // Sends customer data and updates is_accessed state in localhost database
-    await sendCustomerData(queueID);
+    if (hasSessionData) await sendCustomerData(queueID);
     });
 
 // Checks session storage first before decryptin data
@@ -38,7 +40,10 @@ async function fetchData(encryptedData) {
     // Checks session storage and sets it if none or invalid is inside
     if (sessionStorage.getItem("Data") == "" || sessionStorage.getItem("Data") != encryptedData){
         console.log("Invalid parameters, recovering.");
+        hasSessionData = false;
         sessionStorage.setItem("Data", encryptedData)
+    } else {
+        hasSessionData = true;
     }
 
     console.log("Session Storage Contains: ", sessionStorage.getItem("Data"));
