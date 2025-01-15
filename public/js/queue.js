@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', async function() {
 // Parent function in processing encrypted data
 async function getData() {
     sessionStorage.setItem("Key", "Value");
-    alert("Session Storage Contains: ", sessionStorage.length);
+    alert("Session Storage Contains: ", sessionStorage.getItem("Key"));
     // const queueData = await decryptData();
 
     // queueLocation = queueData.data[0];
