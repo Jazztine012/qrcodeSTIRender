@@ -29,9 +29,7 @@ document.addEventListener('DOMContentLoaded', async function() {
 // Checks session storage first before decryptin data
 // Parent function in processing encrypted data
 async function getData() {
-    if (sessionStorage.length() == 0){
-        alert("Session Storage Contains: ", sessionStorage.length());
-    }
+    alert("Session Storage Contains: ", sessionStorage.length);
     // const queueData = await decryptData();
 
     // queueLocation = queueData.data[0];
