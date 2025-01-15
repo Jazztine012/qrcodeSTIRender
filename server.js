@@ -26,32 +26,32 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Append Queue ID to File
-function appendToAccessedQueue(queueID) {
-    const filePath = path.join(__dirname, 'public', 'accessed_queues.txt');
+// function appendToAccessedQueue(queueID) {
+//     const filePath = path.join(__dirname, 'public', 'accessed_queues.txt');
 
-    fs.readFile(filePath, 'utf8', (err, data) => {
-        if (err) {
-            console.error('Error reading file:', err);
-            return;
-        }
+//     fs.readFile(filePath, 'utf8', (err, data) => {
+//         if (err) {
+//             console.error('Error reading file:', err);
+//             return;
+//         }
 
-        // Check if the queueID already exists in the file
-        const queueExists = data.split('\n').includes(queueID);
+//         // Check if the queueID already exists in the file
+//         const queueExists = data.split('\n').includes(queueID);
 
-        if (queueExists) {
-            alert("Invalid queue card.");
-        } else {
-            // Append the queueID to the file if it does not exist
-            fs.appendFile(filePath, `${queueID}\n`, (err) => {
-                if (err) {
-                    console.error('Error appending to file:', err);
-                } else {
-                    console.log(`Queue ID ${queueID} appended to accessed_queues.txt`);
-                }
-            });
-        }
-    });
-}
+//         if (queueExists) {
+//             alert("Invalid queue card.");
+//         } else {
+//             // Append the queueID to the file if it does not exist
+//             fs.appendFile(filePath, `${queueID}\n`, (err) => {
+//                 if (err) {
+//                     console.error('Error appending to file:', err);
+//                 } else {
+//                     console.log(`Queue ID ${queueID} appended to accessed_queues.txt`);
+//                 }
+//             });
+//         }
+//     });
+// }
 
 // Validate Queue ID Endpoint
 app.post('/validate-queue', (req, res) => {
@@ -63,7 +63,6 @@ app.post('/validate-queue', (req, res) => {
 
     const filePath = path.join(__dirname, 'public', 'accessed_queues.txt');
 
-    // Read the file and check if the queueID exists
     fs.readFile(filePath, 'utf8', (err, data) => {
         if (err) {
             console.error('Error reading file:', err);
@@ -90,29 +89,16 @@ app.post('/customer-updates', (req, res) => {
 
     const filePath = path.join(__dirname, 'public', 'accessed_queues.txt');
 
-    // Validate and append Queue ID
-    fs.readFile(filePath, 'utf8', (err, data) => {
+    // Append the queue ID to the file
+    fs.appendFile(filePath, `${queueID}\n`, (err) => {
         if (err) {
-            console.error('Error reading file:', err);
+            console.error('Error appending to file:', err);
             return res.status(500).json({ success: false, message: 'Server error.' });
         }
 
-        const queueExists = data.split('\n').includes(queueID);
-
-        if (queueExists) {
-            return res.status(400).json({ success: false, message: 'Invalid queue card: Queue ID already accessed.' });
-        } else {
-            fs.appendFile(filePath, `${queueID}\n`, (err) => {
-                if (err) {
-                    console.error('Error appending to file:', err);
-                    return res.status(500).json({ success: false, message: 'Server error.' });
-                }
-                res.status(200).json({ success: true, message: 'Queue ID updated successfully.' });
-            });
-        }
+        res.status(200).json({ success: true, message: `Queue ID ${queueID} updated successfully.` });
     });
 });
-
 
 // SMS Notification
 app.post("/sendNotification", async (req, res) => {

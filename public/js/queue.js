@@ -336,43 +336,52 @@ async function sendCustomerData(queueID) {
         return;
     }
 
-    // Validate queue
-    await fetch('https://qrcodesti.onrender.com/validate-queue', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ queueID }), // Dynamically use queueID
-    })
-        .then((response) => response.json())
-        .then((data) => {
-            if (!data.success) {
-                loadInvalidCard(); // Load invalid card if validation fails
-                return;
-            }
-
-            // Proceed to send customer updates if validation is successful
-            return fetch('https://qrcodesti.onrender.com/customer-updates', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ queueID }),
-            });
-        })
-        .then((response) => {
-            if (!response.ok) {
-                throw new Error(`Server error: ${response.statusText}`);
-            }
-            return response.json();
-        })
-        .then((updatedData) => {
-            console.log('Customer data successfully sent:', updatedData);
-        })
-        .catch((error) => {
-            console.error('Error in API flow:', error);
+    try {
+        // Validate queue
+        const validateResponse = await fetch('https://qrcodesti.onrender.com/validate-queue', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ queueID }),
         });
+
+        if (!validateResponse.ok) {
+            const errorMessage = await validateResponse.text();
+            console.error('Validation failed:', errorMessage);
+            loadInvalidCard();
+            return;
+        }
+
+        const validateData = await validateResponse.json();
+        if (!validateData.success) {
+            console.warn('Queue validation failed:', validateData.message);
+            loadInvalidCard();
+            return;
+        }
+
+        // Send customer updates
+        const updateResponse = await fetch('https://qrcodesti.onrender.com/customer-updates', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ queueID }),
+        });
+
+        if (!updateResponse.ok) {
+            const errorMessage = await updateResponse.text();
+            throw new Error(`Update failed: ${errorMessage}`);
+        }
+
+        const updateData = await updateResponse.json();
+        console.log('Customer data successfully sent:', updateData);
+
+    } catch (error) {
+        console.error('Error in API flow:', error.message);
+    }
 }
+
 
 async function decryptData() {
     // Extract the 'queue_data' parameter from the URL
