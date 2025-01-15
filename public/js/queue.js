@@ -336,41 +336,41 @@ function sendCustomerData(queueID) {
         return;
     }
 
+    // Validate queue
     fetch('https://qrcodesti.onrender.com/validate-queue', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ queueID: '12345' }),
+        body: JSON.stringify({ queueID }), // Dynamically use queueID
     })
         .then((response) => response.json())
         .then((data) => {
-            if (!data.success) loadInvalidCard();
-        })
-        .catch((error) => {
-            console.error('Error:', error);
-        });
-    
+            if (!data.success) {
+                loadInvalidCard(); // Load invalid card if validation fails
+                return;
+            }
 
-    // Send data to the customer updates endpoint
-    fetch('https://qrcodesti.onrender.com/customer-updates', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({queueID}),
-    })
-        .then(response => {
+            // Proceed to send customer updates if validation is successful
+            return fetch('https://qrcodesti.onrender.com/customer-updates', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ queueID }),
+            });
+        })
+        .then((response) => {
             if (!response.ok) {
                 throw new Error(`Server error: ${response.statusText}`);
             }
             return response.json();
         })
-        .then(updatedData => {
+        .then((updatedData) => {
             console.log('Customer data successfully sent:', updatedData);
         })
-        .catch(error => {
-            console.error('Error sending customer data:', error);
+        .catch((error) => {
+            console.error('Error in API flow:', error);
         });
 }
 
