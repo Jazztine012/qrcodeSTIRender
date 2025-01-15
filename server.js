@@ -54,7 +54,7 @@ function appendToAccessedQueue(queueID) {
 }
 
 // Validate Queue ID Endpoint
-app.post('/api/validate-queue', (req, res) => {
+app.post('/validate-queue', (req, res) => {
     const { queueID } = req.body;
 
     if (!queueID) {
@@ -81,7 +81,7 @@ app.post('/api/validate-queue', (req, res) => {
 });
 
 // Example: Updating Customer Updates Endpoint to Use Validation
-app.post('/api/customer-updates', (req, res) => {
+app.post('/customer-updates', (req, res) => {
     const { queueID } = req.body;
 
     if (!queueID) {
