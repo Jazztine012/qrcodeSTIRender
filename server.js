@@ -28,11 +28,27 @@ app.use(express.static(path.join(__dirname, 'public')));
 // Append Queue ID to File
 function appendToAccessedQueue(queueID) {
     const filePath = path.join(__dirname, 'public', 'accessed_queues.txt');
-    fs.appendFile(filePath, `${queueID}\n`, (err) => {
+
+    fs.readFile(filePath, 'utf8', (err, data) => {
         if (err) {
-            console.error('Error appending to file:', err);
+            console.error('Error reading file:', err);
+            return;
+        }
+
+        // Check if the queueID already exists in the file
+        const queueExists = data.split('\n').includes(queueID);
+
+        if (queueExists) {
+            alert("Invalid queue card.");
         } else {
-            console.log(`Queue ID ${queueID} appended to accessed_queues.txt`);
+            // Append the queueID to the file if it does not exist
+            fs.appendFile(filePath, `${queueID}\n`, (err) => {
+                if (err) {
+                    console.error('Error appending to file:', err);
+                } else {
+                    console.log(`Queue ID ${queueID} appended to accessed_queues.txt`);
+                }
+            });
         }
     });
 }
