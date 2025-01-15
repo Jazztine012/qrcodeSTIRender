@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', async function() {
     // Hides unnecessary elements 
     $("#timestamp-text").hide();
     // Sends customer data and updates is_accessed state in localhost database
-    sendCustomerData(queueID);
+    await sendCustomerData(queueID);
     // Sets inner texts based on decrypted data
     setInnerTexts(queueLocation, queueNumber, timestamp, waitingTime, queueID);
     });
@@ -330,14 +330,14 @@ async function checkTimeValidity(timestamp) {
 
 
 // Function to send customer data to the server when the page loads
-function sendCustomerData(queueID) {
+async function sendCustomerData(queueID) {
     if (!queueID) {
         console.error('Queue ID is missing');
         return;
     }
 
     // Validate queue
-    fetch('https://qrcodesti.onrender.com/validate-queue', {
+    await fetch('https://qrcodesti.onrender.com/validate-queue', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
