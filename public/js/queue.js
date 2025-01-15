@@ -1,4 +1,4 @@
-const { SessionInstance } = require("twilio/lib/rest/assistants/v1/session");
+
 
 // SMS AND EMAIL FORM OBJECTS
 const smsForm = document.getElementById('sms-form');
