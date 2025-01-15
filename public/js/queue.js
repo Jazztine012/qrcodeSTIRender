@@ -17,34 +17,30 @@ let queueID;
 
 // Page init
 document.addEventListener('DOMContentLoaded', async function() {
-    localStorage.clear();
-
     // Fetches and processes data
     await getData();
-    
-    // if (await checkTimeValidity(timestamp) == false){
-    //     loadInvalidCard();
-    //     return;
-    // }
-    // Hides unnecessary elements 
     $("#timestamp-text").hide();
     // Sends customer data and updates is_accessed state in localhost database
-    await sendCustomerData(queueID);
+    // await sendCustomerData(queueID);
     // Sets inner texts based on decrypted data
-    setInnerTexts(queueLocation, queueNumber, timestamp, waitingTime, queueID);
+    // setInnerTexts(queueLocation, queueNumber, timestamp, waitingTime, queueID);
     });
 
+// Checks session storage first before decryptin data
 // Parent function in processing encrypted data
 async function getData() {
-    const queueData = await decryptData();
+    if (sessionStorage.length() == 0){
+        alert("Session Storage Contains: ", sessionStorage.length());
+    }
+    // const queueData = await decryptData();
 
-    queueLocation = queueData.data[0];
-    queueNumber = queueData.data[1];
-    timestamp = parseInt(queueData.data[2]);
-    waitingTime = parseInt(queueData.data[3]);
-    queueID = parseInt(queueData.data[4]);
+    // queueLocation = queueData.data[0];
+    // queueNumber = queueData.data[1];
+    // timestamp = parseInt(queueData.data[2]);
+    // waitingTime = parseInt(queueData.data[3]);
+    // queueID = parseInt(queueData.data[4]);
 
-    console.log(`${queueLocation} ${queueNumber} ${timestamp} ${waitingTime} ${queueID} `);
+    // console.log(`${queueLocation} ${queueNumber} ${timestamp} ${waitingTime} ${queueID} `);
 }
 
 // Event listeners
