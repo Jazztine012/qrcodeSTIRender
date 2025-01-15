@@ -136,7 +136,10 @@ async function updateEmailAddress(emailAddress) {
 
 async function startCountdown() {
     try {
-        let remainingTime = waitingTime; // Remaining time in seconds
+        if (sessionStorage.getItem("waitingTime") == ""){
+            sessionStorage.setItem("waitingTime", waitingTime);
+        }
+        let remainingTime = sessionStorage.getItem("waitingTime") || waitingTime; // Remaining time in seconds
         const halfTime = Math.floor(remainingTime / 2); // Half-time trigger
 
         const interval = setInterval(() => {
