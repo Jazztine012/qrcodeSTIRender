@@ -355,7 +355,7 @@ async function sendCustomerData(queueID) {
 
         const validateData = await validateResponse.json();
         if (!validateData.success) {
-            console.warn('Queue validation failed:', validateData.message);
+            console.error('Queue validation failed:', validateData.message);
             loadInvalidCard();
             return;
         }
