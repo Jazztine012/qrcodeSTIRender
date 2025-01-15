@@ -53,12 +53,66 @@ function appendToAccessedQueue(queueID) {
     });
 }
 
-// Handle Customer Updates
-app.post('/api/customer-updates', (req, res) => {
-    const data = req.body;
+// Validate Queue ID Endpoint
+app.post('/api/validate-queue', (req, res) => {
+    const { queueID } = req.body;
 
-    appendToAccessedQueue(data.queueID);
+    if (!queueID) {
+        return res.status(400).json({ success: false, message: 'Queue ID is required.' });
+    }
+
+    const filePath = path.join(__dirname, 'public', 'accessed_queues.txt');
+
+    // Read the file and check if the queueID exists
+    fs.readFile(filePath, 'utf8', (err, data) => {
+        if (err) {
+            console.error('Error reading file:', err);
+            return res.status(500).json({ success: false, message: 'Server error.' });
+        }
+
+        const queueExists = data.split('\n').includes(queueID);
+
+        if (queueExists) {
+            res.status(400).json({ success: false, message: 'Invalid queue card: Queue ID already accessed.' });
+        } else {
+            res.status(200).json({ success: true, message: 'Queue ID is valid.' });
+        }
+    });
 });
+
+// Example: Updating Customer Updates Endpoint to Use Validation
+app.post('/api/customer-updates', (req, res) => {
+    const { queueID } = req.body;
+
+    if (!queueID) {
+        return res.status(400).json({ success: false, message: 'Queue ID is required.' });
+    }
+
+    const filePath = path.join(__dirname, 'public', 'accessed_queues.txt');
+
+    // Validate and append Queue ID
+    fs.readFile(filePath, 'utf8', (err, data) => {
+        if (err) {
+            console.error('Error reading file:', err);
+            return res.status(500).json({ success: false, message: 'Server error.' });
+        }
+
+        const queueExists = data.split('\n').includes(queueID);
+
+        if (queueExists) {
+            return res.status(400).json({ success: false, message: 'Invalid queue card: Queue ID already accessed.' });
+        } else {
+            fs.appendFile(filePath, `${queueID}\n`, (err) => {
+                if (err) {
+                    console.error('Error appending to file:', err);
+                    return res.status(500).json({ success: false, message: 'Server error.' });
+                }
+                res.status(200).json({ success: true, message: 'Queue ID updated successfully.' });
+            });
+        }
+    });
+});
+
 
 // SMS Notification
 app.post("/sendNotification", async (req, res) => {

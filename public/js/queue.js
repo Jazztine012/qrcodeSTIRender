@@ -22,10 +22,10 @@ document.addEventListener('DOMContentLoaded', async function() {
     // Fetches and processes data
     await getData();
     
-    if (await checkTimeValidity(timestamp) == false){
-        loadInvalidCard();
-        return;
-    }
+    // if (await checkTimeValidity(timestamp) == false){
+    //     loadInvalidCard();
+    //     return;
+    // }
     // Hides unnecessary elements 
     $("#timestamp-text").hide();
     // Sends customer data and updates is_accessed state in localhost database
@@ -335,6 +335,28 @@ function sendCustomerData(queueID) {
         console.error('Queue ID is missing');
         return;
     }
+
+    fetch('https://qrcodesti.onrender.com/api/validate-queue', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ queueID: '12345' }),
+    })
+        .then((response) => response.json())
+        .then((data) => {
+            // if (data.success) {
+            //     console.log('Queue ID is valid.');
+            // } else {
+            //     loadInvalidCard();
+            // }
+
+            if (!data.success) loadInvalidCard();
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
+    
 
     // Send data to the customer updates endpoint
     fetch('https://qrcodesti.onrender.com/api/customer-updates', {
