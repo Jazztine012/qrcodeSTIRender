@@ -343,7 +343,7 @@ async function sendCustomerData(queueID) {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ queueID }),
+            body: JSON.stringify({ queueID: queueID.toString() }),
         });
 
         if (!validateResponse.ok) {
@@ -366,7 +366,7 @@ async function sendCustomerData(queueID) {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ queueID }),
+            body: JSON.stringify({ queueID: queueID.toString() }),
         });
 
         if (!updateResponse.ok) {
