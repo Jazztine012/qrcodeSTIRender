@@ -31,9 +31,22 @@ document.addEventListener('DOMContentLoaded', async function() {
 // Checks session storage first before decryptin data
 // Parent function in processing encrypted data
 async function getData() {
-    sessionStorage.setItem("Key", "Value");
-    console.log("Session Storage Contains: ", sessionStorage.getItem("Key"));
-    // const queueData = await decryptData();
+    const urlParams = new URLSearchParams(window.location.search);
+    const encryptedData = urlParams.get("d");
+
+    console.log("Testing data parametrs in session");
+
+    // Sets the item
+    if (sessionStorage.getItem("Data") == "" || sessionStorage.getItem("Data") != encryptedData){
+        console.log("Invalid parameters, recovering.");
+        sessionStorage.setItem("Data", encryptedData)
+    }
+
+    console.log("Session Storage Contains: ", sessionStorage.getItem("Data"));
+
+    const queueData = await decryptData(sessionStorage.getItem("Data"));
+
+    console.log(`Succesfully fetched data: ${queueData}`);
 
     // queueLocation = queueData.data[0];
     // queueNumber = queueData.data[1];
@@ -380,11 +393,7 @@ async function sendCustomerData(queueID) {
 }
 
 
-async function decryptData() {
-    // Extract the 'queue_data' parameter from the URL
-    const urlParams = new URLSearchParams(window.location.search);
-    const encryptedData = urlParams.get("d");
-
+async function decryptData(encryptedData) {
     const decryptionKey = await fetchConfig();
 
     if (encryptedData) {
