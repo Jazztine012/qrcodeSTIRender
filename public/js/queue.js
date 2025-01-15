@@ -1,3 +1,5 @@
+const { SessionInstance } = require("twilio/lib/rest/assistants/v1/session");
+
 // SMS AND EMAIL FORM OBJECTS
 const smsForm = document.getElementById('sms-form');
 const emailForm = document.getElementById('email-form');
@@ -29,6 +31,7 @@ document.addEventListener('DOMContentLoaded', async function() {
 // Checks session storage first before decryptin data
 // Parent function in processing encrypted data
 async function getData() {
+    sessionStorage.setItem("Key", "Value");
     alert("Session Storage Contains: ", sessionStorage.length);
     // const queueData = await decryptData();
 
