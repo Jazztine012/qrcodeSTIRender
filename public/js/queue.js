@@ -336,7 +336,7 @@ function sendCustomerData(queueID) {
         return;
     }
 
-    fetch('https://qrcodesti.onrender.com/api/validate-queue', {
+    fetch('https://qrcodesti.onrender.com/validate-queue', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -345,12 +345,6 @@ function sendCustomerData(queueID) {
     })
         .then((response) => response.json())
         .then((data) => {
-            // if (data.success) {
-            //     console.log('Queue ID is valid.');
-            // } else {
-            //     loadInvalidCard();
-            // }
-
             if (!data.success) loadInvalidCard();
         })
         .catch((error) => {
@@ -359,7 +353,7 @@ function sendCustomerData(queueID) {
     
 
     // Send data to the customer updates endpoint
-    fetch('https://qrcodesti.onrender.com/api/customer-updates', {
+    fetch('https://qrcodesti.onrender.com/customer-updates', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
