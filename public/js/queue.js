@@ -19,24 +19,23 @@ let queueID;
 
 // Page init
 document.addEventListener('DOMContentLoaded', async function() {
-    // Fetches and processes data
-    await getData();
-    $("#timestamp-text").hide();
-    // Sends customer data and updates is_accessed state in localhost database
-    // await sendCustomerData(queueID);
+    const urlParams = new URLSearchParams(window.location.search);
+    const encryptedData = urlParams.get("d");
+
+    // Fetches and modified variable data
+    await fetchData(encryptedData);
     // Sets inner texts based on decrypted data
-    // setInnerTexts(queueLocation, queueNumber, timestamp, waitingTime, queueID);
+    setInnerTexts(queueLocation, queueNumber, timestamp, waitingTime, queueID);
+    // Sends customer data and updates is_accessed state in localhost database
+    await sendCustomerData(queueID);
     });
 
 // Checks session storage first before decryptin data
 // Parent function in processing encrypted data
-async function getData() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const encryptedData = urlParams.get("d");
-
+async function fetchData(encryptedData) {
     console.log("Testing data parametrs in session");
 
-    // Sets the item
+    // Checks session storage and sets it if none or invalid is inside
     if (sessionStorage.getItem("Data") == "" || sessionStorage.getItem("Data") != encryptedData){
         console.log("Invalid parameters, recovering.");
         sessionStorage.setItem("Data", encryptedData)
@@ -44,17 +43,17 @@ async function getData() {
 
     console.log("Session Storage Contains: ", sessionStorage.getItem("Data"));
 
+    // Decrypts data in newl-elected session storage if it contains none
     const queueData = await decryptData(sessionStorage.getItem("Data"));
 
     console.log(`Succesfully fetched data: ${queueData}`);
 
-    // queueLocation = queueData.data[0];
-    // queueNumber = queueData.data[1];
-    // timestamp = parseInt(queueData.data[2]);
-    // waitingTime = parseInt(queueData.data[3]);
-    // queueID = parseInt(queueData.data[4]);
-
-    // console.log(`${queueLocation} ${queueNumber} ${timestamp} ${waitingTime} ${queueID} `);
+    // Imports data in variables
+    queueLocation = queueData.data[0];
+    queueNumber = queueData.data[1];
+    timestamp = parseInt(queueData.data[2]);
+    waitingTime = parseInt(queueData.data[3]);
+    queueID = parseInt(queueData.data[4]);
 }
 
 // Event listeners
@@ -297,7 +296,7 @@ mobileNumberTextInput.addEventListener('input', function () {
 });
 
 // Display queue information
-function setInnerTexts(queueLocation, queueNumber, timestamp, waitingTime, queueID) {
+async function setInnerTexts(queueLocation, queueNumber, timestamp, waitingTime, queueID) {
     try {
         if (queueLocation == "" && queueNumber == "" && timestamp == null && queueID == null && waitingTime == null) {
             throw new Error('Queue information is incomplete.');
@@ -308,7 +307,7 @@ function setInnerTexts(queueLocation, queueNumber, timestamp, waitingTime, queue
         const newQueueLocation = queueLocation.replaceAll("_", " ");
         windowNameText.innerText = `${newQueueLocation}`;
         queueNumberText.innerText = `${queueNumber}`;
-        timestampText.innerText = `${timestamp}`;
+        timestampText.innerText = `${await convertTimestampToDate(timestamp)}`;
     } catch (error) {
         loadInvalidCard();
     }
@@ -451,4 +450,40 @@ async function getServerTime() {
         // Fallback to local time (less reliable)
         return Math.floor(Date.now() / 1000);
     }
+}
+
+async function convertTimestampToDate(unixTimestamp) {
+    if (typeof unixTimestamp !== 'number') {
+        console.error('Invalid timestamp. Ensure it is a number.');
+        return 'Invalid date';
+    }
+
+    const date = new Date(unixTimestamp * 1000); // Convert UNIX timestamp to milliseconds
+
+    if (isNaN(date.getTime())) {
+        console.error('Invalid timestamp. Could not convert to a valid date.');
+        return 'Invalid date';
+    }
+
+    // Define month names for human-readable format
+    const months = [
+        'January', 'February', 'March', 'April', 'May', 'June',
+        'July', 'August', 'September', 'October', 'November', 'December'
+    ];
+
+    // Extract date components
+    const month = months[date.getMonth()]; // Get month name
+    const day = date.getDate();
+    const year = date.getFullYear();
+
+    // Extract time components for 12-hour format
+    let hours = date.getHours();
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+    const period = hours >= 12 ? 'PM' : 'AM';
+
+    // Convert hours to 12-hour format
+    hours = hours % 12 || 12;
+
+    // Format as "Month Day, Year (HH:MM:SS AM/PM)"
+    return `${month} ${day}, ${year} (${hours}:${minutes} ${period})`;
 }
