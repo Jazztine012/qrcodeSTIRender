@@ -38,6 +38,7 @@ document.addEventListener('DOMContentLoaded', async function() {
     }
     if (!sessionStorage.getItem("isQueueInvalid")){
         setInnerTexts(queueLocation, queueNumber, timestamp, waitingTime, queueID);
+    } else {
         loadInvalidCard();
     }
     // Sends customer data and updates is_accessed state in localhost database
