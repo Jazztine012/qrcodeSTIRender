@@ -36,8 +36,10 @@ document.addEventListener('DOMContentLoaded', async function() {
             setInnerTexts(queueLocation, queueNumber, timestamp, waitingTime, queueID);
         }
     }
-    if (!sessionStorage.getItem("isQueueInvalid")) setInnerTexts(queueLocation, queueNumber, timestamp, waitingTime, queueID);
-    loadInvalidCard();
+    if (!sessionStorage.getItem("isQueueInvalid")){
+        setInnerTexts(queueLocation, queueNumber, timestamp, waitingTime, queueID);
+        loadInvalidCard();
+    }
     // Sends customer data and updates is_accessed state in localhost database
 });
 
