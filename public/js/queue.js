@@ -30,7 +30,8 @@ document.addEventListener('DOMContentLoaded', async function() {
     setInnerTexts(queueLocation, queueNumber, timestamp, waitingTime, queueID);
     // Sends customer data and updates is_accessed state in localhost database
     if (!hasSessionData){
-        if(await !checkTimeValidity(timestamp)){
+        const isValid = await checkTimeValidity(parseInt(timestamp));
+        if(!isValid){
             loadInvalidCard();
         }
         await sendCustomerData(queueID);
