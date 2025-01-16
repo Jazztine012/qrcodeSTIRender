@@ -29,8 +29,11 @@ document.addEventListener('DOMContentLoaded', async function() {
     // Sets inner texts based on decrypted data
     setInnerTexts(queueLocation, queueNumber, timestamp, waitingTime, queueID);
     // Sends customer data and updates is_accessed state in localhost database
-    if (!hasSessionData) await sendCustomerData(queueID);
-    });
+    if (!hasSessionData){
+        await checkTimeValidity(queueID);
+        await sendCustomerData(queueID);
+    }
+});
 
 // Checks session storage first before decryptin data
 // Parent function in processing encrypted data
