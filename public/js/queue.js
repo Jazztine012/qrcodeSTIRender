@@ -33,8 +33,9 @@ document.addEventListener('DOMContentLoaded', async function() {
         const isValid = await checkTimeValidity(parseInt(timestamp));
         if(!isValid){
             loadInvalidCard();
+        } else {
+            await sendCustomerData(queueID);
         }
-        await sendCustomerData(queueID);
     }
 });
 
