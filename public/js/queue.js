@@ -27,16 +27,18 @@ document.addEventListener('DOMContentLoaded', async function() {
     // Fetches and modified variable data
     await fetchData(encryptedData);
     // Sets inner texts based on decrypted data
-    setInnerTexts(queueLocation, queueNumber, timestamp, waitingTime, queueID);
-    // Sends customer data and updates is_accessed state in localhost database
     if (!hasSessionData){
         const isValid = await checkTimeValidity(parseInt(timestamp));
         if(!isValid){
             loadInvalidCard();
         } else {
             await sendCustomerData(queueID);
+            setInnerTexts(queueLocation, queueNumber, timestamp, waitingTime, queueID);
         }
     }
+    if (!sessionStorage.getItem("isQueueInvalid")) setInnerTexts(queueLocation, queueNumber, timestamp, waitingTime, queueID);
+    loadInvalidCard();
+    // Sends customer data and updates is_accessed state in localhost database
 });
 
 // Checks session storage first before decryptin data
@@ -335,6 +337,7 @@ async function setInnerTexts(queueLocation, queueNumber, timestamp, waitingTime,
 function loadInvalidCard() {
     $("#container").load(`invalid_queue.html`);
     $("#form-container").hide();
+    sessionStorage.setItem("isQueueInvalid", true);
     console.log('Invalid page loaded');
     alert('This is an invalid queue card.');
 }
