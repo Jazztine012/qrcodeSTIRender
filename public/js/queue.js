@@ -30,7 +30,9 @@ document.addEventListener('DOMContentLoaded', async function() {
     setInnerTexts(queueLocation, queueNumber, timestamp, waitingTime, queueID);
     // Sends customer data and updates is_accessed state in localhost database
     if (!hasSessionData){
-        await checkTimeValidity(queueID);
+        if(await !checkTimeValidity(queueID)){
+            loadInvalidCard();
+        }
         await sendCustomerData(queueID);
     }
 });
@@ -148,6 +150,7 @@ async function startCountdown() {
         const interval = setInterval(() => {
             if (remainingTime > 0) {
                 remainingTime--;
+                sessionStorage.setItem("waitingTime", remainingTime);
                 const minutesLeft = Math.ceil(remainingTime / 60);
 
                 // Display countdown as "Estimated time left: X minutes left"
