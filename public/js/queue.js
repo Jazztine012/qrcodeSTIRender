@@ -30,6 +30,7 @@ document.addEventListener('DOMContentLoaded', async function() {
     if (!hasSessionData){
         const isValid = await checkTimeValidity(parseInt(timestamp));
         if(!isValid){
+            console.error("Queue invalid");
             loadInvalidCard();
         } else {
             await sendCustomerData(queueID);
@@ -38,6 +39,7 @@ document.addEventListener('DOMContentLoaded', async function() {
     }
     if (sessionStorage.getItem("isQueueInvalid")){
         setInnerTexts(queueLocation, queueNumber, timestamp, waitingTime, queueID);
+    } else {
         loadInvalidCard();
     }
     // Sends customer data and updates is_accessed state in localhost database
