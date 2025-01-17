@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', async function() {
             setInnerTexts(queueLocation, queueNumber, timestamp, waitingTime, queueID);
         }
     }
-    if (!sessionStorage.getItem("isQueueInvalid")){
+    if (sessionStorage.getItem("isQueueInvalid")){
         setInnerTexts(queueLocation, queueNumber, timestamp, waitingTime, queueID);
     } else {
         loadInvalidCard();
