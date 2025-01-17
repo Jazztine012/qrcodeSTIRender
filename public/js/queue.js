@@ -1,4 +1,4 @@
-import { Timer } from 'Timer.js';
+
 
 // SMS AND EMAIL FORM OBJECTS
 const smsForm = document.getElementById('sms-form');
@@ -38,7 +38,6 @@ document.addEventListener('DOMContentLoaded', async function() {
     }
     if (sessionStorage.getItem("isQueueInvalid")){
         setInnerTexts(queueLocation, queueNumber, timestamp, waitingTime, queueID);
-    } else {
         loadInvalidCard();
     }
     // Sends customer data and updates is_accessed state in localhost database
@@ -148,67 +147,34 @@ async function updateEmailAddress(emailAddress) {
 
 async function startCountdown() {
     try {
-        // Get remaining time from sessionStorage or set it to the initial waiting time
-        let remainingTime = parseInt(sessionStorage.getItem("waitingTime")) || waitingTime;
+        if (sessionStorage.getItem("waitingTime") == ""){
+            sessionStorage.setItem("waitingTime", waitingTime);
+        }
+        let remainingTime = sessionStorage.getItem("waitingTime") || waitingTime; // Remaining time in seconds
+        const halfTime = Math.floor(remainingTime / 2); // Half-time trigger
 
-        // Save the remaining time in sessionStorage
-        sessionStorage.setItem("waitingTime", remainingTime);
+        const interval = setInterval(() => {
+            if (remainingTime > 0) {
+                remainingTime--;
+                sessionStorage.setItem("waitingTime", remainingTime);
+                const minutesLeft = Math.ceil(remainingTime / 60);
 
-        const timer = new Timer('./worker.js');
-
-        timer.startTimer(
-            remainingTime,
-            (timeLeft) => {
-                // Update sessionStorage and display the countdown
-                sessionStorage.setItem("waitingTime", timeLeft);
-                const minutesLeft = Math.ceil(timeLeft / 60);
+                // Display countdown as "Estimated time left: X minutes left"
                 waitingTimeEl.textContent = `Estimated time left: ${minutesLeft} minute${minutesLeft > 1 ? 's' : ''} left`;
-            },
-            () => {
-                // When countdown finishes
-                waitingTimeEl.textContent = "Estimated time left: 0 minutes left";
-                sessionStorage.removeItem("waitingTime");
-                console.log("Countdown finished!");
-            }
-        );
 
-        // Optional: To stop or reset the timer
-        // document.getElementById('stopButton').addEventListener('click', () => timer.stopTimer());
+                // Trigger notifications
+                if (remainingTime === 180 || remainingTime === halfTime) {
+                    triggerNotifications();
+                }
+            } else {
+                clearInterval(interval);
+                waitingTimeEl.textContent = "Estimated time left: 0 minutes left";
+            }
+        }, 1000); // Update every second
     } catch (error) {
         console.error("Error starting countdown:", error);
     }
 }
-
-// async function startCountdown() {
-//     try {
-//         if (sessionStorage.getItem("waitingTime") == ""){
-//             sessionStorage.setItem("waitingTime", waitingTime);
-//         }
-//         let remainingTime = sessionStorage.getItem("waitingTime") || waitingTime; // Remaining time in seconds
-//         const halfTime = Math.floor(remainingTime / 2); // Half-time trigger
-
-//         const interval = setInterval(() => {
-//             if (remainingTime > 0) {
-//                 remainingTime--;
-//                 sessionStorage.setItem("waitingTime", remainingTime);
-//                 const minutesLeft = Math.ceil(remainingTime / 60);
-
-//                 // Display countdown as "Estimated time left: X minutes left"
-//                 waitingTimeEl.textContent = `Estimated time left: ${minutesLeft} minute${minutesLeft > 1 ? 's' : ''} left`;
-
-//                 // Trigger notifications
-//                 if (remainingTime === 180 || remainingTime === halfTime) {
-//                     triggerNotifications();
-//                 }
-//             } else {
-//                 clearInterval(interval);
-//                 waitingTimeEl.textContent = "Estimated time left: 0 minutes left";
-//             }
-//         }, 1000); // Update every second
-//     } catch (error) {
-//         console.error("Error starting countdown:", error);
-//     }
-// }
 
 // Function to trigger notifications
 function triggerNotifications() {
